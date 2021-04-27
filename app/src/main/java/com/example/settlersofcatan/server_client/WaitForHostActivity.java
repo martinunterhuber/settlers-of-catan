@@ -2,7 +2,6 @@ package com.example.settlersofcatan.server_client;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

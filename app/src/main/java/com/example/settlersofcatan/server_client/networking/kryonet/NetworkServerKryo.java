@@ -24,7 +24,7 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
         server = new Server();
     }
 
-    public void registerClass(Class c) {
+    public void registerClass(Class<? extends BaseMessage> c) {
         server.getKryo().register(c);
     }
 
@@ -68,7 +68,7 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
                 }
             }
         } catch (Exception e) {
-            Log.e("Networking", e.getMessage(), e);
+            Log.e(NetworkConstants.TAG, e.getMessage(), e);
         }
         return "-";
     }

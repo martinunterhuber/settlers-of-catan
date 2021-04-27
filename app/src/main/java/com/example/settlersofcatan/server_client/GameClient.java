@@ -7,6 +7,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMess
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
+import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 
 import java.io.IOException;
 
@@ -29,19 +30,19 @@ public class GameClient {
     }
 
     private void callback(BaseMessage message){
-        Log.i("Networking", message.toString());
+        Log.i(NetworkConstants.TAG, message.toString());
     }
 
 
     private void connect(String host) throws IOException {
         client.connect(host);
-        Log.i("Networking", "Connected to Host");
+        Log.i(NetworkConstants.TAG, "Connected to Host");
         client.sendMessage(new ClientJoinedMessage(username));
     }
 
     public void disconnect(){
         client.sendMessage(new ClientLeftMessage(username));
         client.close();
-        Log.i("Networking", "Disconnected from Host");
+        Log.i(NetworkConstants.TAG, "Disconnected from Host");
     }
 }

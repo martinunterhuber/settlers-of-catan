@@ -7,6 +7,7 @@ import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
 import java.io.IOException;
@@ -29,15 +30,15 @@ public class GameServer {
         if (message instanceof ClientJoinedMessage){
             String username = ((ClientJoinedMessage) message).username;
             clientUsernames.add(username);
-            Log.i("Networking", username + " joined the lobby");
+            Log.i(NetworkConstants.TAG, username + " joined the lobby");
             userChangedCallback.callback(username);
         } else if (message instanceof ClientLeftMessage){
             String username = ((ClientLeftMessage) message).username;
             clientUsernames.remove(username);
-            Log.i("Networking", username + " left the lobby");
+            Log.i(NetworkConstants.TAG, username + " left the lobby");
             userChangedCallback.callback(username);
         } else {
-            Log.e("Networking","Unknown message type!");
+            Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }
 
@@ -54,11 +55,11 @@ public class GameServer {
     private void startServer(){
         try {
             server.start();
-            Log.i("Networking", "Started Server");
+            Log.i(NetworkConstants.TAG, "Started Server");
         } catch (BindException e) {
-            Log.i("Networking","Server is already running");
+            Log.i(NetworkConstants.TAG,"Server is already running");
         } catch (IOException e) {
-            Log.e("Networking", e.getMessage(), e);
+            Log.e(NetworkConstants.TAG, e.getMessage(), e);
         }
     }
 

@@ -1,16 +1,12 @@
 package com.example.settlersofcatan.server_client;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.BuddhistCalendar;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -18,9 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
-import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
-import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
+import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 
 import java.io.IOException;
 
@@ -44,7 +38,7 @@ public class JoinServerFragment extends Fragment {
                     Intent intent = new Intent(this.getActivity(), WaitForHostActivity.class);
                     startActivity(intent);
                 } catch (IOException e){
-                    Log.e("Networking", "Failed to connect to " + host);
+                    Log.e(NetworkConstants.TAG, "Failed to connect to " + host);
                     alertConnectionError(host);
                 }
             }

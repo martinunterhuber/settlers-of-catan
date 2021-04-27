@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -13,18 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.esotericsoftware.kryonet.Server;
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
-import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
 import java.io.IOException;
-import java.net.BindException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Enumeration;
 
 public class CreateServerFragment extends Fragment {
     EditText[] users = new EditText[3];
@@ -57,7 +49,7 @@ public class CreateServerFragment extends Fragment {
             String username = ((EditText)view.findViewById(R.id.editTextPlayer)).getText().toString();
             Game.getInstance().setClient(new GameClient("localhost", username));
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(NetworkConstants.TAG, e.getMessage(), e);
         }
         // TODO: implement
     }
