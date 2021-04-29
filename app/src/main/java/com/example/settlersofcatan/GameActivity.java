@@ -16,6 +16,21 @@ public class GameActivity extends AppCompatActivity {
 
         map=findViewById(R.id.mapView);
         player=findViewById(R.id.playerView);
+        player.setHexGrid(map.getHexGrid());
+        player.invalidate();
+    }
+
+    /**
+     *  TODO onClick Event to build road, settlement and city
+     */
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_road:
+                player.buildRoad();
+                break;
+            case R.id.btn_settlement:
+                player.buildSettlement();
+        }
     }
 
 }

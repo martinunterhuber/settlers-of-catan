@@ -3,10 +3,17 @@ package com.example.settlersofcatan;
 public class Point {
     private int x;
     private int y;
+    private int resID;
 
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Point(int x, int y, int resID) {
+        this.x = x;
+        this.y = y;
+        this.resID = resID;
     }
 
     public int getX() {
@@ -23,5 +30,13 @@ public class Point {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getResID() {
+        return resID;
+    }
+
+    public void setResID(int resID) {
+        this.resID = resID;
     }
 }

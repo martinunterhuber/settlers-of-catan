@@ -4,13 +4,24 @@ public class Path {
     private Point x1;
     private Point x2;
     private int length;
+    private int resID;
 
     public Path(Point x1, Point x2) {
         this.x1 = x1;
         this.x2 = x2;
-        //Satz des Pythagoras
-        length=(int)Math.abs(Math.sqrt((x2.getX()-x1.getX())^2
-                                    +(x2.getY()-x1.getY())^2));
+        //Pythagoras
+        length=(int) Math.sqrt((x2.getX()-x1.getX())*(x2.getX()-x1.getX())
+                                    +(x2.getY()-x1.getY())*(x2.getY()-x1.getY()));
+    }
+
+    public Path(Point x1, Point x2, int resID) {
+        this.x1 = x1;
+        this.x2 = x2;
+        this.resID = resID;
+
+        //Pythagoras
+        length=(int) Math.sqrt((x2.getX()-x1.getX())*(x2.getX()-x1.getX())
+                +(x2.getY()-x1.getY())*(x2.getY()-x1.getY()));
     }
 
     public Point getX1() {
@@ -35,5 +46,13 @@ public class Path {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public int getResID() {
+        return resID;
+    }
+
+    public void setResID(int resID) {
+        this.resID = resID;
     }
 }
