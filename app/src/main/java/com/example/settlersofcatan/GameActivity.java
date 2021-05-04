@@ -1,6 +1,8 @@
 package com.example.settlersofcatan;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,6 +10,11 @@ public class GameActivity extends AppCompatActivity {
 
     private MapView map;
     private PlayerView player;
+    private ResourceView resources;
+    private OpponentView opponent1;
+    private OpponentView opponent2;
+    private OpponentView opponent3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +25,14 @@ public class GameActivity extends AppCompatActivity {
         player=findViewById(R.id.playerView);
         player.setHexGrid(map.getHexGrid());
         player.invalidate();
+        resources=findViewById(R.id.resourceView);
+
+        opponent1=findViewById(R.id.opponent1);
+
+        opponent2=findViewById(R.id.opponent2);
+
+        opponent3=findViewById(R.id.opponent3);
+
     }
 
     /**

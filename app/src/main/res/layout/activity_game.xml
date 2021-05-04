@@ -26,13 +26,60 @@
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.0" />
 
+  <com.example.settlersofcatan.ResourceView
+      android:id="@+id/resourceView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btn_settlement" />
+
+  <LinearLayout
+      android:id="@+id/opponents"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+    <com.example.settlersofcatan.OpponentView
+        android:id="@+id/opponent1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp" />
+
+    <com.example.settlersofcatan.OpponentView
+        android:id="@+id/opponent2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp" />
+
+    <com.example.settlersofcatan.OpponentView
+        android:id="@+id/opponent3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp" />
+  </LinearLayout>
+
   <ImageView
       android:id="@+id/btn_city"
       android:layout_width="50dp"
       android:layout_height="30dp"
       android:layout_marginEnd="60dp"
       android:layout_marginRight="60dp"
-      android:layout_marginBottom="50dp"
+      android:layout_marginBottom="60dp"
       android:contentDescription="@string/img_description_city"
       android:onClick="onClick"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +91,7 @@
       android:id="@+id/btn_settlement"
       android:layout_width="30dp"
       android:layout_height="30dp"
-      android:layout_marginBottom="50dp"
+      android:layout_marginBottom="60dp"
       android:contentDescription="@string/img_description_settlement"
       android:onClick="onClick"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +106,7 @@
       android:layout_height="30dp"
       android:layout_marginStart="60dp"
       android:layout_marginLeft="60dp"
-      android:layout_marginBottom="50dp"
+      android:layout_marginBottom="60dp"
       android:contentDescription="@string/img_description_road"
       android:onClick="onClick"
       app:layout_constraintBottom_toBottomOf="parent"
