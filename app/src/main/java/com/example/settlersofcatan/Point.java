@@ -4,6 +4,7 @@ public class Point {
     private int x;
     private int y;
     private int resID;
+    private boolean isAccessable=true;
 
     public Point(int x, int y) {
         this.x = x;
@@ -38,5 +39,13 @@ public class Point {
 
     public void setResID(int resID) {
         this.resID = resID;
+    }
+
+    public boolean isAccessable() {
+        return isAccessable;
+    }
+
+    public void setAccessable(boolean accessable) {
+        isAccessable = accessable;
     }
 }

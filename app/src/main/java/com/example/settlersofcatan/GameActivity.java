@@ -30,6 +30,10 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case R.id.btn_settlement:
                 player.buildSettlement();
+                break;
+            case R.id.btn_city:
+                player.buildCity();
+                break;
         }
     }
 
