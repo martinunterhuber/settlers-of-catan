@@ -33,8 +33,8 @@ public class JoinServerFragment extends Fragment {
 
         new Thread(() -> {
                 try {
-                    GameClient client = new GameClient(host, username);
-                    Game.getInstance().setClient(client);
+                    GameClient client = GameClient.getInstance();
+                    client.init(host, username);
                     Intent intent = new Intent(this.getActivity(), WaitForHostActivity.class);
                     startActivity(intent);
                 } catch (IOException e){

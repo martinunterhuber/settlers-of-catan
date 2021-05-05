@@ -24,7 +24,7 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
         server = new Server();
     }
 
-    public void registerClass(Class<? extends BaseMessage> c) {
+    public void registerClass(Class<?> c) {
         server.getKryo().register(c);
     }
 

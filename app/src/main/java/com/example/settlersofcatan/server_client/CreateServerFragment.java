@@ -1,5 +1,6 @@
 package com.example.settlersofcatan.server_client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,13 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.GameActivity;
+import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
 import java.io.IOException;
 
 public class CreateServerFragment extends Fragment {
-    EditText[] users = new EditText[3];
+    EditText[] users = new EditText[4];
     GameServer server;
 
     @Nullable
@@ -31,13 +35,14 @@ public class CreateServerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        users[0] = getView().findViewById(R.id.editTextPlayer1);
-        users[1] = getView().findViewById(R.id.editTextPlayer2);
-        users[2] = getView().findViewById(R.id.editTextPlayer3);
+        users[0] = getView().findViewById(R.id.editTextPlayer);
+        users[1] = getView().findViewById(R.id.editTextPlayer1);
+        users[2] = getView().findViewById(R.id.editTextPlayer2);
+        users[3] = getView().findViewById(R.id.editTextPlayer3);
         new Thread(() -> {
-            server = new GameServer();
+            server = GameServer.getInstance();
+            server.init();
             server.registerUserChangedCallback(this::updateUsers);
-            Game.getInstance().setServer(server);
         }).start();
         String ip = NetworkServerKryo.getLocalIPAddress();
         ((TextView)getView().findViewById(R.id.serverIP)).setText(ip);
@@ -45,17 +50,24 @@ public class CreateServerFragment extends Fragment {
     }
 
     private void startGame(View view){
-        try {
-            String username = ((EditText)view.findViewById(R.id.editTextPlayer)).getText().toString();
-            Game.getInstance().setClient(new GameClient("localhost", username));
-        } catch (IOException e) {
-            Log.e(NetworkConstants.TAG, e.getMessage(), e);
-        }
-        // TODO: implement
+        String username = ((EditText)getView().findViewById(R.id.editTextPlayer)).getText().toString();
+        new Thread(
+                () -> {
+                    try {
+                        GameClient client = GameClient.getInstance();
+                        client.init("localhost", username);
+                        server.broadcastMessage(new GameStateMessage(new Game()));
+                    } catch (IOException e) {
+                        Log.e(NetworkConstants.TAG, e.getMessage(), e);
+                    }
+                }
+        ).start();
+        Intent intent = new Intent(getActivity(), GameActivity.class);
+        startActivity(intent);
     }
 
     private void updateUsers(String username){
-        for (int i = 0; i < users.length; i++) {
+        for (int i = 1; i < users.length; i++) {
             users[i].setText(server.getClientUsernameAt(i));
         }
     }

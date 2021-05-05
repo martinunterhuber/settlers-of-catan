@@ -2,10 +2,13 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
+import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
@@ -15,21 +18,37 @@ import java.net.BindException;
 import java.util.ArrayList;
 
 public class GameServer {
+    private static GameServer instance;
     private NetworkServerKryo server;
     private ArrayList<String> clientUsernames = new ArrayList<>();
     private Callback<String> userChangedCallback;
 
-    GameServer(){
+    private GameServer(){
+
+    }
+
+    public static GameServer getInstance(){
+        if (instance == null){
+            instance = new GameServer();
+        }
+        return instance;
+    }
+
+    public void init(){
         server = new NetworkServerKryo();
         registerMessageClasses();
         server.registerCallback(this::callback);
         startServer();
+        clientUsernames.add("");
     }
+
 
     private void callback(BaseMessage message) {
         if (message instanceof ClientJoinedMessage){
             String username = ((ClientJoinedMessage) message).username;
-            clientUsernames.add(username);
+            if (!username.equals(GameClient.getInstance().getUsername())){
+                clientUsernames.add(username);
+            }
             Log.i(NetworkConstants.TAG, username + " joined the lobby");
             userChangedCallback.callback(username);
         } else if (message instanceof ClientLeftMessage){
@@ -50,6 +69,8 @@ public class GameServer {
         server.registerClass(TextMessage.class);
         server.registerClass(ClientJoinedMessage.class);
         server.registerClass(ClientLeftMessage.class);
+        server.registerClass(GameStateMessage.class);
+        server.registerClass(Game.class);
     }
 
     private void startServer(){
@@ -68,5 +89,9 @@ public class GameServer {
             return "";
         }
         return clientUsernames.get(index);
+    }
+
+    public void broadcastMessage(BaseMessage message) {
+        server.broadcastMessage(message);
     }
 }

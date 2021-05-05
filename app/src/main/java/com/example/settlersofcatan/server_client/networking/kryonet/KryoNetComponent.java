@@ -9,6 +9,6 @@ public interface KryoNetComponent {
      *
      * @param c
      */
-    void registerClass(Class<? extends BaseMessage> c);
+    void registerClass(Class<?> c);
 
 }

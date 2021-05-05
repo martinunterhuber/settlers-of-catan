@@ -18,7 +18,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client = new Client();
     }
 
-    public void registerClass(Class<? extends BaseMessage> c) {
+    public void registerClass(Class<?> c) {
         client.getKryo().register(c);
     }
 
