@@ -7,12 +7,19 @@ import java.util.ArrayList;
  * settlements and roads todo other player attributes like their colour etc. and maximum on available cities/settlements/roads
  */
 public class Player {
+    private String name;
+    private int id;
 
     private ArrayList<ResourceCard> resourceCards; //could be done in an array, may be subject to change
     private ArrayList<DevelopmentCard> unrevealedDevelopmentCards;
     private ArrayList<Settlement> settlements;
     private ArrayList<City> cities;
     private ArrayList<Road> roads;
+
+    public Player(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
 
     public void getResource(Resource resource) {
         resourceCards.add(new ResourceCard(resource));

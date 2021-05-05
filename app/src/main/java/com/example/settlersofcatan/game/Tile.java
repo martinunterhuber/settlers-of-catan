@@ -26,6 +26,8 @@ public class Tile {
 
     private Resource resource;
 
+    private int number;
+
     public Tile(Resource resource) {
         this.resource = resource;
     }
@@ -40,5 +42,9 @@ public class Tile {
                 n.getBuilding().giveResource(resource);
             }
         }
+    }
+
+    public int getNumber() {
+        return number;
     }
 }
