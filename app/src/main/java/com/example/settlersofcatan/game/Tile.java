@@ -37,6 +37,11 @@ public class Tile {
      * used by the maps dice rolled method. todo implement robber functionality.
      */
     public void giveResource() {
+        // Case for the desert tile
+        if (this.resource == null){
+            return;
+        }
+
         for (Node n : nodes) {
             if (n.getBuilding() != null) {
                 n.getBuilding().giveResource(resource);

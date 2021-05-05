@@ -10,7 +10,7 @@ public class Player {
     private String name;
     private int id;
 
-    private ArrayList<ResourceCard> resourceCards; //could be done in an array, may be subject to change
+    private ResourceMap resources;
     private ArrayList<DevelopmentCard> unrevealedDevelopmentCards;
     private ArrayList<Settlement> settlements;
     private ArrayList<City> cities;
@@ -21,8 +21,7 @@ public class Player {
         this.name = name;
     }
 
-    public void getResource(Resource resource) {
-        resourceCards.add(new ResourceCard(resource));
+    public void giveSingleResource(Resource resource) {
+        resources.incrementResourceCount(resource, 1);
     }
-
 }

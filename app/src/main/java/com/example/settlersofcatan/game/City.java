@@ -8,7 +8,7 @@ public class City extends NodePlaceable{
 
     @Override
     public void giveResource(Resource resource) {
-        player.getResource(resource);
-        player.getResource(resource);
+        player.giveSingleResource(resource);
+        player.giveSingleResource(resource);
     }
 }

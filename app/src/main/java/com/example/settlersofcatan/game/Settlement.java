@@ -8,6 +8,6 @@ public class Settlement extends NodePlaceable {
 
     @Override
     public void giveResource(Resource resource) {
-        player.getResource(resource);
+        player.giveSingleResource(resource);
     }
 }
