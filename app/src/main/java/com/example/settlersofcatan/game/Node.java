@@ -6,11 +6,15 @@ package com.example.settlersofcatan.game;
  */
 public class Node {
 
-    private Tile adjacent1;
-    private Tile adjacent2;
-    private Tile adjacent3;
+     Tile adjacent1;
+     Tile adjacent2;
+     Tile adjacent3;
 
     private NodePlaceable building;
+
+    public Node() {
+
+    }
 
     public Node(Tile adjacent1) {
         this.adjacent1 = adjacent1;

@@ -6,30 +6,34 @@ package com.example.settlersofcatan.game;
  */
 public class Tile {
 
-    private Edge northEdge;
-    private Edge northeastEdge;
-    private Edge southeastEdge;
-    private Edge southEdge;
-    private Edge southwestEdge;
-    private Edge northwestEdge;
+    Edge northEdge;
+    Edge northeastEdge;
+     Edge southeastEdge;
+     Edge southEdge;
+     Edge southwestEdge;
+     Edge northwestEdge;
 
     private Edge[] edges = new Edge[]{northEdge, northeastEdge, southeastEdge, southEdge, southwestEdge, northwestEdge};
 
-    private Node northeastNode;
-    private Node eastNode;
-    private Node southeastNode;
-    private Node southwestNode;
-    private Node westNode;
-    private Node northwestNode;
+     Node northeastNode;
+     Node eastNode;
+     Node southeastNode;
+     Node southwestNode;
+     Node westNode;
+     Node northwestNode;
 
     private Node[] nodes = new Node[]{northeastNode, eastNode, southeastNode, southwestNode, westNode, northwestNode};
 
     private Resource resource;
 
+    int u;
+    int v;
+
     private int number;
 
-    public Tile(Resource resource) {
+    public Tile(Resource resource, int number) {
         this.resource = resource;
+        this.number = number;
     }
 
     /**

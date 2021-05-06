@@ -1,39 +1,49 @@
 package com.example.settlersofcatan.game;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
- * Class to represent a map/board for a game, consists of tiles and currently spans them on a two
- * dimensional array.
+ * Related resources for the hexagon layout:
+ * https://www.redblobgames.com/grids/hexagons/#map-storage
+ * http://www-cs-students.stanford.edu/~amitp/game-programming/grids/#relationships
  */
 public class Board {
-    /**
-     * This attribute is the actual map, with the center of the map being 0,0. It works under the
-     * assumption that there are no more than 19 tiles, just like in the standard map for catan.
-     */
-    private Tile[] tiles;
 
-    public static final int[] resourceDistribution = {3, 3, 4, 4, 4};
+    private Tile[] tiles;
+    private Node[] nodes;
+    private Edge[] edges;
+
+    public static final int[] defaultResourceDistribution = {3, 3, 4, 4, 4};
 
     public Board(){
         tiles = new Tile[19];
+        nodes = new Node[72];
+        edges = new Edge[72];
 
         // for now we'll use null for desert; maybe change this
-        tiles[0] = new Tile(null);
+        tiles[0] = new Tile(null, 7);
 
         distributeTileResources();
     }
 
     private void distributeTileResources(){
+        List<Integer> numbers = Arrays.asList(2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12);
+        Collections.shuffle(numbers);
+
+        int[] resourceDistributionCopy = defaultResourceDistribution.clone();
+
         Random rand = new Random();
-        int[] resourceDistributionCopy = resourceDistribution.clone();
         for (int i = 1; i < 19; i++) {
             int resourceIndex;
             do {
                 resourceIndex = rand.nextInt();
-            } while(resourceDistributionCopy[resourceIndex] < 0);
+            } while(resourceDistributionCopy[resourceIndex] <= 0);
             resourceDistributionCopy[resourceIndex]--;
-            tiles[i] = new Tile(Resource.valueOf(resourceIndex));
+            tiles[i] = new Tile(Resource.valueOf(resourceIndex), numbers.remove(0));
         }
     }
 
