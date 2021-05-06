@@ -34,12 +34,12 @@ public class Board {
             for (int j = 0; j < 5; j++) {
                 if (inRange(i, j)) {
                     Tile tile = tiles[i][j];
-                    tile.northwestEdge.setEndpoints(tile.northNode, tile.northeastNode);
+                    tile.northwestEdge.setEndpoints(tile.northNode, tile.northwestNode);
                     tile.westEdge.setEndpoints(tile.northwestNode, tile.southwestNode);
                     tile.southwestEdge.setEndpoints(tile.southNode, tile.southwestNode);
                     tile.southeastEdge.setEndpoints(tile.southNode, tile.southeastNode);
                     tile.eastEdge.setEndpoints(tile.northeastNode, tile.southeastNode);
-                    tile.northeastEdge.setEndpoints(tile.northeastNode, tile.southeastNode);
+                    tile.northeastEdge.setEndpoints(tile.northeastNode, tile.northNode);
                 }
             }
         }
