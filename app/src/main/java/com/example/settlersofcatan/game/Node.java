@@ -27,6 +27,9 @@ public class Node {
 
     public List<Node> getAdjacentNodes(){
         List<Node> nodes = new ArrayList<>();
+        for (Edge e : outgoingEdges) {
+            nodes.add(e.getOtherEndpoint(this));
+        }
         return nodes;
     }
 
@@ -56,8 +59,23 @@ public class Node {
         return tiles;
     }
 
+    public List<Edge> getOtherOutgoingEdges(Edge edge) {
+        List<Edge> otherOutgoingEdges = new ArrayList<>();
+        for (Edge e : outgoingEdges) {
+            if (e != edge) {
+                otherOutgoingEdges.add(e);
+            }
+        }
+        return otherOutgoingEdges;
+    }
+
     public boolean hasNoAdjacentBuildings(){
-        // TODO
-        return false;
+        List<Node> adjacentNodes = getAdjacentNodes();
+        for (Node n : adjacentNodes) {
+            if (n.getBuilding() != null) {
+                return  false;
+            }
+        }
+        return true;
     }
 }

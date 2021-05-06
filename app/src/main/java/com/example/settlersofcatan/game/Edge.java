@@ -38,6 +38,10 @@ public class Edge {
         }
     }
 
+    public List<Node> getEndpointNodes() {
+        return endpointNodes;
+    }
+
     public Node getOtherEndpoint(Node node){
         for (Node n : endpointNodes){
             if (n != node){
