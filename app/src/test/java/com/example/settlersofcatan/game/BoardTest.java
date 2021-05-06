@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 public class BoardTest {
     private Tile[][] tiles;
@@ -43,6 +43,14 @@ public class BoardTest {
     }
 
     @Test
+    public void testNodeOutgoingEdgesOnlyTwo(){
+        Assert.assertEquals(
+                tiles[2][0].northwestNode.outgoingEdges,
+                new HashSet<>(Arrays.asList(tiles[2][0].westEdge, tiles[2][0].northwestEdge))
+        );
+    }
+
+    @Test
     public void testEdgeAdjacentTiles(){
         Assert.assertEquals(
                 tiles[3][2].westEdge.adjacentTiles,
@@ -51,10 +59,26 @@ public class BoardTest {
     }
 
     @Test
+    public void testEdgeAdjacentTilesOnlyOne(){
+        Assert.assertEquals(
+                tiles[2][4].southeastEdge.adjacentTiles,
+                new HashSet<>(Collections.singletonList(tiles[2][4]))
+        );
+    }
+
+    @Test
     public void testNodeAdjacentTiles(){
         Assert.assertEquals(
                 tiles[3][2].southNode.adjacentTiles,
                 new HashSet<>(Arrays.asList(tiles[3][2], tiles[2][3], tiles[3][3]))
+        );
+    }
+
+    @Test
+    public void testNodeAdjacentTilesOnlyOne(){
+        Assert.assertEquals(
+                tiles[0][4].southwestNode.adjacentTiles,
+                new HashSet<>(Collections.singletonList(tiles[0][4]))
         );
     }
 }
