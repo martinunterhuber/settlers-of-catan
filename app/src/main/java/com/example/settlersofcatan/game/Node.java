@@ -16,26 +16,39 @@ public class Node {
 
     }
 
-    public Node(Tile adjacent1) {
-        this.adjacent1 = adjacent1;
-    }
-
-    public Node(Tile adjacent1, Tile adjacent2) {
-        this.adjacent1 = adjacent1;
-        this.adjacent2 = adjacent2;
-    }
-
-    public Node(Tile adjacent1, Tile adjacent2, Tile adjacent3) {
-        this.adjacent1 = adjacent1;
-        this.adjacent2 = adjacent2;
-        this.adjacent3 = adjacent3;
-    }
-
     public NodePlaceable getBuilding() {
         return building;
     }
 
     public void setBuilding(NodePlaceable building) {
         this.building = building;
+    }
+
+    public void setFreeAdjacentNode(Tile adjacent){
+        if (adjacent1 == null){
+            adjacent1 = adjacent;
+        } else if (adjacent2 == null){
+            adjacent2 = adjacent;
+        } else if (adjacent3 == null) {
+            adjacent3 = adjacent;
+        } else {
+            throw new IllegalStateException("Too many adjacent tiles!");
+        }
+    }
+
+    public Tile[] getAdjacentTiles(){
+        return new Tile[]{adjacent1, adjacent2, adjacent3};
+    }
+
+    public Tile[] getAdjacentTilesExcept(Tile tile){
+        if (tile.equals(adjacent1)){
+            return new Tile[]{adjacent2, adjacent3};
+        } else if (tile.equals(adjacent2)){
+            return new Tile[]{adjacent1, adjacent3};
+        } else if (tile.equals(adjacent3)) {
+            return new Tile[]{adjacent1, adjacent2};
+        } else {
+            return getAdjacentTiles();
+        }
     }
 }

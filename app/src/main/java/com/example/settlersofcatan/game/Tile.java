@@ -6,28 +6,29 @@ package com.example.settlersofcatan.game;
  */
 public class Tile {
 
-    Edge northEdge;
+    Edge eastEdge;
     Edge northeastEdge;
-     Edge southeastEdge;
-     Edge southEdge;
-     Edge southwestEdge;
-     Edge northwestEdge;
+    Edge northwestEdge;
+    Edge southeastEdge;
+    Edge westEdge;
+    Edge southwestEdge;
 
-    private Edge[] edges = new Edge[]{northEdge, northeastEdge, southeastEdge, southEdge, southwestEdge, northwestEdge};
 
+    private Edge[] edges = new Edge[]{eastEdge, northeastEdge, southeastEdge, westEdge, southwestEdge, northwestEdge};
+
+     Node northNode;
      Node northeastNode;
-     Node eastNode;
      Node southeastNode;
+     Node southNode;
      Node southwestNode;
-     Node westNode;
      Node northwestNode;
 
-    private Node[] nodes = new Node[]{northeastNode, eastNode, southeastNode, southwestNode, westNode, northwestNode};
+    private Node[] nodes = new Node[]{northeastNode, northNode, southeastNode, southwestNode, southNode, northwestNode};
 
     private Resource resource;
 
-    int u;
-    int v;
+    int q;
+    int r;
 
     private int number;
 
@@ -55,5 +56,9 @@ public class Tile {
 
     public int getNumber() {
         return number;
+    }
+
+    public String getPosition(){
+        return "q=" + q + " r=" + r;
     }
 }
