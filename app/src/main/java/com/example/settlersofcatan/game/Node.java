@@ -51,4 +51,9 @@ public class Node {
             return getAdjacentTiles();
         }
     }
+
+    public boolean hasNoAdjacentBuildings(){
+        // TODO
+        return false;
+    }
 }

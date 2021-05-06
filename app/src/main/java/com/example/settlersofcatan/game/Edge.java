@@ -13,4 +13,12 @@ public class Edge {
     public Edge() {
 
     }
+
+    public Road getRoad() {
+        return road;
+    }
+
+    public void setRoad(Road road) {
+        this.road = road;
+    }
 }

@@ -24,4 +24,8 @@ public class Player {
     public void giveSingleResource(Resource resource) {
         resources.incrementResourceCount(resource, 1);
     }
+
+    public int getId() {
+        return id;
+    }
 }
