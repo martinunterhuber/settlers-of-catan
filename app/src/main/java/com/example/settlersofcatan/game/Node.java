@@ -29,6 +29,9 @@ public class Node {
 
     public Set<Node> getAdjacentNodes(){
         Set<Node> nodes = new HashSet<>();
+        for (Edge edge : outgoingEdges){
+            nodes.add(edge.getOtherEndpoint(this));
+        }
         return nodes;
     }
 
@@ -52,6 +55,12 @@ public class Node {
         return adjacentTiles;
     }
 
+    public Set<Edge> getOutgoingEdgesExcept(Edge edge){
+        Set<Edge> edges = new HashSet<>(outgoingEdges);
+        edges.remove(edge);
+        return edges;
+    }
+
     public Set<Tile> getAdjacentTilesExcept(Tile tile){
         Set<Tile> tiles = new HashSet<>(adjacentTiles);
         tiles.remove(tile);
@@ -59,7 +68,11 @@ public class Node {
     }
 
     public boolean hasNoAdjacentBuildings(){
-        // TODO
-        return false;
+        for (Node node : getAdjacentNodes()){
+            if (node.getBuilding() != null){
+                return false;
+            }
+        }
+        return true;
     }
 }

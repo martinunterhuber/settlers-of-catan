@@ -6,4 +6,8 @@ public abstract class Placeable {
     public Placeable(Player player) {
         this.player = player;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }

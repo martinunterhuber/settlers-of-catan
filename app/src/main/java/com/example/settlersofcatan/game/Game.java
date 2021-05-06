@@ -73,7 +73,7 @@ public class Game {
     private void buildRoad(Edge edge, Player player){
         if (edge.getRoad() == null
                 && player.getId() == currentPlayerId
-                && edge.hasNoAdjacentBuildings()) {
+                && edge.connectsPlayer(player)) {
             edge.setRoad(new Road(player));
         }
     }
