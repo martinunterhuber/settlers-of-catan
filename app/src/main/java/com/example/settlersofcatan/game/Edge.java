@@ -29,12 +29,20 @@ public class Edge {
         if (!adjacentTiles.contains(tile)){
             adjacentTiles.add(tile);
         }
+        if (adjacentTiles.size() > 2){
+            throw new  IllegalStateException("Edge has too many adjacent tiles!");
+        }
     }
 
     public void setEndpoints(Node ... endpoints){
         for (Node endpoint : endpoints){
-            endpointNodes.add(endpoint);
-            endpoint.addOutgoingEdge(this);
+            if (!endpointNodes.contains(endpoint)){
+                endpointNodes.add(endpoint);
+                endpoint.addOutgoingEdge(this);
+            }
+        }
+        if (endpointNodes.size() > 2){
+            throw new  IllegalStateException("Edge has too many endpoints!");
         }
     }
 

@@ -31,14 +31,20 @@ public class Node {
     }
 
     public void addOutgoingEdge(Edge outgoingEdge){
-        if (!outgoingEdges.contains(outgoingEdge) && outgoingEdges.size() < 3){
+        if (!outgoingEdges.contains(outgoingEdge)){
             outgoingEdges.add(outgoingEdge);
+        }
+        if (adjacentTiles.size() > 3){
+            throw new  IllegalStateException("Node has too many outgoing edges!");
         }
     }
 
     public void addAdjacentTile(Tile adjacent){
         if (!adjacentTiles.contains(adjacent)){
             adjacentTiles.add(adjacent);
+        }
+        if (adjacentTiles.size() > 3){
+            throw new  IllegalStateException("Edge has too many adjacent tiles!");
         }
     }
 
