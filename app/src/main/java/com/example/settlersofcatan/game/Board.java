@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Related resources for the hexagon layout:
@@ -22,12 +21,30 @@ public class Board {
      */
     private Tile[] packedTiles;
 
+
     public Board(){
         initializeTiles();
         initializeEdges();
         initializeNodes();
+        initializeEdgeEndpoints();
     }
-    
+
+    private void initializeEdgeEndpoints(){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (inRange(i, j)) {
+                    Tile tile = tiles[i][j];
+                    tile.northwestEdge.setEndpoints(tile.northNode, tile.northeastNode);
+                    tile.westEdge.setEndpoints(tile.northwestNode, tile.southwestNode);
+                    tile.southwestEdge.setEndpoints(tile.southNode, tile.southwestNode);
+                    tile.southeastEdge.setEndpoints(tile.southNode, tile.southeastNode);
+                    tile.eastEdge.setEndpoints(tile.northeastNode, tile.southeastNode);
+                    tile.northeastEdge.setEndpoints(tile.northeastNode, tile.southeastNode);
+                }
+            }
+        }
+    }
+
     private void initializeTiles(){
         tiles = new Tile[5][5];
         packedTiles = new Tile[19];
@@ -76,37 +93,37 @@ public class Board {
                     Edge ne = new Edge();
                     Edge e = new Edge();
                     Edge se = new Edge();
-                    ne.adjacent1 = tiles[i][j];
-                    e.adjacent1 = tiles[i][j];
-                    se.adjacent1 = tiles[i][j];
+                    ne.addAdjacentTile(tiles[i][j]);
+                    e.addAdjacentTile(tiles[i][j]);
+                    se.addAdjacentTile(tiles[i][j]);
                     tiles[i][j].northeastEdge = ne;
                     tiles[i][j].eastEdge = e;
                     tiles[i][j].southeastEdge = se;
 
                     if (inRange(i - 1, j)){
-                        tiles[i - 1][j].eastEdge.adjacent2 = tiles[i][j];
+                        tiles[i - 1][j].eastEdge.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].westEdge = tiles[i - 1][j].eastEdge;
                     } else {
                         Edge w = new Edge();
-                        w.adjacent1 = tiles[i][j];
+                        w.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].westEdge = w;
                     }
 
                     if (inRange(i, j - 1)){
-                        tiles[i][j - 1].southeastEdge.adjacent2 = tiles[i][j];
+                        tiles[i][j - 1].southeastEdge.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].northwestEdge = tiles[i][j - 1].southeastEdge;
                     } else {
                         Edge nw = new Edge();
-                        nw.adjacent1 = tiles[i][j];
+                        nw.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].northwestEdge = nw;
                     }
 
                     if (inRange(i - 1, j + 1)){
-                        tiles[i - 1][j + 1].northeastEdge.adjacent2 = tiles[i][j];
+                        tiles[i - 1][j + 1].northeastEdge.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].southwestEdge = tiles[i - 1][j + 1].northeastEdge;
                     } else {
                         Edge sw = new Edge();
-                        sw.adjacent1 = tiles[i][j];
+                        sw.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].southwestEdge = sw;
                     }
                     tiles[i][j].initEdges();
@@ -124,8 +141,8 @@ public class Board {
                     Node s = new Node();
                     tiles[i][j].northNode = n;
                     tiles[i][j].southNode = s;
-                    n.adjacent1 = tiles[i][j];
-                    s.adjacent1 = tiles[i][j];
+                    n.addAdjacentTile(tiles[i][j]);
+                    s.addAdjacentTile(tiles[i][j]);
                 }
             }
         }
@@ -135,45 +152,45 @@ public class Board {
             for (int j = 0; j < 5; j++) {
                 if (i + j >= 2 && i + j <= 6){
                     if (inRange(i + 1, j - 1)){
-                        tiles[i + 1][j - 1].southNode.setFreeAdjacentNode(tiles[i][j]);
+                        tiles[i + 1][j - 1].southNode.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].northeastNode = tiles[i + 1][j - 1].southNode;
                     } else {
                         Node ne = new Node();
-                        ne.adjacent1 = tiles[i][j];
+                        ne.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].northeastNode = ne;
                     }
 
                     if (inRange(i, j + 1)){
-                        tiles[i][j + 1].northNode.setFreeAdjacentNode(tiles[i][j]);
+                        tiles[i][j + 1].northNode.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].southeastNode = tiles[i][j + 1].northNode;
                     } else {
-                        Node w = new Node();
-                        w.adjacent1 = tiles[i][j];
-                        tiles[i][j].southeastNode = w;
+                        Node se = new Node();
+                        se.addAdjacentTile(tiles[i][j]);
+                        tiles[i][j].southeastNode = se;
                     }
 
                     if (inRange(i - 1, j + 1)){
-                        tiles[i - 1][j + 1].northNode.setFreeAdjacentNode(tiles[i][j]);
+                        tiles[i - 1][j + 1].northNode.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].southwestNode = tiles[i - 1][j + 1].northNode;
                     } else if (inRange(i - 1, j)){
-                        tiles[i - 1][j].southeastNode.setFreeAdjacentNode(tiles[i][j]);
+                        tiles[i - 1][j].southeastNode.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].southwestNode = tiles[i - 1][j].southeastNode;
                     } else {
-                        Node w = new Node();
-                        w.adjacent1 = tiles[i][j];
-                        tiles[i][j].southwestNode = w;
+                        Node sw = new Node();
+                        sw.addAdjacentTile(tiles[i][j]);
+                        tiles[i][j].southwestNode = sw;
                     }
 
                     if (inRange(i, j - 1)){
-                        tiles[i][j - 1].southNode.setFreeAdjacentNode(tiles[i][j]);
+                        tiles[i][j - 1].southNode.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].northwestNode = tiles[i][j - 1].southNode;
                     } else if (inRange(i - 1, j)){
-                        tiles[i - 1][j].northeastNode.setFreeAdjacentNode(tiles[i][j]);
+                        tiles[i - 1][j].northeastNode.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].northwestNode = tiles[i - 1][j].northeastNode;
                     } else {
-                        Node w = new Node();
-                        w.adjacent1 = tiles[i][j];
-                        tiles[i][j].northwestNode = w;
+                        Node nw = new Node();
+                        nw.addAdjacentTile(tiles[i][j]);
+                        tiles[i][j].northwestNode = nw;
                     }
                     tiles[i][j].initNodes();
                 }

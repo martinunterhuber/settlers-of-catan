@@ -1,14 +1,15 @@
 package com.example.settlersofcatan.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a Node of one or many tiles, can have a maximum of three adjacent tiles.
  * Can also have a building on it.
  */
 public class Node {
-
-     Tile adjacent1;
-     Tile adjacent2;
-     Tile adjacent3;
+    final List<Tile> adjacentTiles = new ArrayList<>();
+    final List<Edge> outgoingEdges = new ArrayList<>();
 
     private NodePlaceable building;
 
@@ -24,32 +25,35 @@ public class Node {
         this.building = building;
     }
 
-    public void setFreeAdjacentNode(Tile adjacent){
-        if (adjacent1 == null){
-            adjacent1 = adjacent;
-        } else if (adjacent2 == null){
-            adjacent2 = adjacent;
-        } else if (adjacent3 == null) {
-            adjacent3 = adjacent;
-        } else {
-            throw new IllegalStateException("Too many adjacent tiles!");
+    public List<Node> getAdjacentNodes(){
+        List<Node> nodes = new ArrayList<>();
+        return nodes;
+    }
+
+    public void addOutgoingEdge(Edge outgoingEdge){
+        if (!outgoingEdges.contains(outgoingEdge) && outgoingEdges.size() < 3){
+            outgoingEdges.add(outgoingEdge);
         }
     }
 
-    public Tile[] getAdjacentTiles(){
-        return new Tile[]{adjacent1, adjacent2, adjacent3};
+    public void addAdjacentTile(Tile adjacent){
+        if (!adjacentTiles.contains(adjacent)){
+            adjacentTiles.add(adjacent);
+        }
     }
 
-    public Tile[] getAdjacentTilesExcept(Tile tile){
-        if (tile.equals(adjacent1)){
-            return new Tile[]{adjacent2, adjacent3};
-        } else if (tile.equals(adjacent2)){
-            return new Tile[]{adjacent1, adjacent3};
-        } else if (tile.equals(adjacent3)) {
-            return new Tile[]{adjacent1, adjacent2};
-        } else {
-            return getAdjacentTiles();
+    public List<Tile> getAdjacentTiles(){
+        return adjacentTiles;
+    }
+
+    public List<Tile> getAdjacentTilesExcept(Tile tile){
+        List<Tile> tiles = new ArrayList<>();
+        for (Tile t : adjacentTiles){
+            if (t != tile){
+                tiles.add(t);
+            }
         }
+        return tiles;
     }
 
     public boolean hasNoAdjacentBuildings(){

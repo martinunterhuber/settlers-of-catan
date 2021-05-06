@@ -13,7 +13,7 @@ public class Tile {
     Edge westEdge;
     Edge southwestEdge;
 
-    private Edge[] edges;
+    Edge[] edges;
 
      Node northNode;
      Node northeastNode;
@@ -22,7 +22,7 @@ public class Tile {
      Node southwestNode;
      Node northwestNode;
 
-    private Node[] nodes;
+    Node[] nodes;
 
     private Resource resource;
 
