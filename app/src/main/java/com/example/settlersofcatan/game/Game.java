@@ -57,7 +57,7 @@ public class Game {
 
     private void buildSettlement(Node node, Player player){
         if (node.getBuilding() == null && player.getId() == currentPlayerId && node.hasNoAdjacentBuildings()) {
-            node.setBuilding(new Settlement(player));
+            node.setBuilding(new Settlement(player, node));
         }
     }
 
@@ -66,7 +66,7 @@ public class Game {
                 && node.getBuilding() instanceof Settlement
                 && ((Settlement) node.getBuilding()).player.getId() == currentPlayerId
                 && player.getId() == currentPlayerId) {
-            node.setBuilding(new City(player));
+            node.setBuilding(new City(player, node));
         }
     }
 

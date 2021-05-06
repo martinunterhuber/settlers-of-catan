@@ -67,6 +67,16 @@ public class Node {
         return tiles;
     }
 
+    public List<Edge> getOtherOutgoingEdges(Edge edge) {
+        List<Edge> otherOutgoingEdges = new ArrayList<>();
+        for (Edge e : outgoingEdges) {
+            if (e != edge) {
+                otherOutgoingEdges.add(e);
+            }
+        }
+        return otherOutgoingEdges;
+    }
+
     public boolean hasNoAdjacentBuildings(){
         for (Node node : getAdjacentNodes()){
             if (node.getBuilding() != null){

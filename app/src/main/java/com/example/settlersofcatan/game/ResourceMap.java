@@ -21,4 +21,9 @@ public class ResourceMap {
         Integer count = resources.get(resource);
         resources.put(resource, count + increment);
     }
+
+    public void decrementResourceCount(Resource resource, int decrement) {
+        Integer count = resources.get(resource);
+        resources.put(resource, count - decrement);
+    }
 }
