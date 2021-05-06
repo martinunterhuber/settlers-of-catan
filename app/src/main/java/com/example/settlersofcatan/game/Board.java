@@ -109,6 +109,7 @@ public class Board {
                         sw.adjacent1 = tiles[i][j];
                         tiles[i][j].southwestEdge = sw;
                     }
+                    tiles[i][j].initEdges();
                 }
             }
         }
@@ -174,6 +175,7 @@ public class Board {
                         w.adjacent1 = tiles[i][j];
                         tiles[i][j].northwestNode = w;
                     }
+                    tiles[i][j].initNodes();
                 }
             }
         }

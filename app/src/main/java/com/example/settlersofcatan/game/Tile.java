@@ -13,8 +13,7 @@ public class Tile {
     Edge westEdge;
     Edge southwestEdge;
 
-
-    private Edge[] edges = new Edge[]{eastEdge, northeastEdge, southeastEdge, westEdge, southwestEdge, northwestEdge};
+    private Edge[] edges;
 
      Node northNode;
      Node northeastNode;
@@ -23,7 +22,7 @@ public class Tile {
      Node southwestNode;
      Node northwestNode;
 
-    private Node[] nodes = new Node[]{northeastNode, northNode, southeastNode, southwestNode, southNode, northwestNode};
+    private Node[] nodes;
 
     private Resource resource;
 
@@ -35,6 +34,14 @@ public class Tile {
     public Tile(Resource resource, int number) {
         this.resource = resource;
         this.number = number;
+    }
+
+    public void initNodes(){
+        nodes = new Node[]{northeastNode, northNode, southeastNode, southwestNode, southNode, northwestNode};
+    }
+
+    public void initEdges(){
+        edges = new Edge[]{eastEdge, northeastEdge, southeastEdge, westEdge, southwestEdge, northwestEdge};
     }
 
     /**
