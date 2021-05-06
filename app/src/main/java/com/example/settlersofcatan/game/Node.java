@@ -1,15 +1,17 @@
 package com.example.settlersofcatan.game;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a Node of one or many tiles, can have a maximum of three adjacent tiles.
  * Can also have a building on it.
  */
 public class Node {
-    final List<Tile> adjacentTiles = new ArrayList<>();
-    final List<Edge> outgoingEdges = new ArrayList<>();
+    final Set<Tile> adjacentTiles = new HashSet<>();
+    final Set<Edge> outgoingEdges = new HashSet<>();
 
     private NodePlaceable building;
 
@@ -25,40 +27,34 @@ public class Node {
         this.building = building;
     }
 
-    public List<Node> getAdjacentNodes(){
-        List<Node> nodes = new ArrayList<>();
+    public Set<Node> getAdjacentNodes(){
+        Set<Node> nodes = new HashSet<>();
         return nodes;
     }
 
     public void addOutgoingEdge(Edge outgoingEdge){
-        if (!outgoingEdges.contains(outgoingEdge)){
-            outgoingEdges.add(outgoingEdge);
-        }
+        outgoingEdges.add(outgoingEdge);
+
         if (adjacentTiles.size() > 3){
             throw new  IllegalStateException("Node has too many outgoing edges!");
         }
     }
 
     public void addAdjacentTile(Tile adjacent){
-        if (!adjacentTiles.contains(adjacent)){
-            adjacentTiles.add(adjacent);
-        }
+        adjacentTiles.add(adjacent);
+
         if (adjacentTiles.size() > 3){
             throw new  IllegalStateException("Edge has too many adjacent tiles!");
         }
     }
 
-    public List<Tile> getAdjacentTiles(){
+    public Set<Tile> getAdjacentTiles(){
         return adjacentTiles;
     }
 
-    public List<Tile> getAdjacentTilesExcept(Tile tile){
-        List<Tile> tiles = new ArrayList<>();
-        for (Tile t : adjacentTiles){
-            if (t != tile){
-                tiles.add(t);
-            }
-        }
+    public Set<Tile> getAdjacentTilesExcept(Tile tile){
+        Set<Tile> tiles = new HashSet<>(adjacentTiles);
+        tiles.remove(tile);
         return tiles;
     }
 

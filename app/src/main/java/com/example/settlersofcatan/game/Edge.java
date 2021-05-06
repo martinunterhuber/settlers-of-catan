@@ -1,14 +1,16 @@
 package com.example.settlersofcatan.game;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Class representing a edge of a tile, can be adjacent to two tiles.
  */
 public class Edge {
-    final List<Tile> adjacentTiles = new ArrayList<>();
-    final List<Node> endpointNodes = new ArrayList<>();
+    final Set<Tile> adjacentTiles = new HashSet<>();
+    final Set<Node> endpointNodes = new HashSet<>();
 
     private Road road;
     private Harbor harbor;
@@ -26,9 +28,8 @@ public class Edge {
     }
 
     public void addAdjacentTile(Tile tile){
-        if (!adjacentTiles.contains(tile)){
-            adjacentTiles.add(tile);
-        }
+        adjacentTiles.add(tile);
+
         if (adjacentTiles.size() > 2){
             throw new  IllegalStateException("Edge has too many adjacent tiles!");
         }
@@ -36,10 +37,8 @@ public class Edge {
 
     public void setEndpoints(Node ... endpoints){
         for (Node endpoint : endpoints){
-            if (!endpointNodes.contains(endpoint)){
-                endpointNodes.add(endpoint);
-                endpoint.addOutgoingEdge(this);
-            }
+            endpointNodes.add(endpoint);
+            endpoint.addOutgoingEdge(this);
         }
         if (endpointNodes.size() > 2){
             throw new  IllegalStateException("Edge has too many endpoints!");

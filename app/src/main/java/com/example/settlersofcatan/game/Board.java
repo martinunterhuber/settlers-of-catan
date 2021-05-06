@@ -89,7 +89,7 @@ public class Board {
         // If it exists connect the southwest, west, and northwest Edges else create them.
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (i + j >= 2 && i + j <= 6){
+                if (inRange(i, j)){
                     Edge ne = new Edge();
                     Edge e = new Edge();
                     Edge se = new Edge();
@@ -136,7 +136,7 @@ public class Board {
         // For each Tile create the north and south Nodes.
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (i + j >= 2 && i + j <= 6){
+                if (inRange(i, j)){
                     Node n = new Node();
                     Node s = new Node();
                     tiles[i][j].northNode = n;
@@ -150,7 +150,7 @@ public class Board {
         // If it exists connect the northeast, southeast, southwest, and northwest Edges else create them.
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (i + j >= 2 && i + j <= 6){
+                if (inRange(i, j)){
                     if (inRange(i + 1, j - 1)){
                         tiles[i + 1][j - 1].southNode.addAdjacentTile(tiles[i][j]);
                         tiles[i][j].northeastNode = tiles[i + 1][j - 1].southNode;
