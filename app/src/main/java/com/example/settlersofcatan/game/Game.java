@@ -9,6 +9,7 @@ import java.util.Random;
  */
 public class Game {
     private static Game instance;
+    public static final Random random = new Random();
 
     private ArrayList<Player> players;
     private Board board;
@@ -40,8 +41,7 @@ public class Game {
 
     private void rollDice(Player player) {
         if (player.getId() == currentPlayerId && !alreadyRolled){
-            Random rand = new Random();
-            int numberRolled = rand.nextInt(6) + 1 + rand.nextInt(6) + 1;
+            int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
             alreadyRolled = true;
         }
@@ -71,7 +71,9 @@ public class Game {
     }
 
     private void buildRoad(Edge edge, Player player){
-        if (edge.getRoad() == null && player.getId() == currentPlayerId) {
+        if (edge.getRoad() == null
+                && player.getId() == currentPlayerId
+                && edge.hasNoAdjacentBuildings()) {
             edge.setRoad(new Road(player));
         }
     }

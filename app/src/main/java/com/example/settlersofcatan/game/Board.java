@@ -37,7 +37,6 @@ public class Board {
         Collections.shuffle(numbers);
 
         int[] resourceDistribution = {3, 3, 4, 4, 4};
-        Random rand = new Random();
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -48,7 +47,7 @@ public class Board {
                     } else {
                         int resourceIndex;
                         do {
-                            resourceIndex = rand.nextInt(5);
+                            resourceIndex = Game.random.nextInt(5);
                         } while(resourceDistribution[resourceIndex] <= 0);
                         resourceDistribution[resourceIndex]--;
                         tiles[i][j] = new Tile(Resource.valueOf(resourceIndex), numbers.remove(0));
