@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Settlers of Catan</string>
+    <string name="img_description_city">Build City</string>
+    <string name="img_description_settlement">Build Settlement</string>
+    <string name="img_description_road">Build Road</string>
     <string name="join_server">Join Server</string>
     <string name="create_server">Create Server</string>
     <string name="username">Username</string>
