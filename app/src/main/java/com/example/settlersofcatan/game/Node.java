@@ -10,8 +10,8 @@ import java.util.Set;
  * Can also have a building on it.
  */
 public class Node {
-    final Set<Tile> adjacentTiles = new HashSet<>();
-    final Set<Edge> outgoingEdges = new HashSet<>();
+    private final Set<Tile> adjacentTiles = new HashSet<>();
+    private final Set<Edge> outgoingEdges = new HashSet<>();
 
     private NodePlaceable building;
 
@@ -84,5 +84,9 @@ public class Node {
             }
         }
         return true;
+    }
+
+    public Set<Edge> getOutgoingEdges() {
+        return outgoingEdges;
     }
 }

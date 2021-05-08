@@ -26,9 +26,8 @@ public class Player {
     private ArrayList<Node> potentialSettlementPlacements;
     private ArrayList<Node> potentialCityPlacements;
 
-    public Player(){
-        this.id = -1;
-        this.name = null;
+    private Player(){
+        this(-1, null);
     }
 
     public Player(int id, String name){

@@ -19,42 +19,42 @@ public class BoardTest {
 
     @Test
     public void testEdgeAdjacency(){
-        Assert.assertEquals(tiles[3][2].westEdge, tiles[2][2].eastEdge);
+        Assert.assertEquals(tiles[3][2].getWestEdge(), tiles[2][2].getEastEdge());
     }
 
     @Test
     public void testNodeAdjacency(){
-        Assert.assertEquals(tiles[3][2].northwestNode, tiles[2][2].northeastNode);
+        Assert.assertEquals(tiles[3][2].getNorthwestNode(), tiles[2][2].getNortheastNode());
     }
 
     @Test
     public void testEdgeEndpoints(){
         Assert.assertEquals(
-                tiles[3][2].northeastEdge.endpointNodes,
-                new HashSet<>(Arrays.asList(tiles[3][2].northeastNode, tiles[3][2].northNode))
+                tiles[3][2].getNortheastEdge().getEndpointNodes(),
+                new HashSet<>(Arrays.asList(tiles[3][2].getNortheastNode(), tiles[3][2].getNorthNode()))
         );
     }
 
     @Test
     public void testNodeOutgoingEdges(){
         Assert.assertEquals(
-                tiles[3][2].southeastNode.outgoingEdges,
-                new HashSet<>(Arrays.asList(tiles[3][2].southeastEdge, tiles[3][2].eastEdge, tiles[3][3].northeastEdge))
+                tiles[3][2].getSoutheastNode().getOutgoingEdges(),
+                new HashSet<>(Arrays.asList(tiles[3][2].getSoutheastEdge(), tiles[3][2].getEastEdge(), tiles[3][3].getNortheastEdge()))
         );
     }
 
     @Test
     public void testNodeOutgoingEdgesOnlyTwo(){
         Assert.assertEquals(
-                tiles[2][0].northwestNode.outgoingEdges,
-                new HashSet<>(Arrays.asList(tiles[2][0].westEdge, tiles[2][0].northwestEdge))
+                tiles[2][0].getNorthwestNode().getOutgoingEdges(),
+                new HashSet<>(Arrays.asList(tiles[2][0].getWestEdge(), tiles[2][0].getNorthwestEdge()))
         );
     }
 
     @Test
     public void testEdgeAdjacentTiles(){
         Assert.assertEquals(
-                tiles[3][2].westEdge.adjacentTiles,
+                tiles[3][2].getWestEdge().getAdjacentTiles(),
                 new HashSet<>(Arrays.asList(tiles[2][2], tiles[3][2]))
         );
     }
@@ -62,7 +62,7 @@ public class BoardTest {
     @Test
     public void testEdgeAdjacentTilesOnlyOne(){
         Assert.assertEquals(
-                tiles[2][4].southeastEdge.adjacentTiles,
+                tiles[2][4].getSoutheastEdge().getAdjacentTiles(),
                 new HashSet<>(Collections.singletonList(tiles[2][4]))
         );
     }
@@ -70,7 +70,7 @@ public class BoardTest {
     @Test
     public void testNodeAdjacentTiles(){
         Assert.assertEquals(
-                tiles[3][2].southNode.adjacentTiles,
+                tiles[3][2].getSouthNode().getAdjacentTiles(),
                 new HashSet<>(Arrays.asList(tiles[3][2], tiles[2][3], tiles[3][3]))
         );
     }
@@ -78,7 +78,7 @@ public class BoardTest {
     @Test
     public void testNodeAdjacentTilesOnlyOne(){
         Assert.assertEquals(
-                tiles[0][4].southwestNode.adjacentTiles,
+                tiles[0][4].getSouthwestNode().getAdjacentTiles(),
                 new HashSet<>(Collections.singletonList(tiles[0][4]))
         );
     }

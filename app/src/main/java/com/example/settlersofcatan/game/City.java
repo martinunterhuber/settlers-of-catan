@@ -6,8 +6,8 @@ package com.example.settlersofcatan.game;
  */
 public class City extends NodePlaceable {
 
-    public City() {
-        super(null, null);
+    private City() {
+        this(null, null);
     }
 
     public City(Player player, Node location) {

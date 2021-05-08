@@ -6,7 +6,7 @@ package com.example.settlersofcatan.game;
  */
 
 public class Settlement extends NodePlaceable {
-    public Settlement(){
+    private Settlement(){
         super(null, null);
     }
 

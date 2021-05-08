@@ -9,8 +9,8 @@ import java.util.Set;
  * Class representing a edge of a tile, can be adjacent to two tiles.
  */
 public class Edge {
-    final Set<Tile> adjacentTiles = new HashSet<>();
-    final Set<Node> endpointNodes = new HashSet<>();
+    private final Set<Tile> adjacentTiles = new HashSet<>();
+    private final Set<Node> endpointNodes = new HashSet<>();
 
     private Road road;
     private Harbor harbor;
@@ -69,5 +69,9 @@ public class Edge {
             }
         }
         return false;
+    }
+
+    public Set<Tile> getAdjacentTiles() {
+        return adjacentTiles;
     }
 }
