@@ -2,6 +2,7 @@ package com.example.settlersofcatan.server_client.networking.kryonet;
 
 import android.util.Log;
 
+import com.esotericsoftware.kryo.ReferenceResolver;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -22,6 +23,7 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
 
     public NetworkServerKryo() {
         server = new Server();
+        server.getKryo().setReferences(true);
     }
 
     public void registerClass(Class<?> c) {

@@ -3,7 +3,17 @@ package com.example.settlersofcatan.server_client;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.example.settlersofcatan.game.Board;
+import com.example.settlersofcatan.game.City;
+import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Harbor;
+import com.example.settlersofcatan.game.Node;
+import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.Resource;
+import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.Settlement;
+import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
@@ -16,6 +26,7 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServe
 import java.io.IOException;
 import java.net.BindException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GameServer {
     private static GameServer instance;
@@ -48,6 +59,8 @@ public class GameServer {
             String username = ((ClientJoinedMessage) message).username;
             if (!username.equals(GameClient.getInstance().getUsername())){
                 clientUsernames.add(username);
+            } else {
+                clientUsernames.set(0, username);
             }
             Log.i(NetworkConstants.TAG, username + " joined the lobby");
             userChangedCallback.callback(username);
@@ -71,6 +84,22 @@ public class GameServer {
         server.registerClass(ClientLeftMessage.class);
         server.registerClass(GameStateMessage.class);
         server.registerClass(Game.class);
+        server.registerClass(HashSet.class);
+        server.registerClass(ArrayList.class);
+        server.registerClass(Board.class);
+        server.registerClass(Player.class);
+        server.registerClass(Tile.class);
+        server.registerClass(Tile[].class);
+        server.registerClass(Tile[][].class);
+        server.registerClass(Edge.class);
+        server.registerClass(Edge[].class);
+        server.registerClass(Node.class);
+        server.registerClass(Node[].class);
+        server.registerClass(Settlement.class);
+        server.registerClass(City.class);
+        server.registerClass(Road.class);
+        server.registerClass(Harbor.class);
+        server.registerClass(Resource.class);
     }
 
     private void startServer(){
@@ -89,6 +118,10 @@ public class GameServer {
             return "";
         }
         return clientUsernames.get(index);
+    }
+
+    public ArrayList<String> getClientUsernames() {
+        return clientUsernames;
     }
 
     public void broadcastMessage(BaseMessage message) {

@@ -15,7 +15,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<BaseMessage> callback;
 
     public NetworkClientKryo() {
-        client = new Client();
+        client = new Client(1000000, 1000000);
+        client.getKryo().setReferences(true);
     }
 
     public void registerClass(Class<?> c) {

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-
 import com.example.settlersofcatan.server_client.GameClient;
 
 public class GameActivity extends AppCompatActivity {
