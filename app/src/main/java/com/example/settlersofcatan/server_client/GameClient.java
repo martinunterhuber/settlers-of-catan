@@ -2,7 +2,17 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.game.Board;
+import com.example.settlersofcatan.game.City;
+import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Harbor;
+import com.example.settlersofcatan.game.Node;
+import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.Resource;
+import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.Settlement;
+import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
@@ -13,6 +23,8 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClien
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GameClient {
     private static GameClient instance;
@@ -45,10 +57,27 @@ public class GameClient {
         client.registerClass(ClientLeftMessage.class);
         client.registerClass(GameStateMessage.class);
         client.registerClass(Game.class);
+        client.registerClass(HashSet.class);
+        client.registerClass(ArrayList.class);
+        client.registerClass(Board.class);
+        client.registerClass(Player.class);
+        client.registerClass(Tile.class);
+        client.registerClass(Tile[].class);
+        client.registerClass(Tile[][].class);
+        client.registerClass(Edge.class);
+        client.registerClass(Edge[].class);
+        client.registerClass(Node.class);
+        client.registerClass(Node[].class);
+        client.registerClass(Settlement.class);
+        client.registerClass(City.class);
+        client.registerClass(Road.class);
+        client.registerClass(Harbor.class);
+        client.registerClass(Resource.class);
     }
 
     private void callback(BaseMessage message){
         if (message instanceof GameStateMessage){
+            Game.setInstance(((GameStateMessage) message).game);
             if (startGameCallback != null){
                 startGameCallback.callback(message);
             }
@@ -71,6 +100,10 @@ public class GameClient {
         client.sendMessage(new ClientLeftMessage(username));
         client.close();
         Log.i(NetworkConstants.TAG, "Disconnected from Host");
+    }
+
+    public void sendMessage(BaseMessage message){
+        client.sendMessage(message);
     }
 
     public String getUsername() {

@@ -23,6 +23,10 @@ public class Board {
 
 
     public Board(){
+
+    }
+
+    public void init(){
         initializeTiles();
         initializeEdges();
         initializeNodes();

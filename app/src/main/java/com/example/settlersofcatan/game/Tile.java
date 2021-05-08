@@ -31,6 +31,11 @@ public class Tile {
 
     private int number;
 
+    public Tile() {
+        this.resource = null;
+        this.number = -1;
+    }
+
     public Tile(Resource resource, int number) {
         this.resource = resource;
         this.number = number;

@@ -56,7 +56,9 @@ public class CreateServerFragment extends Fragment {
                     try {
                         GameClient client = GameClient.getInstance();
                         client.init("localhost", username);
-                        server.broadcastMessage(new GameStateMessage(new Game()));
+                        Game game = Game.getInstance();
+                        game.init(server.getClientUsernames());
+                        server.broadcastMessage(new GameStateMessage(game));
                     } catch (IOException e) {
                         Log.e(NetworkConstants.TAG, e.getMessage(), e);
                     }

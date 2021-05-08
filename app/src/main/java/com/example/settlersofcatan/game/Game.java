@@ -1,5 +1,8 @@
 package com.example.settlersofcatan.game;
 
+import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -28,8 +31,13 @@ public class Game {
     public static Game getInstance() {
         if (instance == null){
             instance = new Game();
+            instance.board.init();
         }
         return instance;
+    }
+
+    public static void setInstance(Game instance) {
+        Game.instance = instance;
     }
 
     public void init(ArrayList<String> names){
@@ -51,7 +59,7 @@ public class Game {
         if (player.getId() == currentPlayerId) {
             currentPlayerId = (players.indexOf(player) + 1) % players.size();
             alreadyRolled = false;
-            // TODO: GameClient.getInstance() send this to server
+            GameClient.getInstance().sendMessage(new GameStateMessage(Game.getInstance()));
         }
     }
 
@@ -76,5 +84,13 @@ public class Game {
                 && edge.connectsPlayer(player)) {
             edge.setRoad(new Road(player));
         }
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }

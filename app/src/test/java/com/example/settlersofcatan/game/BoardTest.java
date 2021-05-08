@@ -13,6 +13,7 @@ public class BoardTest {
     @Before
     public void init(){
         Board board = new Board();
+        board.init();
         tiles = board.getTiles();
     }
 

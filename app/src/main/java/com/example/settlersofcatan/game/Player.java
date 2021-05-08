@@ -26,9 +26,18 @@ public class Player {
     private ArrayList<Node> potentialSettlementPlacements;
     private ArrayList<Node> potentialCityPlacements;
 
+    public Player(){
+        this.id = -1;
+        this.name = null;
+    }
+
     public Player(int id, String name){
         this.id = id;
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void giveSingleResource(Resource resource) {

@@ -7,6 +7,11 @@ public class Road extends Placeable {
 
     private Edge location;
 
+    public Road(){
+        super(null);
+        location = null;
+    }
+
     public Road(Player player) {
         super(player);
     }

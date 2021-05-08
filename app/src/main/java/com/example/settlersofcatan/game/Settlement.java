@@ -6,6 +6,10 @@ package com.example.settlersofcatan.game;
  */
 
 public class Settlement extends NodePlaceable {
+    public Settlement(){
+        super(null, null);
+    }
+
     public Settlement(Player player, Node location) {
         super(player, location);
     }
