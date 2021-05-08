@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.app.AlertDialog;
+import android.os.Bundle;
+
+import com.example.settlersofcatan.server_client.GameClient;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -14,7 +18,6 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent1;
     private OpponentView opponent2;
     private OpponentView opponent3;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,22 @@ public class GameActivity extends AppCompatActivity {
                 player.buildCity();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.quit_lobby_title)
+                .setMessage(R.string.quit_lobby_confirmation)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    GameClient client = GameClient.getInstance();
+                    if (client != null){
+                        new Thread(client::disconnect).start();
+                    }
+                    finish();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
 }
