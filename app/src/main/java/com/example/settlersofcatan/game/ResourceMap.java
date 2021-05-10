@@ -1,15 +1,17 @@
 package com.example.settlersofcatan.game;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResourceMap {
 
-    private EnumMap<Resource, Integer> resources;
+    private Map<Resource, Integer> resources;
 
     public ResourceMap() {
-        resources = new EnumMap<>(Resource.class);
+        resources = new HashMap<>();
         for (Resource resource : Resource.values()){
-            resources.put(resource, 0);
+            resources.put(resource, 10);
         }
     }
 

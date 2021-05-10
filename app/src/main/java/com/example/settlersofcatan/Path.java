@@ -1,8 +1,10 @@
 package com.example.settlersofcatan;
 
 import com.example.settlersofcatan.game.Edge;
+import com.example.settlersofcatan.game.NodePlaceable;
+import com.example.settlersofcatan.game.Settlement;
 
-public class Path {
+public class Path implements HexagonPart {
     private Point x1;
     private Point x2;
     private int length;
@@ -62,5 +64,10 @@ public class Path {
 
     public Edge getEdge() {
         return edge;
+    }
+
+    @Override
+    public void setSelectedResID(){
+        resID = R.drawable.road_selected;
     }
 }

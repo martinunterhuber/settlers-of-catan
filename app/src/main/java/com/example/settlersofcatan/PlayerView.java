@@ -11,9 +11,14 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.NodePlaceable;
+import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.server_client.GameClient;
 
 /**
@@ -22,8 +27,11 @@ import com.example.settlersofcatan.server_client.GameClient;
 public class PlayerView extends View {
 
     private HexGrid hexGrid;
-    private Point touchedPoint;
-    private Path touchedPath;
+
+    private HexagonPart selected;
+
+    private Game game = Game.getInstance();
+    private GameClient client = GameClient.getInstance();
 
     private final int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_white , R.drawable.settlement_orange, R.drawable.settlement_red, R.drawable.settlement_blue};
     private final int[] ROAD_IDS = new int[]{R.drawable.road_white, R.drawable.road_orange, R.drawable.road_red, R.drawable.road_blue};
@@ -46,6 +54,7 @@ public class PlayerView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (hexGrid.getCorners()!=null) {
+            setRoads();
             drawRoads(canvas);
             setBuildings();
             drawCorners(canvas);
@@ -56,74 +65,56 @@ public class PlayerView extends View {
         for (Point point : hexGrid.getCorners()){
             NodePlaceable building = point.getNode().getBuilding();
             if (building != null){
-                point.setResID(SETTLEMENT_IDS[building.getPlayer().getId()]);
+                if (building instanceof Settlement){
+                    point.setResID(SETTLEMENT_IDS[building.getPlayer().getId()]);
+                } else {
+                    point.setResID(CITY_IDS[building.getPlayer().getId()]);
+                }
+            } else {
+                point.setResID(R.drawable.corner_unselected);
+            }
+            if (point == selected) {
+                point.setSelectedResID();
             }
         }
+    }
+
+    public void setRoads(){
+        for (Path path : hexGrid.getPaths()){
+            Road road = path.getEdge().getRoad();
+            if (road != null){
+                path.setResID(ROAD_IDS[road.getPlayer().getId()]);
+            } else if (selected != path) {
+                path.setResID(R.drawable.road_unselected);
+            } else {
+                path.setSelectedResID();
+            }
+        }
+    }
+
+    public void markSelected(Point touched){
+        HexagonPart touchedPart = null;
+        if (hexGrid.isInCircle(touched)) {
+            touchedPart = hexGrid.getTouchedCorner();
+        } else if (hexGrid.isOnLine(touched)) {
+            touchedPart = hexGrid.getTouchedLine();
+        }
+
+        if (selected != null && touchedPart == selected){
+            selected = null;
+        } else {
+            selected = touchedPart;
+        }
+        invalidate();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Point touched = new Point((int) event.getX(), (int) event.getY());
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                // corner touched
-                if (hexGrid.isInCircle(touched)) {
-                    //----------- unselect ----------------------------------------------------------
-                    // previous selected corner gets unselected
-                    if (touchedPoint!=null
-                            && touchedPoint.getResID()==R.drawable.corner_selected)
-                        touchedPoint.setResID(R.drawable.corner_unselected);
-
-                    // previous selected settlement gets unselected
-                    if (touchedPoint!=null
-                            && touchedPoint.getResID()==R.drawable.settlement_selected)
-                        touchedPoint.setResID(R.drawable.settlement_white);
-
-                    // previous selected path gets unselected
-                    if (touchedPath!=null && touchedPath.getResID()==R.drawable.road_selected)
-                        touchedPath.setResID(R.drawable.road_unselected);
-
-                    //----------- select ----------------------------------------------------------
-                    // touched corner gets selected if there's NO settlement placed
-                    touchedPoint = hexGrid.getTouchedCorner();
-                    if (touchedPoint.getResID()==R.drawable.corner_unselected) {
-                        touchedPoint.setResID(R.drawable.corner_selected);
-                        invalidate();
-                        return true;
-                    }
-
-                    // settlement is selected
-                    if (touchedPoint.getResID()==R.drawable.settlement_white) {
-                        touchedPoint.setResID(R.drawable.settlement_selected);
-                        invalidate();
-                        return true;
-                    }
-
-                }else if (hexGrid.isOnLine(touched)){       // road touched
-                    //----------- unselect ----------------------------------------------------------
-                    // previous selected path gets unselected
-                    if (touchedPath!=null && touchedPath.getResID()==R.drawable.road_selected)
-                        touchedPath.setResID(R.drawable.road_unselected);
-
-                    // previous selected settlement gets unselected
-                    if (touchedPoint!=null
-                            && touchedPoint.getResID()==R.drawable.settlement_selected)
-                        touchedPoint.setResID(R.drawable.settlement_white);
-
-                    // previous selected corner gets unselected
-                    if (touchedPoint!=null && touchedPoint.getResID()==R.drawable.corner_selected)
-                        touchedPoint.setResID(R.drawable.corner_unselected);
-
-                    //----------- select ----------------------------------------------------------
-                    // touched road gets selected
-                    touchedPath = hexGrid.getTouchedLine();
-                    if (touchedPath.getResID()==R.drawable.road_unselected) {
-                        touchedPath.setResID(R.drawable.road_selected);
-                        invalidate();
-                        return true;
-                    }
-                }
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            markSelected(touched);
+            return true;
         }
         return false;
     }
@@ -139,25 +130,26 @@ public class PlayerView extends View {
     }
 
     public void buildRoad(){
-        touchedPath.setResID(R.drawable.road_white);
-        invalidate();
+        if (selected != null && selected instanceof Path){
+            game.buildRoad(((Path)selected).getEdge(), client.getId());
+            ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
+            invalidate();
+        }
     }
 
     public void buildSettlement() {
-        if (touchedPoint.isAccessable()) {
-            touchedPoint.setResID(R.drawable.settlement_white);
-            touchedPoint.setAccessable(false);
-            for (Point p : hexGrid.getNeighbouringCities(touchedPoint)) {
-                p.setAccessable(false);
-            }
-            Game.getInstance().buildSettlement(touchedPoint.getNode(), GameClient.getInstance().getId());
+        if (selected != null && selected instanceof Point){
+            game.buildSettlement(((Point)selected).getNode(), client.getId());
+            selected = null;
+            ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
             invalidate();
         }
     }
 
     public void buildCity(){
-        if (touchedPoint.getResID() == R.drawable.settlement_selected) {
-            touchedPoint.setResID(R.drawable.city_white);
+        if (selected != null && selected instanceof Point){
+            game.buildCity(((Point)selected).getNode(), client.getId());
+            ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
             invalidate();
         }
     }

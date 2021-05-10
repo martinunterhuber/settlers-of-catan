@@ -11,6 +11,7 @@ import com.example.settlersofcatan.game.Harbor;
 import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
+import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
@@ -26,6 +27,8 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServe
 import java.io.IOException;
 import java.net.BindException;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class GameServer {
@@ -102,6 +105,8 @@ public class GameServer {
         server.registerClass(Road.class);
         server.registerClass(Harbor.class);
         server.registerClass(Resource.class);
+        server.registerClass(HashMap.class);
+        server.registerClass(ResourceMap.class);
     }
 
     private void startServer(){
