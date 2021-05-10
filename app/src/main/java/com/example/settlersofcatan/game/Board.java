@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -208,6 +210,10 @@ public class Board {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public Tile[] getPackedTiles() {
+        return packedTiles;
     }
 
     /**

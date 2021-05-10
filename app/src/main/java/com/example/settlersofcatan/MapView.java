@@ -21,6 +21,10 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
+import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Resource;
+import com.example.settlersofcatan.game.Tile;
+
 
 /**
  * View class on which the board is drawn.
@@ -33,8 +37,6 @@ public class MapView extends View {
     private final Point[] centers = new Point[19];
     private final Hexagon[] tiles= new Hexagon[19];
     private final Bitmap[] bitmaps= new Bitmap[19];
-    private final List<Point> shuffledTiles;
-    private final List<Integer> shuffeldNumberToken;
     private final HexGrid hexGrid;    //to avoid duplicate points or paths
     private int radius;
     private int hexHeight;
@@ -47,8 +49,6 @@ public class MapView extends View {
         generateBitmaps();
 
         hexGrid=new HexGrid(tiles);
-        shuffledTiles = randomiseTiles();
-        shuffeldNumberToken = randomizeNumbers();
     }
 
     public MapView(Context context, @Nullable AttributeSet attrs) {
@@ -59,8 +59,6 @@ public class MapView extends View {
         generateBitmaps();
 
         hexGrid=new HexGrid(tiles);
-        shuffledTiles = randomiseTiles();
-        shuffeldNumberToken = randomizeNumbers();
     }
 
     public MapView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -71,8 +69,6 @@ public class MapView extends View {
         generateBitmaps();
 
         hexGrid=new HexGrid(tiles);
-        shuffledTiles = randomiseTiles();
-        shuffeldNumberToken = randomizeNumbers();
     }
 
     @SuppressLint("DrawAllocation")
@@ -84,6 +80,12 @@ public class MapView extends View {
         drawNumberTokens(canvas);
     }
 
+    private Point hexToPixel(Tile tile, int scale, Point offset){
+        int x = (int)(scale * (Math.sqrt(3) * tile.getQ()  +  Math.sqrt(3)/2 * tile.getR())) + offset.getX();
+        int y = (int)(scale * (3./2 * (double)tile.getR())) + offset.getY();
+        return new Point(x, y);
+    }
+
     /**
      * Calculates the center points of each hexagon based on the screen size
      * starting from the middle row of the field.
@@ -93,32 +95,11 @@ public class MapView extends View {
         radius = (int) (2*hexHeight/Math.sqrt(3));
         int screenMiddle = screenHeight/2;
 
-        //third row, 5 fields
-        centers[7]=new Point(hexHeight, screenMiddle);
-        for (int i=1; i<5; i++){
-            centers[i+7]=new Point(centers[i+6].getX()+2*hexHeight, screenMiddle);
+        Tile[] packedTiles = Game.getInstance().getBoard().getPackedTiles();
+        for (int i = 0; i < packedTiles.length; i++) {
+            Tile tile = packedTiles[i];
+            centers[i] = hexToPixel(tile, radius, new Point(-hexHeight, hexHeight * 5));
         }
-
-        //second row, 4 fields
-        for (int i=0; i<4; i++){
-            centers[i+3]=new Point(centers[i+7].getX()+hexHeight, (int) (screenMiddle - 1.5*radius));
-        }
-
-        //fourth row, 4 fields
-        for (int i=0; i<4; i++){
-            centers[i+12]=new Point(centers[i+7].getX()+hexHeight, (int) (screenMiddle + 1.5*radius));
-        }
-
-        //first row, 3 fields
-        for (int i = 0; i<3; i++){
-            centers[i]=new Point(centers[i+3].getX()+hexHeight, (int) (centers[i+3].getY() - 1.5*radius));
-        }
-
-        //fifth row, 3 fields
-        for (int i = 0; i<3; i++){
-            centers[i+16]=new Point(centers[i+12].getX()+hexHeight, (int) (centers[i+12].getY() + 1.5*radius));
-        }
-
     }
 
     private void generateTiles(){
@@ -127,31 +108,40 @@ public class MapView extends View {
         }
     }
 
-    private List<Point> randomiseTiles(){
-        ArrayList<Point> tilesToShuffle = new ArrayList<>(Arrays.asList(centers));
-
-        tilesToShuffle.remove(9);
-        Collections.shuffle(tilesToShuffle);
-        return tilesToShuffle;
-    }
-
     /**
      *  Loads all bitmaps that are needed for the board
      */
     private void generateBitmaps(){
-        bitmaps[0]= BitmapFactory.decodeResource(getResources(),R.drawable.deserthex);
+        Tile[] packedTiles = Game.getInstance().getBoard().getPackedTiles();
+        for (int i = 0; i < packedTiles.length; i++) {
+            Tile tile = packedTiles[i];
+            int drawable;
+            Resource resource = tile.getResource();
+            if (resource == null){
+                drawable = R.drawable.deserthex;
+            } else {
+                switch (tile.getResource()){
+                    case SHEEP:
+                        drawable = R.drawable.sheephex;
+                        break;
+                    case FOREST:
+                        drawable = R.drawable.woodhex;
+                        break;
+                    case WHEAT:
+                        drawable = R.drawable.wheathex;
+                        break;
+                    case CLAY:
+                        drawable = R.drawable.clayhex;
+                        break;
+                    case ORE:
+                        drawable = R.drawable.orehex;
+                        break;
+                    default:
+                        drawable = R.drawable.deserthex;
+                }
+            }
 
-        for (int i=1; i<19; i++){
-            if (i<4)
-                bitmaps[i]= BitmapFactory.decodeResource(getResources(),R.drawable.clayhex);
-            else if (i<7)
-                bitmaps[i]= BitmapFactory.decodeResource(getResources(),R.drawable.orehex);
-            else if (i<11)
-                bitmaps[i]= BitmapFactory.decodeResource(getResources(),R.drawable.wheathex);
-            else if (i<15)
-                bitmaps[i]= BitmapFactory.decodeResource(getResources(),R.drawable.sheephex);
-            else
-                bitmaps[i]= BitmapFactory.decodeResource(getResources(),R.drawable.woodhex);
+            bitmaps[i]= BitmapFactory.decodeResource(getResources(), drawable);
         }
     }
 
@@ -184,30 +174,9 @@ public class MapView extends View {
         int imgOffsetX= - hexHeight;
         int imgOffsetY= - radius;
 
-        Bitmap desert=Bitmap.createScaledBitmap(bitmaps[0],2*hexHeight,2*radius,false);
-        canvas.drawBitmap(desert,centers[9].getX()+imgOffsetX, centers[9].getY()+imgOffsetY, null);
-
-        for (int i=1; i<19; i++) {
-            if (i < 4){
-                setResource(shuffledTiles.get(i - 1), "clay");
-                Log.i("MAP_VIEW", "Resource clay set.");
-            }else if (i < 7){
-                setResource(shuffledTiles.get(i - 1), "ore");
-                Log.i("MAP_VIEW", "Resource ore set.");
-            }else if (i < 11){
-                setResource(shuffledTiles.get(i - 1), "wheat");
-                Log.i("MAP_VIEW", "Resource wheat set.");
-            }else if (i<15) {
-                setResource(shuffledTiles.get(i - 1), "sheep");
-                Log.i("MAP_VIEW", "Resource sheep set.");
-            }else{
-                setResource(shuffledTiles.get(i - 1), "wood");
-                Log.i("MAP_VIEW", "Resource wood set.");
-            }
-
-
+        for (int i=0; i<19; i++) {
             Bitmap scaled=Bitmap.createScaledBitmap(bitmaps[i],2*hexHeight,2*radius,false);
-            canvas.drawBitmap(scaled,shuffledTiles.get(i-1).getX()+imgOffsetX, shuffledTiles.get(i-1).getY()+imgOffsetY, null);
+            canvas.drawBitmap(scaled,centers[i].getX()+imgOffsetX, centers[i].getY()+imgOffsetY, null);
         }
 
     }
@@ -220,10 +189,11 @@ public class MapView extends View {
         textpaint.setTextSize(40f);
         Bitmap numberToken = getBitmap(R.drawable.tilenumbertoken);
 
-        for (int i=0; i<18; i++){
-            setNumberToken(shuffledTiles.get(i), shuffeldNumberToken.get(i));
-            canvas.drawBitmap(numberToken,shuffledTiles.get(i).getX()-50, shuffledTiles.get(i).getY()-50, null);
-            canvas.drawText(shuffeldNumberToken.get(i).toString(),shuffledTiles.get(i).getX(),shuffledTiles.get(i).getY()+10, textpaint);
+        Tile[] tiles = Game.getInstance().getBoard().getPackedTiles();
+        for (int i = 0; i < tiles.length; i++) {
+            setNumberToken(centers[i], tiles[i].getNumber());
+            canvas.drawBitmap(numberToken,centers[i].getX()-50, centers[i].getY()-50, null);
+            canvas.drawText(String.valueOf(tiles[i].getNumber()),centers[i].getX(),centers[i].getY()+10, textpaint);
         }
 
     }
@@ -232,14 +202,6 @@ public class MapView extends View {
 
     public HexGrid getHexGrid() {
         return hexGrid;
-    }
-
-    public void setResource(Point center, String resource){
-        for (Hexagon hex : tiles){
-            if (hex.getCenter().equals(center)){
-                hex.setResource(resource);
-            }
-        }
     }
 
     public void setNumberToken(Point center, int token){
