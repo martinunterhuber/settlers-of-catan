@@ -69,7 +69,9 @@ public class GameServer {
             clientUsernames.remove(username);
             Log.i(NetworkConstants.TAG, username + " left the lobby");
             userChangedCallback.callback(username);
-        } else {
+        } else if (message instanceof GameStateMessage) {
+            broadcastMessage(message);
+         }else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }

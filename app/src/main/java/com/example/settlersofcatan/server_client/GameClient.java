@@ -2,6 +2,9 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.Edge;
@@ -30,7 +33,9 @@ public class GameClient {
     private static GameClient instance;
     private NetworkClientKryo client;
     private String username = "";
+    private int id;
     private Callback<BaseMessage> startGameCallback;
+    private AppCompatActivity gameActivity;
 
     private GameClient(){
 
@@ -78,11 +83,23 @@ public class GameClient {
     private void callback(BaseMessage message){
         if (message instanceof GameStateMessage){
             Game.setInstance(((GameStateMessage) message).game);
+            for (Player player : Game.getInstance().getPlayers()){
+                if (player.getName().equals(this.username)){
+                    id = player.getId();
+                }
+            }
             if (startGameCallback != null){
                 startGameCallback.callback(message);
             }
+            if (gameActivity != null) {
+                gameActivity.runOnUiThread(() -> gameActivity.recreate());
+            }
         }
         Log.i(NetworkConstants.TAG, message.toString());
+    }
+
+    public void registerActivity(AppCompatActivity activity){
+        gameActivity = activity;
     }
 
     public void registerStartGameCallback(Callback<BaseMessage> c){
@@ -108,5 +125,9 @@ public class GameClient {
 
     public String getUsername() {
         return username;
+    }
+
+    public int getId() {
+        return id;
     }
 }

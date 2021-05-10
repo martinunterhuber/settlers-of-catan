@@ -1,6 +1,9 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.GameServer;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ public class Game {
     private Game(){
         players = new ArrayList<>();
         board = new Board();
-        currentPlayerId = 0;
+        currentPlayerId = 1;
         alreadyRolled = false;
     }
 
@@ -47,42 +50,52 @@ public class Game {
         }
     }
 
-    private void rollDice(Player player) {
-        if (player.getId() == currentPlayerId && !alreadyRolled){
+    public void rollDice(int playerId) {
+        if (playerId == currentPlayerId && !alreadyRolled){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
             alreadyRolled = true;
         }
     }
 
-    private void endTurn(Player player){
-        if (player.getId() == currentPlayerId) {
-            currentPlayerId = (players.indexOf(player) + 1) % players.size();
+    public void endTurn(int playerId){
+        if (playerId == currentPlayerId) {
+            currentPlayerId = (playerId + 1) % players.size();
             alreadyRolled = false;
-            GameClient.getInstance().sendMessage(new GameStateMessage(Game.getInstance()));
+            // TODO: send messages for every action
+            new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
         }
     }
 
-    private void buildSettlement(Node node, Player player){
-        if (node.getBuilding() == null && player.getId() == currentPlayerId && node.hasNoAdjacentBuildings()) {
-            node.setBuilding(new Settlement(player, node));
+    public Player getPlayerById(int playerId){
+        for (Player player : players){
+            if (player.getId() == playerId){
+                return player;
+            }
+        }
+        throw new IllegalArgumentException("Player does not exits");
+    }
+
+    public void buildSettlement(Node node, int playerId){
+        if (node.getBuilding() == null && playerId == currentPlayerId && node.hasNoAdjacentBuildings()) {
+            node.setBuilding(new Settlement(getPlayerById(playerId), node));
         }
     }
 
-    private void buildCity(Node node, Player player){
+    public void buildCity(Node node, int playerId){
         if (node.getBuilding() != null
                 && node.getBuilding() instanceof Settlement
                 && ((Settlement) node.getBuilding()).player.getId() == currentPlayerId
-                && player.getId() == currentPlayerId) {
-            node.setBuilding(new City(player, node));
+                && playerId == currentPlayerId) {
+            node.setBuilding(new City(getPlayerById(playerId), node));
         }
     }
 
-    private void buildRoad(Edge edge, Player player){
+    public void buildRoad(Edge edge, int playerId){
         if (edge.getRoad() == null
-                && player.getId() == currentPlayerId
-                && edge.connectsPlayer(player)) {
-            edge.setRoad(new Road(player));
+                && playerId == currentPlayerId
+                && edge.connectsPlayer(getPlayerById(playerId))) {
+            edge.setRoad(new Road(getPlayerById(playerId)));
         }
     }
 

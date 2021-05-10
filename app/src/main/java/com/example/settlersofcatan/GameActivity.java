@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.widget.Button;
+
+import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.GameClient;
 
 public class GameActivity extends AppCompatActivity {
@@ -17,12 +20,12 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent1;
     private OpponentView opponent2;
     private OpponentView opponent3;
+    private Button endTurnButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
         map=findViewById(R.id.mapView);
         player=findViewById(R.id.playerView);
         player.setHexGrid(map.getHexGrid());
@@ -35,6 +38,10 @@ public class GameActivity extends AppCompatActivity {
 
         opponent3=findViewById(R.id.opponent3);
 
+        endTurnButton = findViewById(R.id.endTurnButton);
+        endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(GameClient.getInstance().getId()));
+
+        GameClient.getInstance().registerActivity(this);
     }
 
     /**
