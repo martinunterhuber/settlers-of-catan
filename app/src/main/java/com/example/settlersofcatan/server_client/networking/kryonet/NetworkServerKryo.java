@@ -22,7 +22,7 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
     private Callback<BaseMessage> messageCallback;
 
     public NetworkServerKryo() {
-        server = new Server();
+        server = new Server(1000000, 1000000);
         server.getKryo().setReferences(true);
     }
 

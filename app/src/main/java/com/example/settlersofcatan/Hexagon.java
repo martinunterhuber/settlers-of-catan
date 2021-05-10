@@ -2,6 +2,7 @@ package com.example.settlersofcatan;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 
@@ -73,24 +74,24 @@ public class Hexagon {
      * Calculates the corners of the hexagon starting from the top point in clockwise direction.
      */
     private void calcPoints(){
-        points[0] = new Point(center.getX(),center.getY() - radius, R.drawable.corner_unselected);
-        points[1] = new Point(points[0].getX() + halfWidth, points[0].getY() + b, R.drawable.corner_unselected);
-        points[2] = new Point(points[1].getX(), points[1].getY() + radius, R.drawable.corner_unselected);
-        points[3] = new Point(center.getX(),center.getY() + radius, R.drawable.corner_unselected);
-        points[4] = new Point(points[2].getX() - width, points[2].getY(), R.drawable.corner_unselected);
-        points[5] = new Point(points[4].getX(), points[1].getY(), R.drawable.corner_unselected);
+        Node[] nodes = tile.getNodes();
+        int i = 0;
+
+        points[0] = new Point(center.getX(),center.getY() - radius, R.drawable.corner_unselected, nodes[i++]);
+        points[1] = new Point(points[0].getX() + halfWidth, points[0].getY() + b, R.drawable.corner_unselected, nodes[i++]);
+        points[2] = new Point(points[1].getX(), points[1].getY() + radius, R.drawable.corner_unselected, nodes[i++]);
+        points[3] = new Point(center.getX(),center.getY() + radius, R.drawable.corner_unselected, nodes[i++]);
+        points[4] = new Point(points[2].getX() - width, points[2].getY(), R.drawable.corner_unselected, nodes[i++]);
+        points[5] = new Point(points[4].getX(), points[1].getY(), R.drawable.corner_unselected, nodes[i]);
     }
 
     /**
      * Calculates the paths between the points in a clockwise direction.
      */
     private void calcPaths(){
-
-        for (int i=0; i<5; i++){
-            paths[i]=new Path(points[i],points[i+1], R.drawable.road_unselected);
+        for (int i=0; i<6; i++){
+            paths[i]=new Path(points[i],points[(i+1) % 6], R.drawable.road_unselected, tile.getEdges()[i]);
         }
-
-        paths[5]=new Path(points[5],points[0], R.drawable.road_unselected);
     }
 
 //------- Getter and Setter --------------------------------------------------------------------

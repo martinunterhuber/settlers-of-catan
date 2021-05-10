@@ -41,11 +41,11 @@ public class Tile {
     }
 
     public void initNodes(){
-        nodes = new Node[]{northeastNode, northNode, southeastNode, southwestNode, southNode, northwestNode};
+        nodes = new Node[]{northNode, northeastNode, southeastNode, southNode, southwestNode, northwestNode};
     }
 
     public void initEdges(){
-        edges = new Edge[]{eastEdge, northeastEdge, southeastEdge, westEdge, southwestEdge, northwestEdge};
+        edges = new Edge[]{northeastEdge, eastEdge, southeastEdge, southwestEdge, westEdge, northwestEdge};
     }
 
     /**
