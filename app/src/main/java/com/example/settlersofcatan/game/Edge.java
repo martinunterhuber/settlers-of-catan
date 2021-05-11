@@ -27,6 +27,14 @@ public class Edge {
         this.road = road;
     }
 
+    public Harbor getHarbor() {
+        return harbor;
+    }
+
+    public void setHarbor(Harbor harbor) {
+        this.harbor = harbor;
+    }
+
     public void addAdjacentTile(Tile tile){
         adjacentTiles.add(tile);
 

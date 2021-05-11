@@ -204,6 +204,43 @@ public class Board {
         }
     }
 
+    /**
+     *  Method for random harbor initialization, works only with the standard board.
+     *  Elaboration on location placement https://imgur.com/a/gnafJje.
+     */
+    private void initializeHarbors() {
+        List<Harbor> harbors = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            harbors.add(new Harbor(Resource.valueOf(i)));
+        }
+        for (int i = 0; i < 4; i++) {
+            harbors.add(new Harbor());
+        }
+        Collections.shuffle(harbors);
+
+        List<Edge> eligibleEdges = new ArrayList<>();
+
+        eligibleEdges.add(tiles[0][2].getWestEdge());
+        eligibleEdges.add(tiles[2][0].getNorthwestEdge());
+        eligibleEdges.add(tiles[4][0].getNortheastEdge());
+        eligibleEdges.add(tiles[4][2].getEastEdge());
+        eligibleEdges.add(tiles[2][4].getSoutheastEdge());
+        eligibleEdges.add(tiles[0][4].getSoutheastEdge());
+
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[1][1].getWestEdge() : tiles[1][1].getNorthwestEdge());
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[3][0].getNorthwestEdge() : tiles[3][0].getNortheastEdge());
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[4][1].getNortheastEdge() : tiles[4][1].getEastEdge());
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[3][3].getEastEdge() : tiles[3][3].getSoutheastEdge());
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[1][4].getSoutheastEdge() : tiles[1][4].getNortheastEdge());
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[0][3].getSoutheastEdge() : tiles[0][3].getWestEdge());
+
+        Collections.shuffle(eligibleEdges);
+        for (int i = 0 ; i < harbors.size(); i++) {
+            eligibleEdges.get(i).setHarbor(harbors.get(i));
+        }
+
+    }
+
     private static boolean inRange(int i, int j){
         return i < 5 && i >= 0 && j < 5 && j >= 0 && i + j >= 2 && i + j <= 6;
     }
