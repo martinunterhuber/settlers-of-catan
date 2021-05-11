@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.settlersofcatan.GameActivity;
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.Edge;
@@ -97,7 +98,11 @@ public class GameClient {
                 startGameCallback.callback(message);
             }
             if (gameActivity != null) {
-                gameActivity.runOnUiThread(() -> gameActivity.recreate());
+                gameActivity.overridePendingTransition(0, 0);
+                gameActivity.findViewById(R.id.mapView).invalidate();
+                gameActivity.findViewById(R.id.playerView).invalidate();
+                gameActivity.findViewById(R.id.resourceView).invalidate();
+                gameActivity.overridePendingTransition(0, 0);
             }
         }
         Log.i(NetworkConstants.TAG, message.toString());

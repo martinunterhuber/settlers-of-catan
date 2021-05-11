@@ -23,8 +23,6 @@ public class ResourceView extends FrameLayout {
     private TextView clayTxt;
     private TextView oreTxt;
 
-    private Player player;
-
     public ResourceView(@NonNull Context context) {
         super(context);
         initView();
@@ -52,10 +50,10 @@ public class ResourceView extends FrameLayout {
     private void initView() {
         inflate(getContext(), R.layout.resource_view, this);
         setWillNotDraw(false);
-        player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
     }
 
     private void setResourceValues(){
+        Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
         woodTxt.setText(String.valueOf(player.getResourceCount(Resource.FOREST)));
         wheatTxt.setText(String.valueOf(player.getResourceCount(Resource.WHEAT)));
         sheepTxt.setText(String.valueOf(player.getResourceCount(Resource.SHEEP)));

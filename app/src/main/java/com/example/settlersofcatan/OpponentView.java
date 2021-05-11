@@ -43,17 +43,16 @@ public class OpponentView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        setOpponent();
+        textName = findViewById(R.id.txt_name);
+        textPointCount = findViewById(R.id.txt_countpoints);
+        opponentLayout = findViewById(R.id.layout_opponent);
         updateValues();
     }
 
     private void initView() {
         inflate(getContext(), R.layout.opponent_view, this);
         setWillNotDraw(false);
-        setOpponent();
-        textName = findViewById(R.id.txt_name);
-        textPointCount = findViewById(R.id.txt_countpoints);
-        opponentLayout = findViewById(R.id.layout_opponent);
-        updateValues();
     }
 
     private void updateValues(){

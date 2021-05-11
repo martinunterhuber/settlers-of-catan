@@ -33,7 +33,6 @@ public class PlayerView extends View {
 
     private HexagonPart selected;
 
-    private Game game = Game.getInstance();
     private GameClient client = GameClient.getInstance();
 
     final static int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_green , R.drawable.settlement_orange, R.drawable.settlement_red, R.drawable.settlement_blue};
@@ -124,7 +123,7 @@ public class PlayerView extends View {
 
     public void buildRoad(){
         if (selected != null && selected instanceof Path){
-            game.buildRoad(((Path)selected).getEdge(), client.getId());
+            Game.getInstance().buildRoad(((Path)selected).getEdge(), client.getId());
             ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
             invalidate();
         }
@@ -132,7 +131,7 @@ public class PlayerView extends View {
 
     public void buildSettlement() {
         if (selected != null && selected instanceof Point){
-            game.buildSettlement(((Point)selected).getNode(), client.getId());
+            Game.getInstance().buildSettlement(((Point)selected).getNode(), client.getId());
             selected = null;
             ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
             invalidate();
@@ -141,7 +140,7 @@ public class PlayerView extends View {
 
     public void buildCity(){
         if (selected != null && selected instanceof Point){
-            game.buildCity(((Point)selected).getNode(), client.getId());
+            Game.getInstance().buildCity(((Point)selected).getNode(), client.getId());
             ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
             invalidate();
         }
