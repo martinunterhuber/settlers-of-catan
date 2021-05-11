@@ -21,13 +21,15 @@ public class Game {
     private Board board;
 
     private int currentPlayerId;
+    private int turnCounter;
 
     private boolean alreadyRolled;
 
     private Game(){
         players = new ArrayList<>();
         board = new Board();
-        currentPlayerId = 1;
+        currentPlayerId = 0;
+        turnCounter = 0;
         alreadyRolled = false;
     }
 
@@ -50,18 +52,21 @@ public class Game {
         }
     }
 
-    public void rollDice(int playerId) {
+    public int rollDice(int playerId) {
         if (playerId == currentPlayerId && !alreadyRolled){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
             alreadyRolled = true;
+            return numberRolled;
         }
+        return -1;
     }
 
     public void endTurn(int playerId){
         if (playerId == currentPlayerId) {
             currentPlayerId = (playerId + 1) % players.size();
             alreadyRolled = false;
+            turnCounter++;
             // TODO: send messages for every action
             new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
         }
@@ -77,26 +82,37 @@ public class Game {
     }
 
     public void buildSettlement(Node node, int playerId){
-        if (node.getBuilding() == null && playerId == currentPlayerId && node.hasNoAdjacentBuildings()) {
-            node.setBuilding(new Settlement(getPlayerById(playerId), node));
+        Player player = getPlayerById(playerId);
+        if (node.getBuilding() == null
+                && playerId == currentPlayerId
+                && node.hasNoAdjacentBuildings()
+                && player.canPlayerPlaceSettlement()) {
+            player.placeSettlement(node);
         }
     }
 
     public void buildCity(Node node, int playerId){
+        Player player = getPlayerById(playerId);
         if (node.getBuilding() != null
                 && node.getBuilding() instanceof Settlement
                 && ((Settlement) node.getBuilding()).player.getId() == currentPlayerId
-                && playerId == currentPlayerId) {
-            node.setBuilding(new City(getPlayerById(playerId), node));
+                && playerId == currentPlayerId
+                && player.canPlayerPlaceCity()) {
+            player.placeCity(node);
         }
     }
 
     public void buildRoad(Edge edge, int playerId){
+        Player player = getPlayerById(playerId);
         if (edge.getRoad() == null
                 && playerId == currentPlayerId
-                && edge.connectsPlayer(getPlayerById(playerId))) {
-            edge.setRoad(new Road(getPlayerById(playerId)));
+                && player.canPlayerPlaceRoad()) {
+            player.placeRoad(edge);
         }
+    }
+
+    public boolean isBuildingPhase(){
+        return (turnCounter / players.size()) < 2;
     }
 
     public ArrayList<Player> getPlayers() {

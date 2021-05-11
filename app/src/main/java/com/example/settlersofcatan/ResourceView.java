@@ -1,134 +1,73 @@
 package com.example.settlersofcatan;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class ResourceView extends FrameLayout {
-    private int wood=0;
-    private int wheat=0;
-    private int sheep=0;
-    private int clay=0;
-    private int ore=0;
+import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.Resource;
+import com.example.settlersofcatan.game.ResourceMap;
+import com.example.settlersofcatan.server_client.GameClient;
 
-    private final TextView woodTxt;
-    private final TextView wheatTxt;
-    private final TextView sheepTxt;
-    private final TextView clayTxt;
-    private final TextView oreTxt;
+public class ResourceView extends FrameLayout {
+    private TextView woodTxt;
+    private TextView wheatTxt;
+    private TextView sheepTxt;
+    private TextView clayTxt;
+    private TextView oreTxt;
+
+    private Player player;
 
     public ResourceView(@NonNull Context context) {
         super(context);
-
         initView();
-
-        woodTxt=findViewById(R.id.txt_wood);
-        woodTxt.setText(String.valueOf(wood));
-
-        wheatTxt=findViewById(R.id.txt_wheat);
-        wheatTxt.setText(String.valueOf(wheat));
-
-        sheepTxt=findViewById(R.id.txt_sheep);
-        sheepTxt.setText(String.valueOf(sheep));
-
-        clayTxt=findViewById(R.id.txt_clay);
-        clayTxt.setText(String.valueOf(clay));
-
-        oreTxt=findViewById(R.id.txt_ore);
-        oreTxt.setText(String.valueOf(ore));
+        initResourceTextFields();
     }
 
     public ResourceView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
         initView();
-
-        woodTxt=findViewById(R.id.txt_wood);
-        woodTxt.setText(String.valueOf(wood));
-
-        wheatTxt=findViewById(R.id.txt_wheat);
-        wheatTxt.setText(String.valueOf(wheat));
-
-        sheepTxt=findViewById(R.id.txt_sheep);
-        sheepTxt.setText(String.valueOf(sheep));
-
-        clayTxt=findViewById(R.id.txt_clay);
-        clayTxt.setText(String.valueOf(clay));
-
-        oreTxt=findViewById(R.id.txt_ore);
-        oreTxt.setText(String.valueOf(ore));
+        initResourceTextFields();
     }
 
     public ResourceView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         initView();
+        initResourceTextFields();
+    }
 
-        woodTxt=findViewById(R.id.txt_wood);
-        woodTxt.setText(String.valueOf(wood));
-
-        wheatTxt=findViewById(R.id.txt_wheat);
-        wheatTxt.setText(String.valueOf(wheat));
-
-        sheepTxt=findViewById(R.id.txt_sheep);
-        sheepTxt.setText(String.valueOf(sheep));
-
-        clayTxt=findViewById(R.id.txt_clay);
-        clayTxt.setText(String.valueOf(clay));
-
-        oreTxt=findViewById(R.id.txt_ore);
-        oreTxt.setText(String.valueOf(ore));
-
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        setResourceValues();
     }
 
     private void initView() {
-
         inflate(getContext(), R.layout.resource_view, this);
+        setWillNotDraw(false);
+        player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
     }
 
-//----------- Getter and Setter --------------------------------------------------------------------------------
-
-    public int getWood() {
-        return wood;
+    private void setResourceValues(){
+        woodTxt.setText(String.valueOf(player.getResourceCount(Resource.FOREST)));
+        wheatTxt.setText(String.valueOf(player.getResourceCount(Resource.WHEAT)));
+        sheepTxt.setText(String.valueOf(player.getResourceCount(Resource.SHEEP)));
+        clayTxt.setText(String.valueOf(player.getResourceCount(Resource.CLAY)));
+        oreTxt.setText(String.valueOf(player.getResourceCount(Resource.ORE)));
     }
 
-    public void setWood(int wood) {
-        this.wood = wood;
-    }
-
-    public int getWheat() {
-        return wheat;
-    }
-
-    public void setWheat(int wheat) {
-        this.wheat = wheat;
-    }
-
-    public int getSheep() {
-        return sheep;
-    }
-
-    public void setSheep(int sheep) {
-        this.sheep = sheep;
-    }
-
-    public int getClay() {
-        return clay;
-    }
-
-    public void setClay(int clay) {
-        this.clay = clay;
-    }
-
-    public int getOre() {
-        return ore;
-    }
-
-    public void setOre(int ore) {
-        this.ore = ore;
+    private void initResourceTextFields() {
+        woodTxt = findViewById(R.id.txt_wood);
+        wheatTxt = findViewById(R.id.txt_wheat);
+        sheepTxt = findViewById(R.id.txt_sheep);
+        clayTxt = findViewById(R.id.txt_clay);
+        oreTxt = findViewById(R.id.txt_ore);
     }
 }

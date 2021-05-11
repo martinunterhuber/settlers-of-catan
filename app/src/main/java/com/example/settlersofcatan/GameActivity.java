@@ -3,13 +3,17 @@ package com.example.settlersofcatan;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
 
 public class GameActivity extends AppCompatActivity {
@@ -21,6 +25,13 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent2;
     private OpponentView opponent3;
     private Button endTurnButton;
+    private ImageView dice;
+
+    static final int[] playerColors = new int[]{
+            Color.parseColor("#05A505"),
+            Color.parseColor("#F44336"),
+            Color.parseColor("#FF9800"),
+            Color.parseColor("#2196F3"), };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +52,27 @@ public class GameActivity extends AppCompatActivity {
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(GameClient.getInstance().getId()));
 
+        dice = findViewById(R.id.btn_dice);
+        dice.setOnClickListener(
+                (v) -> {
+                    int result = Game.getInstance().rollDice(GameClient.getInstance().getId());
+                    if (result > 0){
+                        ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+                        resources.invalidate();
+                    }
+                }
+        );
+
         GameClient.getInstance().registerActivity(this);
+
+        setButtonToPlayerColor();
+    }
+
+    private void setButtonToPlayerColor(){
+        Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
+        ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[player.getId()]);
+        ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[player.getId()]);
+        ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
     }
 
     /**

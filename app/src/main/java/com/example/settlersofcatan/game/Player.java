@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,16 +18,18 @@ public class Player {
     private String name;
     private int id;
 
+    private int victoryPoints;
+
     private ResourceMap resources;
-    private ArrayList<DevelopmentCard> unrevealedDevelopmentCards;
-    private ArrayList<Settlement> settlements;
-    private ArrayList<City> cities;
-    private ArrayList<Road> roads;
+    private ArrayList<DevelopmentCard> unrevealedDevelopmentCards = new ArrayList<>();
+    private ArrayList<Settlement> settlements = new ArrayList<>();
+    private ArrayList<City> cities = new ArrayList<>();
+    private ArrayList<Road> roads = new ArrayList<>();
     private ArrayList<Harbor> harborsSettledOn;
 
-    private ArrayList<Edge> potentialRoadPlacements;
-    private ArrayList<Node> potentialSettlementPlacements;
-    private ArrayList<Node> potentialCityPlacements;
+    private ArrayList<Edge> potentialRoadPlacements = new ArrayList<>();
+    private ArrayList<Node> potentialSettlementPlacements = new ArrayList<>();
+    private ArrayList<Node> potentialCityPlacements = new ArrayList<>();
 
     private Player(){
         this(-1, null);
@@ -34,6 +38,8 @@ public class Player {
     public Player(int id, String name){
         this.id = id;
         this.name = name;
+        this.resources = new ResourceMap();
+        this.victoryPoints = 0;
     }
 
     public String getName() {
@@ -54,6 +60,10 @@ public class Player {
 
     public int getId() {
         return id;
+    }
+
+    public int getVictoryPoints() {
+        return victoryPoints;
     }
 
     // Calculation in getters subject to change, just there to guarantee authenticity
@@ -138,7 +148,7 @@ public class Player {
      * road available, edge selected, edge connected, edge empty)
      * @param e the edge to place the road on
      */
-    private void placeRoad(Edge e) {
+    public void placeRoad(Edge e) {
         takeResource(Resource.FOREST, 1);
         takeResource(Resource.CLAY, 1);
         Road roadToPlace = new Road(this, e);
@@ -151,7 +161,7 @@ public class Player {
      * settlement available, node selected, node empty, no adjacent building)
      * @param n the node to place the settlement on
      */
-    private void placeSettlement(Node n) {
+    public void placeSettlement(Node n) {
         takeResource(Resource.FOREST, 1);
         takeResource(Resource.CLAY, 1);
         takeResource(Resource.WHEAT, 1);
@@ -170,7 +180,7 @@ public class Player {
      * node selected, node has settlement)
      * @param n the node to place the city on
      */
-    private void placeCity(Node n) {
+    public void placeCity(Node n) {
         takeResource(Resource.ORE, 3);
         takeResource(Resource.WHEAT, 2);
         City cityToPlace = new City(this, n);

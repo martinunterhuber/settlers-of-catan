@@ -1,12 +1,12 @@
 package com.example.settlersofcatan;
 
 import com.example.settlersofcatan.game.Node;
+import com.example.settlersofcatan.game.NodePlaceable;
+import com.example.settlersofcatan.game.Settlement;
 
-public class Point {
+public class Point extends HexagonPart {
     private int x;
     private int y;
-    private int resID;
-    private boolean isAccessable=true;
     private Node node;
 
     public Point(int x, int y) {
@@ -17,7 +17,7 @@ public class Point {
     public Point(int x, int y, int resID, Node node) {
         this.x = x;
         this.y = y;
-        this.resID = resID;
+        this.setResID(resID);
         this.node = node;
     }
 
@@ -37,20 +37,15 @@ public class Point {
         this.y = y;
     }
 
-    public int getResID() {
-        return resID;
-    }
 
-    public void setResID(int resID) {
-        this.resID = resID;
-    }
-
-    public boolean isAccessable() {
-        return isAccessable;
-    }
-
-    public void setAccessable(boolean accessable) {
-        isAccessable = accessable;
+    @Override
+    public void setSelectedResID(){
+        NodePlaceable building = node.getBuilding();
+        if (building == null){
+            setResID(R.drawable.corner_selected);
+        } else if (building instanceof Settlement) {
+            setResID(R.drawable.settlement_selected);
+        }
     }
 
     public Node getNode() {
