@@ -170,8 +170,29 @@ public class Player {
         takeResource(Resource.WHEAT, 2);
         City cityToPlace = new City(this, n);
         cities.add(cityToPlace);
-        settlements.remove(n.getBuilding());
+        settlements.remove((Settlement) n.getBuilding());
         n.setBuilding(cityToPlace);
     }
+
+    /**
+     * Method to check if a player has the resources necessary to be able to accept a specific trade offer
+     * @param tradeOffer the trade offer
+     * @return true, if he can  afford it, false if not
+     */
+    public boolean isEligibleForTradeOffer(TradeOffer tradeOffer) {
+        return resources.containsResourceMap(tradeOffer.getReceive());
+    }
+
+    /**
+     * Method to execute a trade offer
+     * DISCLAIMER: This should probably be moved to the game class and not the player class, so
+     * that the resource movement can be facilitated on both sides of the offer more easily
+     * @param tradeOffer the trade offer the player accepted
+     */
+    public void acceptTradeOffer(TradeOffer tradeOffer) {
+        resources.decrementResourceMap(tradeOffer.getReceive());
+        resources.incrementResourceMap(tradeOffer.getGive());
+    }
+
 
 }

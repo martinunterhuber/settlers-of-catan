@@ -210,9 +210,11 @@ public class Board {
      */
     private void initializeHarbors() {
         List<Harbor> harbors = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            harbors.add(new Harbor(Resource.valueOf(i)));
+        //Create one harbor per resource
+        for (Resource resource : Resource.values()){
+            harbors.add(new Harbor(resource));
         }
+        //Create four wildcard harbors
         for (int i = 0; i < 4; i++) {
             harbors.add(new Harbor());
         }
@@ -220,6 +222,7 @@ public class Board {
 
         List<Edge> eligibleEdges = new ArrayList<>();
 
+        //Edges from tiles with only one eligible Edge
         eligibleEdges.add(tiles[0][2].getWestEdge());
         eligibleEdges.add(tiles[2][0].getNorthwestEdge());
         eligibleEdges.add(tiles[4][0].getNortheastEdge());
@@ -227,6 +230,7 @@ public class Board {
         eligibleEdges.add(tiles[2][4].getSoutheastEdge());
         eligibleEdges.add(tiles[0][4].getSoutheastEdge());
 
+        //Edges from tiles with two eligible Edges, thus one is chosen at random.
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[1][1].getWestEdge() : tiles[1][1].getNorthwestEdge());
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[3][0].getNorthwestEdge() : tiles[3][0].getNortheastEdge());
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[4][1].getNortheastEdge() : tiles[4][1].getEastEdge());
@@ -234,7 +238,9 @@ public class Board {
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[1][4].getSoutheastEdge() : tiles[1][4].getNortheastEdge());
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[0][3].getSoutheastEdge() : tiles[0][3].getWestEdge());
 
+        //Shuffled to ensure randomness, as only the first 9 are assigned harbors
         Collections.shuffle(eligibleEdges);
+
         for (int i = 0 ; i < harbors.size(); i++) {
             eligibleEdges.get(i).setHarbor(harbors.get(i));
         }

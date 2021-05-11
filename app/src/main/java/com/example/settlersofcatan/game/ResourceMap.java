@@ -26,4 +26,27 @@ public class ResourceMap {
         Integer count = resources.get(resource);
         resources.put(resource, count - decrement);
     }
+
+    public void decrementResourceMap(ResourceMap resourceMap) {
+        if (containsResourceMap(resourceMap)) {
+            for (Resource resource : Resource.values()) {
+                decrementResourceCount(resource, resourceMap.getResourceCount(resource));
+            }
+        }
+    }
+
+    public void incrementResourceMap(ResourceMap resourceMap) {
+        for (Resource resource : Resource.values()) {
+            incrementResourceCount(resource, resourceMap.getResourceCount(resource));
+        }
+    }
+
+    public boolean containsResourceMap(ResourceMap resourceMap) {
+        for (Resource resource : Resource.values()) {
+            if (getResourceCount(resource) < resourceMap.getResourceCount(resource)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
