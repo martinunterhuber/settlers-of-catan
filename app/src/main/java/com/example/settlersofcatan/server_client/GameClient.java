@@ -105,9 +105,11 @@ public class GameClient {
             }
         }
         if (message instanceof ClientWinMessage){
+            if(gameActivity != null) {
                 Intent intent = new Intent(gameActivity, GameEndActivity.class);
                 gameActivity.startActivity(intent);
                 gameActivity.finish();
+            }
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }
