@@ -52,7 +52,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:tag="1" />
 
     <com.example.settlersofcatan.OpponentView
         android:id="@+id/opponent2"
@@ -61,7 +62,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:tag="2" />
 
     <com.example.settlersofcatan.OpponentView
         android:id="@+id/opponent3"
@@ -70,20 +72,20 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:tag="3" />
   </LinearLayout>
 
   <ImageView
       android:id="@+id/btn_city"
       android:layout_width="50dp"
       android:layout_height="30dp"
-      android:layout_marginEnd="60dp"
-      android:layout_marginRight="60dp"
       android:layout_marginBottom="60dp"
       android:contentDescription="@string/img_description_city"
       android:onClick="onClick"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/btn_dice"
+      app:layout_constraintStart_toEndOf="@+id/btn_settlement"
       app:srcCompat="@drawable/city_white"
       tools:ignore="VectorDrawableCompat" />
 
@@ -96,6 +98,7 @@
       android:onClick="onClick"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/btn_city"
+      app:layout_constraintHorizontal_bias="0.44"
       app:layout_constraintStart_toEndOf="@+id/btn_road"
       app:srcCompat="@drawable/settlement_white"
       tools:ignore="VectorDrawableCompat" />
@@ -104,13 +107,45 @@
       android:id="@+id/btn_road"
       android:layout_width="50dp"
       android:layout_height="30dp"
-      android:layout_marginStart="60dp"
-      android:layout_marginLeft="60dp"
       android:layout_marginBottom="60dp"
       android:contentDescription="@string/img_description_road"
       android:onClick="onClick"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/btn_settlement"
       app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintHorizontal_chainStyle="spread"
       app:srcCompat="@drawable/road_white" />
+
+  <ImageView
+      android:id="@+id/btn_dice"
+      android:layout_width="50dp"
+      android:layout_height="30dp"
+      android:layout_marginBottom="60dp"
+      android:contentDescription="@string/img_description_road"
+      android:onClick="onClick"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/btn_city"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:srcCompat="@drawable/dice1" />
+
+  <Button
+      android:id="@+id/endTurnButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="120dp"
+      android:text="End Turn"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/rollResult"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="0"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toTopOf="@+id/btn_dice"
+      app:layout_constraintEnd_toEndOf="@+id/btn_dice"
+      app:layout_constraintStart_toStartOf="@+id/btn_dice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

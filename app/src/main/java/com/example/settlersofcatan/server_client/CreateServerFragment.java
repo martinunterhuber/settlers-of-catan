@@ -56,6 +56,11 @@ public class CreateServerFragment extends Fragment {
                     try {
                         GameClient client = GameClient.getInstance();
                         client.init("localhost", username);
+                        client.registerStartGameCallback((message) -> {
+                            Intent intent = new Intent(getActivity(), GameActivity.class);
+                            startActivity(intent);
+                        });
+
                         Game game = Game.getInstance();
                         game.init(server.getClientUsernames());
                         server.broadcastMessage(new GameStateMessage(game));
@@ -64,8 +69,6 @@ public class CreateServerFragment extends Fragment {
                     }
                 }
         ).start();
-        Intent intent = new Intent(getActivity(), GameActivity.class);
-        startActivity(intent);
     }
 
     private void updateUsers(String username){
