@@ -1,9 +1,9 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
+import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.GameServer;
+import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -64,11 +64,16 @@ public class Game {
 
     public void endTurn(int playerId){
         if (playerId == currentPlayerId) {
-            currentPlayerId = (playerId + 1) % players.size();
-            alreadyRolled = false;
-            turnCounter++;
-            // TODO: send messages for every action
-            new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+            if(getPlayerById(playerId).getVictoryPoints() == 10){
+                Ranking ranking = Ranking.getInstance();
+                new Thread(() -> GameServer.getInstance().broadcastMessage(new ClientWinMessage(ranking))).start();
+            }else {
+                currentPlayerId = (playerId + 1) % players.size();
+                alreadyRolled = false;
+                turnCounter++;
+                // TODO: send messages for every action
+                new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+            }
         }
     }
 

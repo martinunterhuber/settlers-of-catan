@@ -7,22 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.NodePlaceable;
-import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.server_client.GameClient;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * View class on which the cities, settlements and roads of the players are placed.
@@ -36,9 +31,9 @@ public class PlayerView extends View {
     private Game game = Game.getInstance();
     private GameClient client = GameClient.getInstance();
 
-    final static int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_green , R.drawable.settlement_orange, R.drawable.settlement_red, R.drawable.settlement_blue};
-    final static int[] ROAD_IDS = new int[]{R.drawable.road_green, R.drawable.road_orange, R.drawable.road_red, R.drawable.road_blue};
-    final static int[] CITY_IDS = new int[]{R.drawable.city_green, R.drawable.city_orange, R.drawable.city_red, R.drawable.city_blue};
+    final static int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_green , R.drawable.settlement_red, R.drawable.settlement_orange, R.drawable.settlement_blue};
+    final static int[] ROAD_IDS = new int[]{R.drawable.road_green, R.drawable.road_red, R.drawable.road_orange, R.drawable.road_blue};
+    final static int[] CITY_IDS = new int[]{R.drawable.city_green, R.drawable.city_red, R.drawable.city_orange, R.drawable.city_blue};
 
     public PlayerView(Context context) {
         super(context);

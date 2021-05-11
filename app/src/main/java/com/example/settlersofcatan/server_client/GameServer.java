@@ -2,7 +2,7 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
-import com.esotericsoftware.kryonet.Connection;
+import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.Edge;
@@ -19,6 +19,7 @@ import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
@@ -27,7 +28,6 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServe
 import java.io.IOException;
 import java.net.BindException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -74,7 +74,9 @@ public class GameServer {
             userChangedCallback.callback(username);
         } else if (message instanceof GameStateMessage) {
             broadcastMessage(message);
-         }else {
+        }else if (message instanceof ClientWinMessage){
+            broadcastMessage(message);
+        }else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }
@@ -88,6 +90,8 @@ public class GameServer {
         server.registerClass(ClientJoinedMessage.class);
         server.registerClass(ClientLeftMessage.class);
         server.registerClass(GameStateMessage.class);
+        server.registerClass(ClientWinMessage.class);
+        server.registerClass(Ranking.class);
         server.registerClass(Game.class);
         server.registerClass(HashSet.class);
         server.registerClass(ArrayList.class);

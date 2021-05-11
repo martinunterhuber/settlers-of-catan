@@ -1,10 +1,10 @@
 package com.example.settlersofcatan.server_client;
 
+import android.content.Intent;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.settlersofcatan.GameActivity;
+import com.example.settlersofcatan.GameEndActivity;
+import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.Edge;
@@ -21,6 +21,7 @@ import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
@@ -28,9 +29,10 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConst
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GameClient {
     private static GameClient instance;
@@ -64,6 +66,8 @@ public class GameClient {
         client.registerClass(ClientJoinedMessage.class);
         client.registerClass(ClientLeftMessage.class);
         client.registerClass(GameStateMessage.class);
+        client.registerClass(ClientWinMessage.class);
+        client.registerClass(Ranking.class);
         client.registerClass(Game.class);
         client.registerClass(HashSet.class);
         client.registerClass(ArrayList.class);
@@ -99,6 +103,11 @@ public class GameClient {
             if (gameActivity != null) {
                 gameActivity.runOnUiThread(() -> gameActivity.recreate());
             }
+        }
+        if (message instanceof ClientWinMessage){
+                Intent intent = new Intent(gameActivity, GameEndActivity.class);
+                gameActivity.startActivity(intent);
+                gameActivity.finish();
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }

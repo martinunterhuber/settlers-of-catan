@@ -1,13 +1,9 @@
 package com.example.settlersofcatan;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.app.AlertDialog;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +11,8 @@ import android.widget.TextView;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -75,9 +73,6 @@ public class GameActivity extends AppCompatActivity {
         ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
     }
 
-    /**
-     *  TODO onClick Event to build road, settlement and city
-     */
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:
