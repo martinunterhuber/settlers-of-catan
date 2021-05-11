@@ -4,10 +4,9 @@ import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.NodePlaceable;
 import com.example.settlersofcatan.game.Settlement;
 
-public class Point implements HexagonPart {
+public class Point extends HexagonPart {
     private int x;
     private int y;
-    private int resID;
     private Node node;
 
     public Point(int x, int y) {
@@ -18,7 +17,7 @@ public class Point implements HexagonPart {
     public Point(int x, int y, int resID, Node node) {
         this.x = x;
         this.y = y;
-        this.resID = resID;
+        this.setResID(resID);
         this.node = node;
     }
 
@@ -38,21 +37,14 @@ public class Point implements HexagonPart {
         this.y = y;
     }
 
-    public int getResID() {
-        return resID;
-    }
-
-    public void setResID(int resID) {
-        this.resID = resID;
-    }
 
     @Override
     public void setSelectedResID(){
         NodePlaceable building = node.getBuilding();
         if (building == null){
-            resID = R.drawable.corner_selected;
+            setResID(R.drawable.corner_selected);
         } else if (building instanceof Settlement) {
-            resID = R.drawable.settlement_selected;
+            setResID(R.drawable.settlement_selected);
         }
     }
 

@@ -1,5 +1,15 @@
 package com.example.settlersofcatan;
 
-public interface HexagonPart {
-    void setSelectedResID();
+public abstract class HexagonPart {
+    private int resID;
+
+    public int getResID() {
+        return resID;
+    }
+
+    public void setResID(int resID) {
+        this.resID = resID;
+    }
+
+    abstract void setSelectedResID();
 }

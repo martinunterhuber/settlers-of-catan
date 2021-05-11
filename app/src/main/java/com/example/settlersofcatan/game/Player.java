@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,8 @@ public class Player {
 
     private String name;
     private int id;
+
+    private int victoryPoints;
 
     private ResourceMap resources;
     private ArrayList<DevelopmentCard> unrevealedDevelopmentCards = new ArrayList<>();
@@ -34,6 +38,7 @@ public class Player {
         this.id = id;
         this.name = name;
         this.resources = new ResourceMap();
+        this.victoryPoints = 0;
     }
 
     public String getName() {
@@ -54,6 +59,10 @@ public class Player {
 
     public int getId() {
         return id;
+    }
+
+    public int getVictoryPoints() {
+        return victoryPoints;
     }
 
     // Calculation in getters subject to change, just there to guarantee authenticity
