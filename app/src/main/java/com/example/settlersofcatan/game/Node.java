@@ -86,6 +86,32 @@ public class Node {
         return true;
     }
 
+    /**
+     * Method to check if a Node has an adjacent Harbor
+     * @return true if so, else false
+     */
+    public boolean isAdjacentToHarbor() {
+        for (Edge edge : outgoingEdges) {
+            if (edge.getHarbor() != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method to return an adjacent harbor, (Node can only have one adjacent harbor)
+     * @return The adjacent harbor, null if none exists.
+     */
+    public Harbor getAdjacentHarbor() {
+        for (Edge edge : outgoingEdges) {
+            if (edge.getHarbor() != null) {
+                return edge.getHarbor();
+            }
+        }
+        return null;
+    }
+
     public Set<Edge> getOutgoingEdges() {
         return outgoingEdges;
     }

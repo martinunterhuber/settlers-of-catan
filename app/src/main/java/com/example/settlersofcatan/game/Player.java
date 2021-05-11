@@ -21,6 +21,7 @@ public class Player {
     private ArrayList<Settlement> settlements;
     private ArrayList<City> cities;
     private ArrayList<Road> roads;
+    private ArrayList<Harbor> harborsSettledOn;
 
     private ArrayList<Edge> potentialRoadPlacements;
     private ArrayList<Node> potentialSettlementPlacements;
@@ -158,6 +159,10 @@ public class Player {
         Settlement settlementToPlace = new Settlement(this, n);
         settlements.add(settlementToPlace);
         n.setBuilding(settlementToPlace);
+        //DISCLAIMER: Remember to add same functionality to the initialSettlementPlacement Method
+        if (n.isAdjacentToHarbor()) {
+            harborsSettledOn.add(n.getAdjacentHarbor());
+        }
     }
 
     /**
