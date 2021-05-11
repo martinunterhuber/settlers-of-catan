@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
@@ -24,6 +25,7 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent2;
     private OpponentView opponent3;
     private Button endTurnButton;
+    private ImageView dice;
 
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
@@ -49,6 +51,17 @@ public class GameActivity extends AppCompatActivity {
 
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(GameClient.getInstance().getId()));
+
+        dice = findViewById(R.id.btn_dice);
+        dice.setOnClickListener(
+                (v) -> {
+                    int result = Game.getInstance().rollDice(GameClient.getInstance().getId());
+                    if (result > 0){
+                        ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+                        resources.invalidate();
+                    }
+                }
+        );
 
         GameClient.getInstance().registerActivity(this);
 

@@ -52,12 +52,14 @@ public class Game {
         }
     }
 
-    public void rollDice(int playerId) {
+    public int rollDice(int playerId) {
         if (playerId == currentPlayerId && !alreadyRolled){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
             alreadyRolled = true;
+            return numberRolled;
         }
+        return -1;
     }
 
     public void endTurn(int playerId){
