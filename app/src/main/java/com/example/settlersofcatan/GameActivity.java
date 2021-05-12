@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,6 +65,7 @@ public class GameActivity extends AppCompatActivity {
         GameClient.getInstance().registerActivity(this);
 
         setButtonToPlayerColor();
+        showCurrentPlayer();
     }
 
     private void setButtonToPlayerColor(){
@@ -101,6 +103,36 @@ public class GameActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
+    }
+
+    private void showCurrentPlayer(){
+        Game game = Game.getInstance();
+        int currentPlayerId = game.getCurrentPlayerId();
+        String currentPlayerName = game.getPlayerById(currentPlayerId).getName();
+
+        unselectPlayer();
+
+        if (opponent1.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent1.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }else if (opponent2.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent2.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }else if (opponent3.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent3.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void unselectPlayer(){
+        FrameLayout border = opponent1.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+
+        border = opponent2.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+
+        border = opponent3.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
     }
 
 }
