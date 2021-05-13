@@ -1,9 +1,6 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
 import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.server_client.GameServer;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -23,14 +20,16 @@ public class Game {
     private int currentPlayerId;
     private int turnCounter;
 
-    private boolean alreadyRolled;
+    private boolean hasRolled;
+    private boolean hasBuiltSettlement;
+    private boolean hasBuiltRoad;
 
     private Game(){
         players = new ArrayList<>();
         board = new Board();
         currentPlayerId = 0;
         turnCounter = 0;
-        alreadyRolled = false;
+        hasRolled = false;
     }
 
     public static Game getInstance() {
@@ -53,10 +52,10 @@ public class Game {
     }
 
     public int rollDice(int playerId) {
-        if (playerId == currentPlayerId && !alreadyRolled){
+        if (playerId == currentPlayerId && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
-            alreadyRolled = true;
+            hasRolled = true;
             return numberRolled;
         }
         return -1;
@@ -64,11 +63,25 @@ public class Game {
 
     public void endTurn(int playerId){
         if (playerId == currentPlayerId) {
-            currentPlayerId = (playerId + 1) % players.size();
-            alreadyRolled = false;
+            hasRolled = false;
+            hasBuiltRoad = false;
+            hasBuiltSettlement = false;
             turnCounter++;
+            setCurrentPlayerId();
             // TODO: send messages for every action
             new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+        }
+    }
+
+    private void setCurrentPlayerId(){
+        if (isBuildingPhase() && isSecondRound()){
+            if (turnCounter != players.size()){
+                currentPlayerId = (currentPlayerId - 1) % players.size();
+            }
+        } else {
+            if (turnCounter != players.size() * 2){
+                currentPlayerId = (currentPlayerId + 1) % players.size();
+            }
         }
     }
 
@@ -83,11 +96,19 @@ public class Game {
 
     public void buildSettlement(Node node, int playerId){
         Player player = getPlayerById(playerId);
+
         if (node.getBuilding() == null
                 && playerId == currentPlayerId
-                && node.hasNoAdjacentBuildings()
-                && player.canPlayerPlaceSettlement()) {
-            player.placeSettlement(node);
+                && node.hasNoAdjacentBuildings()){
+            if (isBuildingPhase()){
+                if (!hasBuiltSettlement){
+                    player.placeSettlement(node);
+                    hasBuiltSettlement = true;
+                }
+            } else if (player.hasResources(Settlement.costs)){
+                player.takeResources(Settlement.costs);
+                player.placeSettlement(node);
+            }
         }
     }
 
@@ -104,15 +125,28 @@ public class Game {
 
     public void buildRoad(Edge edge, int playerId){
         Player player = getPlayerById(playerId);
+
         if (edge.getRoad() == null
                 && playerId == currentPlayerId
-                && player.canPlayerPlaceRoad()) {
-            player.placeRoad(edge);
+                && player.canPlayerPlaceRoad(edge)) {
+            if (isBuildingPhase()){
+                if (!hasBuiltRoad){
+                    player.placeRoad(edge);
+                    hasBuiltRoad = true;
+                }
+            } else if (player.hasResources(Road.costs)){
+                player.takeResources(Road.costs);
+                player.placeRoad(edge);
+            }
         }
     }
 
     public boolean isBuildingPhase(){
         return (turnCounter / players.size()) < 2;
+    }
+
+    public boolean isSecondRound(){
+        return (turnCounter / players.size()) == 1;
     }
 
     public ArrayList<Player> getPlayers() {

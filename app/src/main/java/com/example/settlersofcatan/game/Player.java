@@ -102,6 +102,15 @@ public class Player {
                 }
             }
         }
+
+        for (Settlement settlement : settlements){
+            Node node = settlement.getLocation();
+            for (Edge edge : node.getOutgoingEdges()){
+                if (edge.getRoad() == null){
+                    potentialRoadPlacements.add(edge);
+                }
+            }
+        }
     }
 
     // Does not take into account the settlement placement at the start of the game
