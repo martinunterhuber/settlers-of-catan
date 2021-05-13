@@ -67,8 +67,8 @@ public class Node {
         return tiles;
     }
 
-    public List<Edge> getOtherOutgoingEdges(Edge edge) {
-        List<Edge> otherOutgoingEdges = new ArrayList<>();
+    public Set<Edge> getOtherOutgoingEdges(Edge edge) {
+        Set<Edge> otherOutgoingEdges = new HashSet<>();
         for (Edge e : outgoingEdges) {
             if (e != edge) {
                 otherOutgoingEdges.add(e);

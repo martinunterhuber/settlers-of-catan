@@ -2,8 +2,8 @@ package com.example.settlersofcatan.game;
 
 import android.graphics.Color;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Player of the game, has an inventory of resource cards, development cards, placed cities,
@@ -21,15 +21,15 @@ public class Player {
     private int victoryPoints;
 
     private ResourceMap resources;
-    private ArrayList<DevelopmentCard> unrevealedDevelopmentCards = new ArrayList<>();
-    private ArrayList<Settlement> settlements = new ArrayList<>();
-    private ArrayList<City> cities = new ArrayList<>();
-    private ArrayList<Road> roads = new ArrayList<>();
-    private ArrayList<Harbor> harborsSettledOn;
+    private HashSet<DevelopmentCard> unrevealedDevelopmentCards = new HashSet<>();
+    private HashSet<Settlement> settlements = new HashSet<>();
+    private HashSet<City> cities = new HashSet<>();
+    private HashSet<Road> roads = new HashSet<>();
+    private HashSet<Harbor> harborsSettledOn;
 
-    private ArrayList<Edge> potentialRoadPlacements = new ArrayList<>();
-    private ArrayList<Node> potentialSettlementPlacements = new ArrayList<>();
-    private ArrayList<Node> potentialCityPlacements = new ArrayList<>();
+    private HashSet<Edge> potentialRoadPlacements = new HashSet<>();
+    private HashSet<Node> potentialSettlementPlacements = new HashSet<>();
+    private HashSet<Node> potentialCityPlacements = new HashSet<>();
 
     private Player(){
         this(-1, null);
@@ -67,17 +67,17 @@ public class Player {
     }
 
     // Calculation in getters subject to change, just there to guarantee authenticity
-    public ArrayList<Edge> getPotentialRoadPlacements() {
+    public HashSet<Edge> getPotentialRoadPlacements() {
         calculatePotentialRoadPlacements();
         return potentialRoadPlacements;
     }
 
-    public ArrayList<Node> getPotentialSettlementPlacements() {
+    public HashSet<Node> getPotentialSettlementPlacements() {
         calculatePotentialSettlementPlacements();
         return potentialSettlementPlacements;
     }
 
-    public ArrayList<Node> getPotentialCityPlacements() {
+    public HashSet<Node> getPotentialCityPlacements() {
         calculatePotentialCityPlacements();
         return potentialCityPlacements;
     }
@@ -85,7 +85,7 @@ public class Player {
     // Does not take into account the Road Placement during the start of the game.
     private void calculatePotentialRoadPlacements() {
         potentialRoadPlacements.clear();
-        List<Edge> correspondingEdges = new ArrayList<>();
+        Set<Edge> correspondingEdges = new HashSet<>();
         for (Road r : roads) {
             correspondingEdges.add(r.getLocation());
         }
@@ -94,7 +94,7 @@ public class Player {
                 if (n.getBuilding() != null && n.getBuilding().getPlayer() != this) {
                     break;
                 }
-                List<Edge> potentialCandidates = n.getOtherOutgoingEdges(correspondingEdge);
+                Set<Edge> potentialCandidates = n.getOtherOutgoingEdges(correspondingEdge);
                 for (Edge potentialCandidate : potentialCandidates) {
                     if (potentialCandidate.getRoad() == null) {
                         potentialRoadPlacements.add(potentialCandidate);
@@ -116,7 +116,7 @@ public class Player {
     // Does not take into account the settlement placement at the start of the game
     private void calculatePotentialSettlementPlacements() {
         potentialSettlementPlacements.clear();
-        List<Node> allAccessibleNodes = new ArrayList<>();
+        Set<Node> allAccessibleNodes = new HashSet<>();
         for (Road r : roads) {
             allAccessibleNodes.addAll(r.getLocation().getEndpointNodes());
         }
