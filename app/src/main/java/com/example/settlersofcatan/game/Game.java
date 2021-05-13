@@ -21,8 +21,11 @@ public class Game {
     private int turnCounter;
 
     private boolean hasRolled;
+
+    // Variables for initial building phase
     private boolean hasBuiltSettlement;
     private boolean hasBuiltRoad;
+    private Node lastBuiltNode;
 
     private Game(){
         players = new ArrayList<>();
@@ -66,6 +69,7 @@ public class Game {
             hasRolled = false;
             hasBuiltRoad = false;
             hasBuiltSettlement = false;
+            lastBuiltNode = null;
             turnCounter++;
             setCurrentPlayerId();
             // TODO: send messages for every action
@@ -103,6 +107,7 @@ public class Game {
             if (isBuildingPhase()){
                 if (!hasBuiltSettlement){
                     player.placeSettlement(node);
+                    lastBuiltNode = node;
                     hasBuiltSettlement = true;
                 }
             } else if (player.hasResources(Settlement.costs)){
@@ -130,7 +135,7 @@ public class Game {
                 && playerId == currentPlayerId
                 && player.canPlayerPlaceRoad(edge)) {
             if (isBuildingPhase()){
-                if (!hasBuiltRoad){
+                if (!hasBuiltRoad && lastBuiltNode.getOutgoingEdges().contains(edge)){
                     player.placeRoad(edge);
                     hasBuiltRoad = true;
                 }
