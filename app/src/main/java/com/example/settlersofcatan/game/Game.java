@@ -65,15 +65,17 @@ public class Game {
     }
 
     public void endTurn(int playerId){
-        if (playerId == currentPlayerId) {
-            hasRolled = false;
-            hasBuiltRoad = false;
-            hasBuiltSettlement = false;
-            lastBuiltNode = null;
-            turnCounter++;
-            setCurrentPlayerId();
-            // TODO: send messages for every action
-            new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+        if (playerId == currentPlayerId && (isBuildingPhase() || hasRolled)) {
+            if (!isBuildingPhase() || (hasBuiltSettlement && hasBuiltRoad)){
+                hasRolled = false;
+                hasBuiltRoad = false;
+                hasBuiltSettlement = false;
+                lastBuiltNode = null;
+                turnCounter++;
+                setCurrentPlayerId();
+                // TODO: send messages for every action
+                new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+            }
         }
     }
 
@@ -161,5 +163,9 @@ public class Game {
 
     public Board getBoard() {
         return board;
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
     }
 }
