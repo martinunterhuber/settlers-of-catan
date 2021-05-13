@@ -81,6 +81,7 @@ public class Player {
         calculatePotentialCityPlacements();
         return potentialCityPlacements;
     }
+
     // Does not take into account the Road Placement during the start of the game.
     private void calculatePotentialRoadPlacements() {
         potentialRoadPlacements.clear();
@@ -124,23 +125,37 @@ public class Player {
         }
     }
 
-    public boolean canPlayerPlaceRoad() {
+    public boolean canPlayerPlaceRoad(Edge e) {
         calculatePotentialRoadPlacements();
-        boolean canAffordRoad = getResourceCount(Resource.FOREST) > 0 && getResourceCount(Resource.CLAY) > 0;
-        return canAffordRoad && roads.size() < ROAD_COUNT && !potentialRoadPlacements.isEmpty();
+        return roads.size() < ROAD_COUNT
+                 && potentialRoadPlacements.contains(e);
     }
 
     public boolean canPlayerPlaceSettlement() {
         calculatePotentialSettlementPlacements();
-        boolean canAffordSettlement = getResourceCount(Resource.FOREST) > 0 && getResourceCount(Resource.CLAY) > 0
-                && getResourceCount(Resource.SHEEP) > 0 && getResourceCount(Resource.WHEAT) > 0;
-        return canAffordSettlement && settlements.size() < SETTLEMENT_COUNT && !potentialSettlementPlacements.isEmpty();
+        return settlements.size() < SETTLEMENT_COUNT
+                && !potentialSettlementPlacements.isEmpty();
     }
 
     public boolean canPlayerPlaceCity() {
         calculatePotentialCityPlacements();
-        boolean canAffordCity = getResourceCount(Resource.WHEAT) > 2 && getResourceCount(Resource.ORE) > 3;
-        return canAffordCity && cities.size() < CITY_COUNT && !potentialCityPlacements.isEmpty();
+        return cities.size() < CITY_COUNT
+                && !potentialCityPlacements.isEmpty();
+    }
+
+    public boolean hasResources(ResourceMap costs){
+        for (Resource resource : Resource.values()){
+            if (getResourceCount(resource) < costs.getResourceCount(resource)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void takeResources(ResourceMap costs){
+        for (Resource resource : Resource.values()){
+            takeResource(resource, costs.getResourceCount(resource));
+        }
     }
 
     /**
@@ -149,8 +164,6 @@ public class Player {
      * @param e the edge to place the road on
      */
     public void placeRoad(Edge e) {
-        takeResource(Resource.FOREST, 1);
-        takeResource(Resource.CLAY, 1);
         Road roadToPlace = new Road(this, e);
         roads.add(roadToPlace);
         e.setRoad(roadToPlace);
@@ -162,10 +175,6 @@ public class Player {
      * @param n the node to place the settlement on
      */
     public void placeSettlement(Node n) {
-        takeResource(Resource.FOREST, 1);
-        takeResource(Resource.CLAY, 1);
-        takeResource(Resource.WHEAT, 1);
-        takeResource(Resource.SHEEP,1);
         Settlement settlementToPlace = new Settlement(this, n);
         settlements.add(settlementToPlace);
         n.setBuilding(settlementToPlace);
@@ -181,8 +190,6 @@ public class Player {
      * @param n the node to place the city on
      */
     public void placeCity(Node n) {
-        takeResource(Resource.ORE, 3);
-        takeResource(Resource.WHEAT, 2);
         City cityToPlace = new City(this, n);
         cities.add(cityToPlace);
         settlements.remove((Settlement) n.getBuilding());
