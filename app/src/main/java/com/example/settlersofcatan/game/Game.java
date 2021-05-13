@@ -110,7 +110,7 @@ public class Game {
                     lastBuiltNode = node;
                     hasBuiltSettlement = true;
                 }
-            } else if (player.hasResources(Settlement.costs)){
+            } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlayerPlaceSettlement()){
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
             }
@@ -120,6 +120,7 @@ public class Game {
     public void buildCity(Node node, int playerId){
         Player player = getPlayerById(playerId);
         if (node.getBuilding() != null
+                && hasRolled
                 && node.getBuilding() instanceof Settlement
                 && ((Settlement) node.getBuilding()).player.getId() == currentPlayerId
                 && playerId == currentPlayerId
@@ -139,7 +140,7 @@ public class Game {
                     player.placeRoad(edge);
                     hasBuiltRoad = true;
                 }
-            } else if (player.hasResources(Road.costs)){
+            } else if (hasRolled && player.hasResources(Road.costs)){
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
             }
