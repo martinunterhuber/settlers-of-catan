@@ -31,21 +31,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class DefaultGameClient implements GameClient {
-    private static DefaultGameClient instance;
+public class GameClient {
+    private static GameClient instance;
     private NetworkClientKryo client;
     private String username = "";
     private int id;
     private Callback<BaseMessage> startGameCallback;
     private AppCompatActivity gameActivity;
 
-    private DefaultGameClient(){
+    private GameClient(){
 
     }
 
-    public static DefaultGameClient getInstance(){
+    public static GameClient getInstance(){
         if (instance == null){
-            instance = new DefaultGameClient();
+            instance = new GameClient();
         }
         return instance;
     }

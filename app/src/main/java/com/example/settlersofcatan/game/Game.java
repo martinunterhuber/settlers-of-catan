@@ -1,6 +1,7 @@
 package com.example.settlersofcatan.game;
 
-import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ import java.util.Random;
 public class Game {
     private static Game instance;
     public static final Random random = new Random();
+
+    // transient = "do not serialize this"
+    transient private Callback<BaseMessage> clientCallback;
 
     private ArrayList<Player> players;
     private Board board;
@@ -54,6 +58,10 @@ public class Game {
         }
     }
 
+    public void setClientCallback(Callback<BaseMessage> callback){
+        this.clientCallback = callback;
+    }
+
     public int rollDice(int playerId) {
         if (playerId == currentPlayerId && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
@@ -74,7 +82,7 @@ public class Game {
                 turnCounter++;
                 setCurrentPlayerId();
                 // TODO: send messages for every action
-                new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+                new Thread(() -> clientCallback.callback(new GameStateMessage(this))).start();
             }
         }
     }
