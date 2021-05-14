@@ -3,7 +3,6 @@ package com.example.settlersofcatan;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -13,7 +12,6 @@ import androidx.annotation.Nullable;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
-import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.server_client.GameClient;
 
 public class ResourceView extends FrameLayout {
