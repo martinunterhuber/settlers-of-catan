@@ -3,6 +3,7 @@ package com.example.settlersofcatan.server_client;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.GameEndActivity;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.game.Board;
@@ -19,6 +20,7 @@ import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
@@ -87,6 +89,7 @@ public class GameClient {
         client.registerClass(Resource.class);
         client.registerClass(HashMap.class);
         client.registerClass(ResourceMap.class);
+        client.registerClass(ClientDiceMessage.class);
     }
 
     private void callback(BaseMessage message){
@@ -109,6 +112,17 @@ public class GameClient {
                 Intent intent = new Intent(gameActivity, GameEndActivity.class);
                 gameActivity.startActivity(intent);
                 gameActivity.finish();
+            }
+        }
+        if (message instanceof ClientDiceMessage){
+            if(gameActivity != null && gameActivity instanceof GameActivity) {
+
+                gameActivity.runOnUiThread(() -> ((GameActivity) gameActivity).updateOpponentView(
+                        ((ClientDiceMessage) message).getUsername(),
+                        ((ClientDiceMessage) message).getRolled())
+
+                );
+
             }
         }
         Log.i(NetworkConstants.TAG, message.toString());

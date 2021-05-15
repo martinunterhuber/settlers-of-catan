@@ -3,6 +3,7 @@ package com.example.settlersofcatan.game;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.GameServer;
+import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
@@ -57,6 +58,9 @@ public class Game {
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
             alreadyRolled = true;
+            new Thread(() -> GameClient.getInstance()
+                                    .sendMessage(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled)))
+                                    .start();
             return numberRolled;
         }
         return -1;
