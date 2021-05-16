@@ -1,13 +1,9 @@
 package com.example.settlersofcatan;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.app.AlertDialog;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +11,8 @@ import android.widget.TextView;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -26,6 +24,12 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent3;
     private Button endTurnButton;
     private ImageView dice;
+    private DevelopmentCardView knights;
+    private DevelopmentCardView victoryPoints;
+    private DevelopmentCardView monopoly;
+    private DevelopmentCardView roadBuilding;
+    private DevelopmentCardView yearOfPlenty;
+    private Button drawDevelopmentCard;
 
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
@@ -37,17 +41,24 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         map=findViewById(R.id.mapView);
+
         player=findViewById(R.id.playerView);
         player.setHexGrid(map.getHexGrid());
         player.invalidate();
+
         resources=findViewById(R.id.resourceView);
 
         opponent1=findViewById(R.id.opponent1);
-
         opponent2=findViewById(R.id.opponent2);
-
         opponent3=findViewById(R.id.opponent3);
+
+        knights=findViewById(R.id.view_knights);
+        victoryPoints=findViewById(R.id.view_victory_point_cards);
+        monopoly=findViewById(R.id.view_monopoly);
+        roadBuilding=findViewById(R.id.view_road_building);
+        yearOfPlenty=findViewById(R.id.view_year_of_plenty);
 
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(GameClient.getInstance().getId()));
@@ -59,6 +70,25 @@ public class GameActivity extends AppCompatActivity {
                     if (result > 0){
                         ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
                         resources.invalidate();
+                    }
+                }
+        );
+
+        drawDevelopmentCard=findViewById(R.id.btn_draw_development);
+        drawDevelopmentCard.setOnClickListener(
+                view -> {
+                    int type = Game.getInstance().drawDevelopmentCard(GameClient.getInstance().getId());
+
+                    if (type == 0){
+                        knights.updateView(type);
+                    }else if (type == 1){
+                        victoryPoints.updateView(type);
+                    }else if (type == 2){
+                        monopoly.updateView(type);
+                    }else if (type == 3){
+                        roadBuilding.updateView(type);
+                    }else if (type == 4){
+                        yearOfPlenty.updateView(type);
                     }
                 }
         );
@@ -75,9 +105,6 @@ public class GameActivity extends AppCompatActivity {
         ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
     }
 
-    /**
-     *  TODO onClick Event to build road, settlement and city
-     */
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:

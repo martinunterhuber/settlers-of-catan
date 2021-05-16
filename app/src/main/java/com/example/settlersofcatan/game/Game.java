@@ -1,9 +1,6 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
 import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.server_client.GameServer;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -19,6 +16,7 @@ public class Game {
 
     private ArrayList<Player> players;
     private Board board;
+    private DevelopmentCardDeck developmentCardDeck;
 
     private int currentPlayerId;
     private int turnCounter;
@@ -28,6 +26,7 @@ public class Game {
     private Game(){
         players = new ArrayList<>();
         board = new Board();
+        developmentCardDeck = new DevelopmentCardDeck();
         currentPlayerId = 0;
         turnCounter = 0;
         alreadyRolled = false;
@@ -108,6 +107,44 @@ public class Game {
                 && playerId == currentPlayerId
                 && player.canPlayerPlaceRoad()) {
             player.placeRoad(edge);
+        }
+    }
+
+    public int drawDevelopmentCard(int playerId){
+        if (playerId == currentPlayerId
+                && alreadyRolled
+                && developmentCardDeck.getNumberOfCards() > 0){
+            DevelopmentCard card = developmentCardDeck.drawDevelopmentCard();
+            Player player=getPlayerById(playerId);
+
+            if (card instanceof Knights){
+                player.increaseDevelopmentCard(0);
+                return 0;
+
+            }else if (card instanceof VictoryPoints){
+                player.increaseDevelopmentCard(1);
+                return 1;
+
+            }else if (card instanceof Monopoly){
+                player.increaseDevelopmentCard(2);
+                return 2;
+
+            }else if (card instanceof RoadBuilding){
+                player.increaseDevelopmentCard(3);
+                return 3;
+
+            }else if (card instanceof YearOfPlenty){
+                player.increaseDevelopmentCard(4);
+                return 4;
+            }
+        }
+        return -1;
+    }
+
+    public void playDevelopmentCard(int playerId, int tag){
+        if (playerId == currentPlayerId && alreadyRolled ) {
+            developmentCardDeck.getDevelopmentCard(tag - 1).playCard();
+            getPlayerById(playerId).decreaseDevelopmentCard(tag-1);
         }
     }
 

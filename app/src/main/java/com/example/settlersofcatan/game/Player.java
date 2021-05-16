@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.game;
 
-import android.graphics.Color;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,8 @@ public class Player {
     private int id;
 
     private int victoryPoints;
+    // {Knights, victory point, monopoly, road building, year of plenty}
+    private int[] developmetCards = new int[]{0, 0, 0, 0, 0};
 
     private ResourceMap resources;
     private ArrayList<DevelopmentCard> unrevealedDevelopmentCards = new ArrayList<>();
@@ -209,5 +211,17 @@ public class Player {
         resources.incrementResourceMap(tradeOffer.getGive());
     }
 
+    public void increaseDevelopmentCard(int index){
+        developmetCards[index]++;
+        Log.i("DEVELOPMENT","Player card count increased.");
+    }
 
+    public void decreaseDevelopmentCard(int index){
+        developmetCards[index]--;
+        Log.i("DEVELOPMENT","Player card count decreased.");
+    }
+
+    public int getDevelopmentCardCount(int index){
+        return developmetCards[index];
+    }
 }
