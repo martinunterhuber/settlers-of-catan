@@ -3,6 +3,7 @@ package com.example.settlersofcatan;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent3;
     private Button endTurnButton;
     private ImageView dice;
+    private Button btnTrade;
 
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
@@ -62,6 +64,15 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        btnTrade = findViewById(R.id.btn_trade);
+        btnTrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), TradeActivity.class);
+                startActivity(i);
+            }
+        });
 
         GameClient.getInstance().registerActivity(this);
 
