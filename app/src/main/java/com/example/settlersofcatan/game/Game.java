@@ -63,7 +63,7 @@ public class Game {
     }
 
     public int rollDice(int playerId) {
-        if (playerId == currentPlayerId && !hasRolled && !isBuildingPhase()){
+        if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
             hasRolled = true;
@@ -73,18 +73,20 @@ public class Game {
     }
 
     public void endTurn(int playerId){
-        if (playerId == currentPlayerId && (isBuildingPhase() || hasRolled)) {
-            if (!isBuildingPhase() || (hasBuiltSettlement && hasBuiltRoad)){
-                hasRolled = false;
-                hasBuiltRoad = false;
-                hasBuiltSettlement = false;
-                lastBuiltNode = null;
-                turnCounter++;
-                setCurrentPlayerId();
-                // TODO: send messages for every action
-                new Thread(() -> clientCallback.callback(new GameStateMessage(this))).start();
-            }
+        if (isPlayersTurn(playerId) && canEndTurn()) {
+            hasRolled = false;
+            hasBuiltRoad = false;
+            hasBuiltSettlement = false;
+            lastBuiltNode = null;
+            turnCounter++;
+            setCurrentPlayerId();
+            // TODO: send messages for every action
+            new Thread(() -> clientCallback.callback(new GameStateMessage(this))).start();
         }
+    }
+
+    private boolean canEndTurn(){
+        return (!isBuildingPhase() && hasRolled) || (isBuildingPhase() && hasBuiltSettlement && hasBuiltRoad);
     }
 
     private void setCurrentPlayerId(){
@@ -111,16 +113,14 @@ public class Game {
     public void buildSettlement(Node node, int playerId){
         Player player = getPlayerById(playerId);
 
-        if (node.getBuilding() == null
-                && playerId == currentPlayerId
-                && node.hasNoAdjacentBuildings()){
+        if (node.hasNoAdjacentBuildings() && isPlayersTurn(playerId)){
             if (isBuildingPhase()){
                 if (!hasBuiltSettlement){
                     player.placeSettlement(node);
                     lastBuiltNode = node;
                     hasBuiltSettlement = true;
                 }
-            } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlayerPlaceSettlement()){
+            } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
             }
@@ -129,12 +129,10 @@ public class Game {
 
     public void buildCity(Node node, int playerId){
         Player player = getPlayerById(playerId);
-        if (node.getBuilding() != null
+        if (node.hasPlayersSettlement(playerId)
                 && hasRolled
-                && node.getBuilding() instanceof Settlement
-                && ((Settlement) node.getBuilding()).player.getId() == currentPlayerId
-                && playerId == currentPlayerId
-                && player.canPlayerPlaceCity()) {
+                && isPlayersTurn(playerId)
+                && player.canPlaceCityOn(node)) {
             player.placeCity(node);
         }
     }
@@ -142,9 +140,7 @@ public class Game {
     public void buildRoad(Edge edge, int playerId){
         Player player = getPlayerById(playerId);
 
-        if (edge.getRoad() == null
-                && playerId == currentPlayerId
-                && player.canPlayerPlaceRoad(edge)) {
+        if (isPlayersTurn(playerId) && player.canPlaceRoadOn(edge)) {
             if (isBuildingPhase()){
                 if (!hasBuiltRoad && lastBuiltNode != null && lastBuiltNode.getOutgoingEdges().contains(edge)){
                     player.placeRoad(edge);
@@ -163,6 +159,10 @@ public class Game {
 
     public boolean isSecondRound(){
         return (turnCounter / players.size()) == 1;
+    }
+
+    public boolean isPlayersTurn(int playerId){
+        return playerId == currentPlayerId;
     }
 
     public ArrayList<Player> getPlayers() {

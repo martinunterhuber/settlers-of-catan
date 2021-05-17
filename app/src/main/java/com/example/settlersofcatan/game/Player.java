@@ -82,7 +82,6 @@ public class Player {
         return potentialCityPlacements;
     }
 
-    // Does not take into account the Road Placement during the start of the game.
     private void calculatePotentialRoadPlacements() {
         potentialRoadPlacements.clear();
         Set<Edge> correspondingEdges = new HashSet<>();
@@ -103,6 +102,10 @@ public class Player {
             }
         }
 
+        calculatePotentialRoadsFromBuildings();
+    }
+
+    private void calculatePotentialRoadsFromBuildings(){
         for (Settlement settlement : settlements){
             Node node = settlement.getLocation();
             for (Edge edge : node.getOutgoingEdges()){
@@ -134,22 +137,22 @@ public class Player {
         }
     }
 
-    public boolean canPlayerPlaceRoad(Edge e) {
+    public boolean canPlaceRoadOn(Edge edge) {
         calculatePotentialRoadPlacements();
         return roads.size() < ROAD_COUNT
-                 && potentialRoadPlacements.contains(e);
+                 && potentialRoadPlacements.contains(edge);
     }
 
-    public boolean canPlayerPlaceSettlement() {
+    public boolean canPlaceSettlementOn(Node node) {
         calculatePotentialSettlementPlacements();
         return settlements.size() < SETTLEMENT_COUNT
-                && !potentialSettlementPlacements.isEmpty();
+                && potentialSettlementPlacements.contains(node);
     }
 
-    public boolean canPlayerPlaceCity() {
+    public boolean canPlaceCityOn(Node node) {
         calculatePotentialCityPlacements();
         return cities.size() < CITY_COUNT
-                && !potentialCityPlacements.isEmpty();
+                && potentialCityPlacements.contains(node);
     }
 
     public boolean hasResources(ResourceMap costs){

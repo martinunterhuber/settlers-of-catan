@@ -78,12 +78,21 @@ public class Node {
     }
 
     public boolean hasNoAdjacentBuildings(){
+        if (building != null){
+            return false;
+        }
         for (Node node : getAdjacentNodes()){
             if (node.getBuilding() != null){
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean hasPlayersSettlement(int playerId){
+        return building != null
+                && playerId == building.getPlayerId()
+                && building instanceof Settlement;
     }
 
     /**

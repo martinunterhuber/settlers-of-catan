@@ -10,4 +10,8 @@ public abstract class Placeable {
     public Player getPlayer() {
         return player;
     }
+
+    public int getPlayerId(){
+        return player.getId();
+    }
 }
