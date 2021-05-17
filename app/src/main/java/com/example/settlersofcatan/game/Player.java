@@ -106,8 +106,11 @@ public class Player {
     }
 
     private void calculatePotentialRoadsFromBuildings(){
-        for (Settlement settlement : settlements){
-            Node node = settlement.getLocation();
+        Set<NodePlaceable> buildings = new HashSet<>();
+        buildings.addAll(settlements);
+        buildings.addAll(cities);
+        for (NodePlaceable building : buildings){
+            Node node = building.getLocation();
             for (Edge edge : node.getOutgoingEdges()){
                 if (edge.getRoad() == null){
                     potentialRoadPlacements.add(edge);
