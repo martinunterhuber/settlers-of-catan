@@ -2,12 +2,10 @@ package com.example.settlersofcatan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.app.AlertDialog;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,16 +25,20 @@ public class GameActivity extends AppCompatActivity {
     private Button endTurnButton;
     private ImageView dice;
 
+    private GameClient client;
+
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
-            Color.parseColor("#F44336"),
             Color.parseColor("#FF9800"),
+            Color.parseColor("#F44336"),
             Color.parseColor("#2196F3"), };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        client = GameClient.getInstance();
+
         map=findViewById(R.id.mapView);
         player=findViewById(R.id.playerView);
         player.setHexGrid(map.getHexGrid());
@@ -50,12 +52,12 @@ public class GameActivity extends AppCompatActivity {
         opponent3=findViewById(R.id.opponent3);
 
         endTurnButton = findViewById(R.id.endTurnButton);
-        endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(GameClient.getInstance().getId()));
+        endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
 
         dice = findViewById(R.id.btn_dice);
         dice.setOnClickListener(
                 (v) -> {
-                    int result = Game.getInstance().rollDice(GameClient.getInstance().getId());
+                    int result = Game.getInstance().rollDice(client.getId());
                     if (result > 0){
                         ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
                         resources.invalidate();
@@ -63,13 +65,13 @@ public class GameActivity extends AppCompatActivity {
                 }
         );
 
-        GameClient.getInstance().registerActivity(this);
+        client.registerActivity(this);
 
         setButtonToPlayerColor();
     }
 
     private void setButtonToPlayerColor(){
-        Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
+        Player player = Game.getInstance().getPlayerById(client.getId());
         ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[player.getId()]);
         ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[player.getId()]);
         ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
@@ -98,7 +100,6 @@ public class GameActivity extends AppCompatActivity {
                 .setTitle(R.string.quit_lobby_title)
                 .setMessage(R.string.quit_lobby_confirmation)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    GameClient client = GameClient.getInstance();
                     if (client != null){
                         new Thread(client::disconnect).start();
                     }

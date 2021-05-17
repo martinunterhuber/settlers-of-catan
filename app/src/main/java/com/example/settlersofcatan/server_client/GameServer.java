@@ -2,7 +2,6 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.Edge;
@@ -27,7 +26,6 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServe
 import java.io.IOException;
 import java.net.BindException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 

@@ -2,9 +2,7 @@ package com.example.settlersofcatan;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 

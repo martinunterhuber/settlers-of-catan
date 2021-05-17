@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
@@ -29,7 +28,6 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConst
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -52,12 +50,20 @@ public class GameClient {
         return instance;
     }
 
-    public void init(String host, String username) throws IOException {
+    public void connect(String host, String username) {
         this.username = username;
         client = new NetworkClientKryo();
         registerMessageClasses();
         client.registerCallback(this::callback);
-        connect(host);
+        try {
+            connect(host);
+        } catch (IOException e){
+            Log.e(NetworkConstants.TAG, "Failed to connect to " + host);
+        }
+    }
+
+    public boolean isConnected(){
+        return client.isConnected();
     }
 
     private void registerMessageClasses(){
@@ -86,9 +92,17 @@ public class GameClient {
         client.registerClass(ResourceMap.class);
     }
 
+    private void gameCallback(BaseMessage message){
+        if (message instanceof GameStateMessage){
+            sendMessage(message);
+        }
+    }
+
     private void callback(BaseMessage message){
         if (message instanceof GameStateMessage){
-            Game.setInstance(((GameStateMessage) message).game);
+            Game game = ((GameStateMessage) message).game;
+            game.setClientCallback(this::gameCallback);
+            Game.setInstance(game);
             for (Player player : Game.getInstance().getPlayers()){
                 if (player.getName().equals(this.username)){
                     id = player.getId();
@@ -125,7 +139,7 @@ public class GameClient {
 
     public void disconnect(){
         client.sendMessage(new ClientLeftMessage(username));
-        client.close();
+        client.disconnect();
         Log.i(NetworkConstants.TAG, "Disconnected from Host");
     }
 

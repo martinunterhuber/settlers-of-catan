@@ -67,8 +67,8 @@ public class Node {
         return tiles;
     }
 
-    public List<Edge> getOtherOutgoingEdges(Edge edge) {
-        List<Edge> otherOutgoingEdges = new ArrayList<>();
+    public Set<Edge> getOtherOutgoingEdges(Edge edge) {
+        Set<Edge> otherOutgoingEdges = new HashSet<>();
         for (Edge e : outgoingEdges) {
             if (e != edge) {
                 otherOutgoingEdges.add(e);
@@ -78,12 +78,21 @@ public class Node {
     }
 
     public boolean hasNoAdjacentBuildings(){
+        if (building != null){
+            return false;
+        }
         for (Node node : getAdjacentNodes()){
             if (node.getBuilding() != null){
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean hasPlayersSettlement(int playerId){
+        return building != null
+                && playerId == building.getPlayerId()
+                && building instanceof Settlement;
     }
 
     /**

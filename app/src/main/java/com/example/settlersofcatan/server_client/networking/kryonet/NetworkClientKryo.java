@@ -43,7 +43,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.sendTCP(message);
     }
 
-    public void close(){
+    public void disconnect(){
         client.close();
+    }
+
+    public boolean isConnected(){
+        return client.isConnected();
     }
 }

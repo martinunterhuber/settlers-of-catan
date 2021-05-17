@@ -1,9 +1,7 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
-import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.server_client.GameServer;
+import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -17,20 +15,28 @@ public class Game {
     private static Game instance;
     public static final Random random = new Random();
 
+    // transient = "do not serialize this"
+    transient private Callback<BaseMessage> clientCallback;
+
     private ArrayList<Player> players;
     private Board board;
 
     private int currentPlayerId;
     private int turnCounter;
 
-    private boolean alreadyRolled;
+    private boolean hasRolled;
+
+    // Variables for initial building phase
+    private boolean hasBuiltSettlement;
+    private boolean hasBuiltRoad;
+    private Node lastBuiltNode;
 
     private Game(){
         players = new ArrayList<>();
         board = new Board();
         currentPlayerId = 0;
         turnCounter = 0;
-        alreadyRolled = false;
+        hasRolled = false;
     }
 
     public static Game getInstance() {
@@ -52,23 +58,46 @@ public class Game {
         }
     }
 
+    public void setClientCallback(Callback<BaseMessage> callback){
+        this.clientCallback = callback;
+    }
+
     public int rollDice(int playerId) {
-        if (playerId == currentPlayerId && !alreadyRolled){
+        if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
             board.distributeResources(numberRolled);
-            alreadyRolled = true;
+            hasRolled = true;
             return numberRolled;
         }
         return -1;
     }
 
     public void endTurn(int playerId){
-        if (playerId == currentPlayerId) {
-            currentPlayerId = (playerId + 1) % players.size();
-            alreadyRolled = false;
+        if (isPlayersTurn(playerId) && canEndTurn()) {
+            hasRolled = false;
+            hasBuiltRoad = false;
+            hasBuiltSettlement = false;
+            lastBuiltNode = null;
             turnCounter++;
+            setCurrentPlayerId();
             // TODO: send messages for every action
-            new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+            new Thread(() -> clientCallback.callback(new GameStateMessage(this))).start();
+        }
+    }
+
+    private boolean canEndTurn(){
+        return (!isBuildingPhase() && hasRolled) || (isBuildingPhase() && hasBuiltSettlement && hasBuiltRoad);
+    }
+
+    private void setCurrentPlayerId(){
+        if (isBuildingPhase() && isSecondRound()){
+            if (turnCounter != players.size()){
+                currentPlayerId = (currentPlayerId - 1) % players.size();
+            }
+        } else {
+            if (turnCounter != players.size() * 2){
+                currentPlayerId = (currentPlayerId + 1) % players.size();
+            }
         }
     }
 
@@ -83,36 +112,57 @@ public class Game {
 
     public void buildSettlement(Node node, int playerId){
         Player player = getPlayerById(playerId);
-        if (node.getBuilding() == null
-                && playerId == currentPlayerId
-                && node.hasNoAdjacentBuildings()
-                && player.canPlayerPlaceSettlement()) {
-            player.placeSettlement(node);
+
+        if (node.hasNoAdjacentBuildings() && isPlayersTurn(playerId)){
+            if (isBuildingPhase()){
+                if (!hasBuiltSettlement){
+                    player.placeSettlement(node);
+                    lastBuiltNode = node;
+                    hasBuiltSettlement = true;
+                }
+            } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
+                player.takeResources(Settlement.costs);
+                player.placeSettlement(node);
+            }
         }
     }
 
     public void buildCity(Node node, int playerId){
         Player player = getPlayerById(playerId);
-        if (node.getBuilding() != null
-                && node.getBuilding() instanceof Settlement
-                && ((Settlement) node.getBuilding()).player.getId() == currentPlayerId
-                && playerId == currentPlayerId
-                && player.canPlayerPlaceCity()) {
+        if (node.hasPlayersSettlement(playerId)
+                && hasRolled
+                && isPlayersTurn(playerId)
+                && player.canPlaceCityOn(node)) {
             player.placeCity(node);
         }
     }
 
     public void buildRoad(Edge edge, int playerId){
         Player player = getPlayerById(playerId);
-        if (edge.getRoad() == null
-                && playerId == currentPlayerId
-                && player.canPlayerPlaceRoad()) {
-            player.placeRoad(edge);
+
+        if (isPlayersTurn(playerId) && player.canPlaceRoadOn(edge)) {
+            if (isBuildingPhase()){
+                if (!hasBuiltRoad && lastBuiltNode != null && lastBuiltNode.getOutgoingEdges().contains(edge)){
+                    player.placeRoad(edge);
+                    hasBuiltRoad = true;
+                }
+            } else if (hasRolled && player.hasResources(Road.costs)){
+                player.takeResources(Road.costs);
+                player.placeRoad(edge);
+            }
         }
     }
 
     public boolean isBuildingPhase(){
         return (turnCounter / players.size()) < 2;
+    }
+
+    public boolean isSecondRound(){
+        return (turnCounter / players.size()) == 1;
+    }
+
+    public boolean isPlayersTurn(int playerId){
+        return playerId == currentPlayerId;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -121,5 +171,9 @@ public class Game {
 
     public Board getBoard() {
         return board;
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
     }
 }

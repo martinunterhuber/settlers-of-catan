@@ -7,19 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.NodePlaceable;
-import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.server_client.GameClient;
