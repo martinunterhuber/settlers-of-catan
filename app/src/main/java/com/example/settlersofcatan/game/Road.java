@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import java.util.Set;
+
 /**
  * Class to represent a road. Always belongs to a player.
  */

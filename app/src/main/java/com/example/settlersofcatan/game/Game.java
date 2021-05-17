@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
@@ -30,6 +32,8 @@ public class Game {
     private boolean hasBuiltSettlement;
     private boolean hasBuiltRoad;
     private Node lastBuiltNode;
+
+    private Player longestRoadPlayer;
 
     private Game(){
         players = new ArrayList<>();
@@ -123,6 +127,7 @@ public class Game {
             } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
+                updateLongestRoadPlayer();
             }
         }
     }
@@ -149,6 +154,32 @@ public class Game {
             } else if (hasRolled && player.hasResources(Road.costs)){
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
+                updateLongestRoadPlayer();
+            }
+        }
+    }
+
+    public void updateLongestRoadPlayer(){
+        Player currentPlayer = getPlayerById(currentPlayerId);
+        int currentPlayerLongestRoad = currentPlayer.longestRoad();
+        if (currentPlayerLongestRoad >= 5){
+            int previousLongestRoad = 0;
+            if (longestRoadPlayer != null){
+                previousLongestRoad = longestRoadPlayer.longestRoad();
+            }
+            if (previousLongestRoad < currentPlayerLongestRoad && longestRoadPlayer != currentPlayer){
+                if (longestRoadPlayer != null) {
+                    longestRoadPlayer.addVictoryPoints(-2);
+                }
+                longestRoadPlayer = currentPlayer;
+                currentPlayer.addVictoryPoints(2);
+            }
+        } else if (currentPlayer == longestRoadPlayer){
+            // currentPlayer doesn't have a road >= 5 anymore (because of enemy settlement)
+            for (Player otherPlayer : players){
+                if (otherPlayer.getId() != currentPlayerId){
+                    updateLongestRoadPlayer();
+                }
             }
         }
     }
