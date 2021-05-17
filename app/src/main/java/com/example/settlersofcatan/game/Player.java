@@ -25,7 +25,7 @@ public class Player {
     private ArrayList<Settlement> settlements = new ArrayList<>();
     private ArrayList<City> cities = new ArrayList<>();
     private ArrayList<Road> roads = new ArrayList<>();
-    private ArrayList<Harbor> harborsSettledOn;
+    private ArrayList<Harbor> harborsSettledOn = new ArrayList<>();
 
     private ArrayList<Edge> potentialRoadPlacements = new ArrayList<>();
     private ArrayList<Node> potentialSettlementPlacements = new ArrayList<>();
@@ -56,6 +56,14 @@ public class Player {
 
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
+    }
+
+    public ResourceMap getResources() {
+        return resources;
+    }
+
+    public void setResources(ResourceMap resources) {
+        this.resources = resources;
     }
 
     public int getId() {
@@ -188,6 +196,27 @@ public class Player {
         settlements.remove((Settlement) n.getBuilding());
         n.setBuilding(cityToPlace);
     }
+
+    /**
+     * Method to calculate the exchange rates of resources for trading with the bank.
+     * @return an array with the exchange rate at the index of the resource.
+     */
+    public int[] getResourceExchangeRates() {
+        int[] resourceExchangeRates = {4,4,4,4,4};
+        int[] resourceExchangeRatesWithWildcard = {3,3,3,3,3};
+        boolean onWildcardHarbor = false;
+        for (Harbor harbor : harborsSettledOn) {
+            if (harbor.getResource() != null) {
+                resourceExchangeRates[harbor.getResource().getIndex()] = 2;
+                resourceExchangeRatesWithWildcard[harbor.getResource().getIndex()] = 2;
+            }
+            else {
+                onWildcardHarbor = true;
+            }
+        }
+        return onWildcardHarbor ? resourceExchangeRatesWithWildcard : resourceExchangeRates;
+    }
+
 
     /**
      * Method to check if a player has the resources necessary to be able to accept a specific trade offer

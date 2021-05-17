@@ -65,6 +65,7 @@ public class GameActivity extends AppCompatActivity {
                 }
         );
 
+        //TODO implement that button can only be pressed by player who's turn it is
         btnTrade = findViewById(R.id.btn_trade);
         btnTrade.setOnClickListener(new View.OnClickListener() {
             @Override

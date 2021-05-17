@@ -51,4 +51,21 @@ public class ResourceMap {
         }
         return true;
     }
+
+    public static ResourceMap cloneResourceMap(ResourceMap resourceMapToCopy) {
+        ResourceMap resourceMap = getEmptyResourceMap();
+        for (Resource resource : Resource.values()) {
+            resourceMap.incrementResourceCount(resource, resourceMapToCopy.getResourceCount(resource));
+        }
+        return resourceMap;
+    }
+
+    public static ResourceMap getEmptyResourceMap() {
+        ResourceMap resourceMap = new ResourceMap();
+        for (Resource resource : Resource.values()){
+            resourceMap.decrementResourceCount(resource, 10);
+        }
+        return resourceMap;
+    }
+
 }
