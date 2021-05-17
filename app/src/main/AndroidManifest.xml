@@ -13,7 +13,7 @@
         android:theme="@style/Theme.SettlersOfCatan" >
 
         <activity android:name=".GameActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/GameTheme"
             android:parentActivityName=".MainActivity">
         </activity>
 

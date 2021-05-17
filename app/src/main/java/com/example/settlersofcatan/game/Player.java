@@ -193,6 +193,7 @@ public class Player {
         Settlement settlementToPlace = new Settlement(this, n);
         settlements.add(settlementToPlace);
         n.setBuilding(settlementToPlace);
+        victoryPoints++;
         //DISCLAIMER: Remember to add same functionality to the initialSettlementPlacement Method
         if (n.isAdjacentToHarbor()) {
             harborsSettledOn.add(n.getAdjacentHarbor());
@@ -209,6 +210,7 @@ public class Player {
         cities.add(cityToPlace);
         settlements.remove((Settlement) n.getBuilding());
         n.setBuilding(cityToPlace);
+        victoryPoints++;
     }
 
     /**

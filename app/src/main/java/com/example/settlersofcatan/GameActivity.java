@@ -77,6 +77,12 @@ public class GameActivity extends AppCompatActivity {
         ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
     }
 
+    public void redrawViews(){
+        findViewById(R.id.opponents).invalidate();
+        findViewById(R.id.playerView).invalidate();
+        findViewById(R.id.resourceView).invalidate();
+    }
+
     /**
      *  TODO onClick Event to build road, settlement and city
      */
