@@ -2,7 +2,7 @@ package com.example.settlersofcatan.game;
 
 import android.util.Log;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 /**
  * A shuffled deck of development cards from which you can draw.
@@ -10,7 +10,7 @@ import java.util.Random;
 public class DevelopmentCardDeck {
     private DevelopmentCard[] deck;
     private int numberOfCards = 25;
-    private static final Random rand = new Random();
+    private static final SecureRandom rand = new SecureRandom();
 
     public DevelopmentCardDeck() {
         this.deck = new DevelopmentCard[]{

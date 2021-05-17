@@ -31,6 +31,7 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClien
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -97,6 +98,7 @@ public class GameClient {
         client.registerClass(RoadBuilding.class);
         client.registerClass(YearOfPlenty.class);
         client.registerClass(int[].class);
+        client.registerClass(SecureRandom.class);
     }
 
     private void callback(BaseMessage message){

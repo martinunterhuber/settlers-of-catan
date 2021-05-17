@@ -32,6 +32,7 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServe
 
 import java.io.IOException;
 import java.net.BindException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -121,6 +122,7 @@ public class GameServer {
         server.registerClass(RoadBuilding.class);
         server.registerClass(YearOfPlenty.class);
         server.registerClass(int[].class);
+        server.registerClass(SecureRandom.class);
     }
 
     private void startServer(){
