@@ -10,7 +10,7 @@ import java.util.Random;
 public class DevelopmentCardDeck {
     private DevelopmentCard[] deck;
     private int numberOfCards = 25;
-    private Random rand = new Random();
+    private static final Random rand = new Random();
 
     public DevelopmentCardDeck() {
         this.deck = new DevelopmentCard[]{
