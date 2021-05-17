@@ -20,6 +20,8 @@ public class OpponentView extends FrameLayout {
     private TextView textName;
     private TextView textPointCount;
     private ConstraintLayout opponentLayout;
+    private TextView dice;
+    private int rolled;
 
     private Player opponent;
 
@@ -51,6 +53,8 @@ public class OpponentView extends FrameLayout {
         textName = findViewById(R.id.txt_name);
         textPointCount = findViewById(R.id.txt_countpoints);
         opponentLayout = findViewById(R.id.layout_opponent);
+        dice = findViewById(R.id.txt_dice);
+        rolled = 0;
         updateValues();
     }
 
@@ -59,6 +63,7 @@ public class OpponentView extends FrameLayout {
             textName.setText(opponent.getName());
             textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
             opponentLayout.setBackgroundColor(GameActivity.playerColors[opponent.getId()]);
+            dice.setText(String.valueOf(rolled));
         } else {
             textName.setText("---");
         }
@@ -82,6 +87,14 @@ public class OpponentView extends FrameLayout {
     }
 
     public String getPlayerName(){
-        return textName.getText().toString();
+        if (opponent != null){
+        return opponent.getName();
+        }
+
+        return "---";
+    }
+
+    public void updateDice(int rolled){
+        this.rolled = (rolled);
     }
 }

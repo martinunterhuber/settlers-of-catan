@@ -136,16 +136,16 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void updateOpponentView(String username, int rolled){
-        TextView txt;
+
         if (opponent1.getPlayerName().equals(username)){
-            txt = opponent1.findViewById(R.id.txt_dice);
-            txt.setText(String.valueOf(rolled));
-        }else if (opponent2.getPlayerName().equals(username)){
-            txt = opponent2.findViewById(R.id.txt_dice);
-            txt.setText(String.valueOf(rolled));
-        }else if (opponent3.getPlayerName().equals(username)){
-            txt = opponent3.findViewById(R.id.txt_dice);
-            txt.setText(String.valueOf(rolled));
+            opponent1.updateDice(rolled);
+            opponent1.invalidate();
+        }else if (Game.getInstance().getPlayers().size() > 2 && opponent2.getPlayerName().equals(username)){
+            opponent2.updateDice(rolled);
+            opponent2.invalidate();
+        }else if (Game.getInstance().getPlayers().size() > 3 && opponent3.getPlayerName().equals(username)){
+            opponent3.updateDice(rolled);
+            opponent3.invalidate();
         }
 
     }
