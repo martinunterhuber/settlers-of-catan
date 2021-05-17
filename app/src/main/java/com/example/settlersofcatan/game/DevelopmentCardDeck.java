@@ -10,6 +10,7 @@ import java.util.Random;
 public class DevelopmentCardDeck {
     private DevelopmentCard[] deck;
     private int numberOfCards = 25;
+    private Random rand = new Random();
 
     public DevelopmentCardDeck() {
         this.deck = new DevelopmentCard[]{
@@ -22,7 +23,7 @@ public class DevelopmentCardDeck {
     }
 
     public DevelopmentCard drawDevelopmentCard(){
-        int random = new Random().nextInt(5);
+        int random = rand.nextInt(5);
         numberOfCards--;
 
         if (deck[random].getCount() > 0) {
