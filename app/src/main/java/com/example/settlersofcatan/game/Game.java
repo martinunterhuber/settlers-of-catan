@@ -146,7 +146,7 @@ public class Game {
                 && playerId == currentPlayerId
                 && player.canPlayerPlaceRoad(edge)) {
             if (isBuildingPhase()){
-                if (!hasBuiltRoad && lastBuiltNode.getOutgoingEdges().contains(edge)){
+                if (!hasBuiltRoad && lastBuiltNode != null && lastBuiltNode.getOutgoingEdges().contains(edge)){
                     player.placeRoad(edge);
                     hasBuiltRoad = true;
                 }
