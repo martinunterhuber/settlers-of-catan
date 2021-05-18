@@ -84,17 +84,20 @@ public class Game {
     }
 
     public void moveRobber(Tile tile, Resource resource, int playerToId, int playerFromId){
-        Player playerFrom = getPlayerById(playerFromId);
-        Player playerTo = getPlayerById(playerToId);
-
         if (tile != null
                 && isPlayersTurn(playerToId)
                 && canMoveRobber
-                && !tile.hasRobber()
-                && playerFrom.getResourceCount(resource) > 0){
+                && !tile.hasRobber()){
             board.moveRobberTo(tile);
-            playerFrom.takeResource(resource, 1);
-            playerTo.giveSingleResource(resource);
+            if (playerFromId != -1){
+                Player playerFrom = getPlayerById(playerFromId);
+                Player playerTo = getPlayerById(playerToId);
+
+                if (playerFrom.getResourceCount(resource) > 0){
+                    playerFrom.takeResource(resource, 1);
+                    playerTo.giveSingleResource(resource);
+                }
+            }
             canMoveRobber = false;
         }
     }

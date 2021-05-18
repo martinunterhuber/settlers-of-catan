@@ -42,6 +42,10 @@ public class ResourceView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        doOnDraw();
+    }
+
+    protected void doOnDraw(){
         setResourceValues();
     }
 
@@ -52,11 +56,23 @@ public class ResourceView extends FrameLayout {
 
     private void setResourceValues(){
         Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
+        setResourceValuesOf(player);
+    }
+
+    public void setResourceValuesOf(Player player){
         woodTxt.setText(String.valueOf(player.getResourceCount(Resource.FOREST)));
         wheatTxt.setText(String.valueOf(player.getResourceCount(Resource.WHEAT)));
         sheepTxt.setText(String.valueOf(player.getResourceCount(Resource.SHEEP)));
         clayTxt.setText(String.valueOf(player.getResourceCount(Resource.CLAY)));
         oreTxt.setText(String.valueOf(player.getResourceCount(Resource.ORE)));
+    }
+
+    public void setEmptyResources(){
+        woodTxt.setText(String.valueOf(0));
+        wheatTxt.setText(String.valueOf(0));
+        sheepTxt.setText(String.valueOf(0));
+        clayTxt.setText(String.valueOf(0));
+        oreTxt.setText(String.valueOf(0));
     }
 
     private void initResourceTextFields() {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.app.AlertDialog;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -86,6 +87,7 @@ public class GameActivity extends AppCompatActivity {
         Game.getInstance().moveRobber(playerView.getSelectedTile(), resource, client.getId(), otherPlayerId);
         playerView.invalidate();
         findViewById(R.id.moveRobber).setEnabled(Game.getInstance().canMoveRobber());
+        resources.invalidate();
     }
 
     private void rollDice(View view){
@@ -100,6 +102,13 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void selectPlayerAndResource(Tile tile){
+        Player currentPlayer = Game.getInstance().getPlayerById(client.getId());
+        List<String> spinnerArray = tile.getAdjacentPlayersNamesExcept(currentPlayer);
+        if (spinnerArray.isEmpty()){
+            moveRobber(null, -1);
+            return;
+        }
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_robber, null);
@@ -107,15 +116,6 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.setCancelable(false);
 
-        List<String> spinnerArray = new ArrayList<>();
-        for (Node node : tile.getNodes()){
-            if (node.getBuilding() != null){
-                Player player = node.getBuilding().getPlayer();
-                if (player.getId() != client.getId() && !spinnerArray.contains(player.getName())){
-                    spinnerArray.add(player.getName());
-                }
-            }
-        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -123,13 +123,31 @@ public class GameActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         Button confirm = dialogView.findViewById(R.id.confirm);
+        SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
+
         confirm.setOnClickListener((view) -> {
             String playerName = spinner.getSelectedItem().toString();
             Player player = Game.getInstance().getPlayerByName(playerName);
-            Resource resource = Resource.SHEEP;
+            Resource resource = resourceView.getSelectedResource();
             moveRobber(resource, player.getId());
             alertDialog.dismiss();
         });
+
+        AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Player player = Game.getInstance().getPlayerByName(parent.getItemAtPosition(position).toString());
+                resourceView.setResourceValuesOf(player);
+                resourceView.initListeners(() -> confirm.setEnabled(true));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                confirm.setEnabled(false);
+                resourceView.setEmptyResources();
+            }
+        };
+        spinner.setOnItemSelectedListener(onItemSelectedListener);
 
         alertDialog.show();
     }
