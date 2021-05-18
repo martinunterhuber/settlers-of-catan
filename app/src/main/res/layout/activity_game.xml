@@ -112,7 +112,7 @@
       android:onClick="onClick"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/btn_settlement"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toEndOf="@id/icon_trophy"
       app:layout_constraintHorizontal_chainStyle="spread"
       app:srcCompat="@drawable/road_white" />
 
@@ -128,6 +128,27 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:srcCompat="@drawable/dice1" />
 
+  <TextView
+      android:id="@+id/victory_points"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="0"
+      android:textSize="24sp"
+      app:layout_constraintBottom_toTopOf="@id/icon_trophy"
+      app:layout_constraintStart_toStartOf="@id/icon_trophy"
+      app:layout_constraintEnd_toEndOf="@id/icon_trophy" />
+
+  <ImageView
+      android:id="@+id/icon_trophy"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_marginBottom="60dp"
+      android:onClick="onClick"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/btn_road"
+      android:src="@drawable/trophy" />
+
   <Button
       android:id="@+id/endTurnButton"
       android:layout_width="wrap_content"
@@ -142,7 +163,7 @@
       android:id="@+id/rollResult"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="0"
+      android:text=""
       android:textSize="24sp"
       app:layout_constraintBottom_toTopOf="@+id/btn_dice"
       app:layout_constraintEnd_toEndOf="@+id/btn_dice"

@@ -4,20 +4,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.app.AlertDialog;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
+
+import java.util.Arrays;
 
 public class GameActivity extends AppCompatActivity {
 
     private MapView map;
-    private PlayerView player;
+    private PlayerView playerView;
     private ResourceView resources;
     private OpponentView opponent1;
     private OpponentView opponent2;
@@ -40,9 +45,9 @@ public class GameActivity extends AppCompatActivity {
         client = GameClient.getInstance();
 
         map=findViewById(R.id.mapView);
-        player=findViewById(R.id.playerView);
-        player.setHexGrid(map.getHexGrid());
-        player.invalidate();
+        playerView =findViewById(R.id.playerView);
+        playerView.setHexGrid(map.getHexGrid());
+        playerView.invalidate();
         resources=findViewById(R.id.resourceView);
 
         opponent1=findViewById(R.id.opponent1);
@@ -53,6 +58,9 @@ public class GameActivity extends AppCompatActivity {
 
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
+        if (Game.getInstance().getCurrentPlayerId() != client.getId()){
+            endTurnButton.setEnabled(false);
+        }
 
         dice = findViewById(R.id.btn_dice);
         dice.setOnClickListener(
@@ -68,6 +76,8 @@ public class GameActivity extends AppCompatActivity {
         client.registerActivity(this);
 
         setButtonToPlayerColor();
+
+        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
     }
 
     private void setButtonToPlayerColor(){
@@ -89,13 +99,13 @@ public class GameActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:
-                player.buildRoad();
+                playerView.buildRoad();
                 break;
             case R.id.btn_settlement:
-                player.buildSettlement();
+                playerView.buildSettlement();
                 break;
             case R.id.btn_city:
-                player.buildCity();
+                playerView.buildCity();
                 break;
         }
     }
