@@ -14,4 +14,6 @@
     <string name="could_not_connect">Could not connect to %1$s</string>
     <string name="quit_lobby_title">Leave Lobby?</string>
     <string name="quit_lobby_confirmation">Do you really want to leave the lobby?</string>
+    <string name="move_robber">Move Robber</string>
+    <string name="end_turn">End Turn</string>
 </resources>

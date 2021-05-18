@@ -31,6 +31,8 @@ public class Tile {
 
     private int number;
 
+    private Robber robber;
+
     private Tile() {
         this(null, -1);
     }
@@ -195,5 +197,17 @@ public class Tile {
 
     void setR(int r) {
         this.r = r;
+    }
+
+    public boolean hasRobber(){
+        return robber != null;
+    }
+
+    public Robber getRobber() {
+        return robber;
+    }
+
+    void setRobber(Robber robber) {
+        this.robber = robber;
     }
 }

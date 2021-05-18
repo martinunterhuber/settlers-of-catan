@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
@@ -28,6 +29,7 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent2;
     private OpponentView opponent3;
     private Button endTurnButton;
+    private Button moveRobberButton;
     private ImageView dice;
 
     private GameClient client;
@@ -62,6 +64,15 @@ public class GameActivity extends AppCompatActivity {
             endTurnButton.setEnabled(false);
         }
 
+        moveRobberButton = findViewById(R.id.moveRobber);
+        moveRobberButton.setOnClickListener((v) -> {
+            Resource resource = selectResource();
+            int otherPlayerId = selectPlayer();
+
+            Game.getInstance().moveRobber(playerView.getSelectedTile(), resource, client.getId(), otherPlayerId);
+            playerView.invalidate();
+        });
+
         dice = findViewById(R.id.btn_dice);
         dice.setOnClickListener(
                 (v) -> {
@@ -80,6 +91,16 @@ public class GameActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
     }
 
+    private int selectPlayer(){
+        // TODO
+        return 0;
+    }
+
+    private Resource selectResource(){
+        // TODO
+        return Resource.SHEEP;
+    }
+
     private void setButtonToPlayerColor(){
         Player player = Game.getInstance().getPlayerById(client.getId());
         ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[player.getId()]);
@@ -93,9 +114,6 @@ public class GameActivity extends AppCompatActivity {
         findViewById(R.id.resourceView).invalidate();
     }
 
-    /**
-     *  TODO onClick Event to build road, settlement and city
-     */
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:
