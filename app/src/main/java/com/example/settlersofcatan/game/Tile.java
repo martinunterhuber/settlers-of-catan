@@ -1,5 +1,8 @@
 package com.example.settlersofcatan.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class to represent a tile on the board, has hexagonal shape and as  such 6 nodes and 6 edges.
  * It furthermore has a resource it belongs to. If its resource is null, it is desert.
@@ -30,6 +33,8 @@ public class Tile {
     private int r;
 
     private int number;
+
+    private Robber robber;
 
     private Tile() {
         this(null, -1);
@@ -63,6 +68,23 @@ public class Tile {
                 n.getBuilding().giveResource(resource);
             }
         }
+    }
+
+    /**
+     * Returns a list of all the names of other players which have a building
+     * on a node adjacent to this tile
+     */
+    public List<String> getAdjacentPlayersNamesExcept(Player player){
+        List<String> players = new ArrayList<>();
+        for (Node node : nodes){
+            if (node.getBuilding() != null){
+                Player other = node.getBuilding().getPlayer();
+                if (player.getId() != other.getId() && !players.contains(other.getName())){
+                    players.add(other.getName());
+                }
+            }
+        }
+        return players;
     }
 
     public int getNumber() {
@@ -195,5 +217,17 @@ public class Tile {
 
     void setR(int r) {
         this.r = r;
+    }
+
+    public boolean hasRobber(){
+        return robber != null;
+    }
+
+    public Robber getRobber() {
+        return robber;
+    }
+
+    void setRobber(Robber robber) {
+        this.robber = robber;
     }
 }

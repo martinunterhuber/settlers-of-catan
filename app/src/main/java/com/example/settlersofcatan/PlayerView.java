@@ -3,8 +3,12 @@ package com.example.settlersofcatan;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -17,6 +21,7 @@ import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.NodePlaceable;
 import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.Settlement;
+import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
 /**
@@ -55,6 +60,8 @@ public class PlayerView extends View {
             drawRoads(canvas);
             setBuildings();
             drawCorners(canvas);
+            setTiles();
+            drawTiles(canvas);
         }
     }
 
@@ -89,12 +96,26 @@ public class PlayerView extends View {
         }
     }
 
+    public void setTiles(){
+        for (Hexagon tile : hexGrid.getTiles()){
+            if (tile.getTile().hasRobber()){
+                tile.setResID(R.drawable.robber);
+            } else if (selected == tile){
+                tile.setSelectedResID();
+            } else {
+                tile.setResID(0);
+            }
+        }
+    }
+
     public void markSelected(Point touched){
         HexagonPart touchedPart = null;
         if (hexGrid.isInCircle(touched)) {
             touchedPart = hexGrid.getTouchedCorner();
         } else if (hexGrid.isOnLine(touched)) {
             touchedPart = hexGrid.getTouchedLine();
+        } else if (hexGrid.isInTile(touched)){
+            touchedPart = hexGrid.getTouchedTile();
         }
 
         if (selected != null && touchedPart == selected){
@@ -203,8 +224,19 @@ public class PlayerView extends View {
 
         for (Point p : hexGrid.getCorners()){
             Bitmap bitmap = getBitmap(p.getResID());
+            if (bitmap != null){
+                canvas.drawBitmap(bitmap,p.getX()-bitmap.getWidth()/2,p.getY()-bitmap.getHeight()/2,null);
+            }
+        }
+    }
 
-            canvas.drawBitmap(bitmap,p.getX()-bitmap.getWidth()/2,p.getY()-bitmap.getHeight()/2,null);
+    private void drawTiles(Canvas canvas){
+        for (Hexagon tile : hexGrid.getTiles()){
+            Bitmap bitmap = getBitmap(tile.getResID());
+            if (bitmap != null){
+                bitmap = Bitmap.createScaledBitmap(bitmap, 120,120, false);
+                canvas.drawBitmap(bitmap, tile.getCenter().getX() - bitmap.getWidth() / 2, tile.getCenter().getY() - bitmap.getHeight() / 2,null);
+            }
         }
     }
 
@@ -212,6 +244,9 @@ public class PlayerView extends View {
      * XML drawable gets converted into bitmap.
      */
     private Bitmap getBitmap(int drawableRes) {
+        if (drawableRes == 0){
+            return null;
+        }
         Drawable drawable = getResources().getDrawable(drawableRes);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -235,5 +270,10 @@ public class PlayerView extends View {
         this.hexGrid=grid;
     }
 
-
+    public Tile getSelectedTile(){
+        if (selected != null && selected instanceof Hexagon){
+            return ((Hexagon) selected).getTile();
+        }
+        return null;
+    }
 }

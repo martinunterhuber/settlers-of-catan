@@ -35,6 +35,8 @@ public class Game {
 
     private Player longestRoadPlayer;
 
+    private boolean canMoveRobber;
+
     private Game(){
         players = new ArrayList<>();
         board = new Board();
@@ -69,15 +71,54 @@ public class Game {
     public int rollDice(int playerId) {
         if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
-            board.distributeResources(numberRolled);
+            if (numberRolled == 7){
+                robPlayers();
+                canMoveRobber = true;
+            } else {
+                board.distributeResources(numberRolled);
+            }
             hasRolled = true;
             return numberRolled;
         }
         return -1;
     }
 
+    public void moveRobber(Tile tile, Resource resource, int playerToId, int playerFromId){
+        if (tile != null
+                && isPlayersTurn(playerToId)
+                && canMoveRobber
+                && !tile.hasRobber()){
+            board.moveRobberTo(tile);
+            if (playerFromId != -1){
+                Player playerFrom = getPlayerById(playerFromId);
+                Player playerTo = getPlayerById(playerToId);
+
+                if (playerFrom.getResourceCount(resource) > 0){
+                    playerFrom.takeResource(resource, 1);
+                    playerTo.giveSingleResource(resource);
+                }
+            }
+            canMoveRobber = false;
+        }
+    }
+
+    public boolean canMoveRobber() {
+        return canMoveRobber;
+    }
+
+    private void robPlayers(){
+        for (Player player : players){
+            for (Resource resource : Resource.values()){
+                int resourceCount = player.getResourceCount(resource);
+                if (resourceCount >= 7){
+                    player.takeResource(resource, resourceCount / 2);
+                }
+            }
+        }
+    }
+
     public void endTurn(int playerId){
-        if (isPlayersTurn(playerId) && canEndTurn()) {
+        if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
             hasRolled = false;
             hasBuiltRoad = false;
             hasBuiltSettlement = false;
@@ -108,6 +149,15 @@ public class Game {
     public Player getPlayerById(int playerId){
         for (Player player : players){
             if (player.getId() == playerId){
+                return player;
+            }
+        }
+        throw new IllegalArgumentException("Player does not exits");
+    }
+
+    public Player getPlayerByName(String playerName){
+        for (Player player : players){
+            if (player.getName().equals(playerName)){
                 return player;
             }
         }

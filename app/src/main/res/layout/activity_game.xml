@@ -26,6 +26,17 @@
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.0" />
 
+  <Button
+      android:id="@+id/moveRobber"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="120dp"
+      android:enabled="false"
+      android:text="@string/move_robber"
+      app:layout_constraintEnd_toStartOf="@+id/endTurnButton"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
   <com.example.settlersofcatan.ResourceView
       android:id="@+id/resourceView"
       android:layout_width="match_parent"
@@ -154,9 +165,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="120dp"
-      android:text="End Turn"
+      android:text="@string/end_turn"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toEndOf="@id/moveRobber"
       app:layout_constraintTop_toTopOf="parent" />
 
   <TextView

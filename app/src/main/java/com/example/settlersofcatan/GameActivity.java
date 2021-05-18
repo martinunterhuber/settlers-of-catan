@@ -4,20 +4,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.app.AlertDialog;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -28,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
     private OpponentView opponent2;
     private OpponentView opponent3;
     private Button endTurnButton;
+    private Button moveRobberButton;
     private ImageView dice;
 
     private GameClient client;
@@ -58,26 +64,92 @@ public class GameActivity extends AppCompatActivity {
 
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
-        if (Game.getInstance().getCurrentPlayerId() != client.getId()){
-            endTurnButton.setEnabled(false);
-        }
+        endTurnButton.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
+
+        moveRobberButton = findViewById(R.id.moveRobber);
+        moveRobberButton.setOnClickListener(this::moveRobber);
 
         dice = findViewById(R.id.btn_dice);
-        dice.setOnClickListener(
-                (v) -> {
-                    int result = Game.getInstance().rollDice(client.getId());
-                    if (result > 0){
-                        ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
-                        resources.invalidate();
-                    }
-                }
-        );
+        dice.setOnClickListener(this::rollDice);
 
         client.registerActivity(this);
 
         setButtonToPlayerColor();
 
         ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
+    }
+
+    private void moveRobber(View view){
+        selectPlayerAndResource(playerView.getSelectedTile());
+    }
+
+    private void moveRobber(Resource resource, int otherPlayerId){
+        Game.getInstance().moveRobber(playerView.getSelectedTile(), resource, client.getId(), otherPlayerId);
+        playerView.invalidate();
+        findViewById(R.id.moveRobber).setEnabled(Game.getInstance().canMoveRobber());
+        resources.invalidate();
+    }
+
+    private void rollDice(View view){
+        int result = Game.getInstance().rollDice(client.getId());
+        if (result > 0){
+            ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+            resources.invalidate();
+        }
+        if (result == 7){
+            findViewById(R.id.moveRobber).setEnabled(true);
+        }
+    }
+
+    private void selectPlayerAndResource(Tile tile){
+        Player currentPlayer = Game.getInstance().getPlayerById(client.getId());
+        List<String> spinnerArray = tile.getAdjacentPlayersNamesExcept(currentPlayer);
+        if (spinnerArray.isEmpty()){
+            moveRobber(null, -1);
+            return;
+        }
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_robber, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = dialogView.findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+
+        Button confirm = dialogView.findViewById(R.id.confirm);
+        SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
+
+        confirm.setOnClickListener((view) -> {
+            String playerName = spinner.getSelectedItem().toString();
+            Player player = Game.getInstance().getPlayerByName(playerName);
+            Resource resource = resourceView.getSelectedResource();
+            moveRobber(resource, player.getId());
+            alertDialog.dismiss();
+        });
+
+        AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Player player = Game.getInstance().getPlayerByName(parent.getItemAtPosition(position).toString());
+                resourceView.setResourceValuesOf(player);
+                resourceView.initListeners(() -> confirm.setEnabled(true));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                confirm.setEnabled(false);
+                resourceView.setEmptyResources();
+            }
+        };
+        spinner.setOnItemSelectedListener(onItemSelectedListener);
+
+        alertDialog.show();
     }
 
     private void setButtonToPlayerColor(){
@@ -93,9 +165,6 @@ public class GameActivity extends AppCompatActivity {
         findViewById(R.id.resourceView).invalidate();
     }
 
-    /**
-     *  TODO onClick Event to build road, settlement and city
-     */
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:

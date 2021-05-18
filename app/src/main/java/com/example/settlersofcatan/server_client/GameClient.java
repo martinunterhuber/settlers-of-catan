@@ -16,6 +16,7 @@ import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -91,6 +92,7 @@ public class GameClient {
         client.registerClass(Resource.class);
         client.registerClass(HashMap.class);
         client.registerClass(ResourceMap.class);
+        client.registerClass(Robber.class);
     }
 
     private void gameCallback(BaseMessage message){
@@ -113,7 +115,7 @@ public class GameClient {
                 startGameCallback.callback(message);
             }
             if (gameActivity != null) {
-                gameActivity.redrawViews();
+                // gameActivity.redrawViews();
             }
         }
         Log.i(NetworkConstants.TAG, message.toString());
