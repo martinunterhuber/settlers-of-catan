@@ -163,26 +163,24 @@ public class Game {
     }
 
     public void updateLongestRoadPlayer(){
-        Player currentPlayer = getPlayerById(currentPlayerId);
-        int currentPlayerLongestRoad = currentPlayer.longestRoad();
-        if (currentPlayerLongestRoad >= 5){
-            int previousLongestRoad = 0;
-            if (longestRoadPlayer != null){
-                previousLongestRoad = longestRoadPlayer.longestRoad();
+        int previousLongestRoad = 4;
+        if (longestRoadPlayer != null){
+            previousLongestRoad = longestRoadPlayer.longestRoad();
+            if (previousLongestRoad < 5){
+                longestRoadPlayer.addVictoryPoints(-2);
+                longestRoadPlayer = null;
+                previousLongestRoad = 4;
             }
-            if (previousLongestRoad < currentPlayerLongestRoad && longestRoadPlayer != currentPlayer){
-                if (longestRoadPlayer != null) {
+        }
+        for (Player player : players){
+            int longestRoad = player.longestRoad();
+            if (longestRoad > previousLongestRoad){
+                if (longestRoadPlayer != null){
                     longestRoadPlayer.addVictoryPoints(-2);
                 }
-                longestRoadPlayer = currentPlayer;
-                currentPlayer.addVictoryPoints(2);
-            }
-        } else if (currentPlayer == longestRoadPlayer){
-            // currentPlayer doesn't have a road >= 5 anymore (because of enemy settlement)
-            for (Player otherPlayer : players){
-                if (otherPlayer.getId() != currentPlayerId){
-                    updateLongestRoadPlayer();
-                }
+                longestRoadPlayer = player;
+                player.addVictoryPoints(2);
+                previousLongestRoad = longestRoad;
             }
         }
     }
