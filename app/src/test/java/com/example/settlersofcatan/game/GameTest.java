@@ -149,4 +149,31 @@ public class GameTest {
         game.endTurn(0);
         Assert.assertTrue(dice == 7 || game.getCurrentPlayerId() == 1);
     }
+
+    private int rollUntilRobber(){
+        int player = 0;
+        int dice = game.rollDice(player);
+        while (dice != 7) {
+            game.endTurn(player);
+            player = (player + 1) % 4;
+            dice = game.rollDice(player);
+        }
+        return player;
+    }
+
+    @Test
+    public void testEndTurnBeforeDoingRobber() {
+        skipBuildingPhase();
+        int player = rollUntilRobber();
+        game.endTurn(player);
+        Assert.assertEquals(player, game.getCurrentPlayerId());
+    }
+
+    @Test
+    public void testRobberWithoutTakingResource() {
+        skipBuildingPhase();
+        int player = rollUntilRobber();
+        game.moveRobber(tiles[3][3], null, player, -1);
+        Assert.assertTrue(tiles[3][3].hasRobber());
+    }
 }
