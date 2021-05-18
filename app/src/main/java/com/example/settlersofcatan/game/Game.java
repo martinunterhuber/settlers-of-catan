@@ -136,9 +136,12 @@ public class Game {
         Player player = getPlayerById(playerId);
         if (node.hasPlayersSettlement(playerId)
                 && hasRolled
+                && player.hasResources(City.costs)
+                && !isBuildingPhase()
                 && isPlayersTurn(playerId)
                 && player.canPlaceCityOn(node)) {
             player.placeCity(node);
+            player.takeResources(City.costs);
         }
     }
 
