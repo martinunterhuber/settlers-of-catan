@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
@@ -37,7 +38,7 @@ public class GameClient {
     private String username = "";
     private int id;
     private Callback<BaseMessage> startGameCallback;
-    private AppCompatActivity gameActivity;
+    private GameActivity gameActivity;
 
     private GameClient(){
 
@@ -112,17 +113,13 @@ public class GameClient {
                 startGameCallback.callback(message);
             }
             if (gameActivity != null) {
-                gameActivity.overridePendingTransition(0, 0);
-                gameActivity.findViewById(R.id.mapView).invalidate();
-                gameActivity.findViewById(R.id.playerView).invalidate();
-                gameActivity.findViewById(R.id.resourceView).invalidate();
-                gameActivity.overridePendingTransition(0, 0);
+                gameActivity.redrawViews();
             }
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }
 
-    public void registerActivity(AppCompatActivity activity){
+    public void registerActivity(GameActivity activity){
         gameActivity = activity;
     }
 

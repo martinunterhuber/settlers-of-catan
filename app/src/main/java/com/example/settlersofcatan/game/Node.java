@@ -108,6 +108,10 @@ public class Node {
         return false;
     }
 
+    public boolean hasPlayersBuildingOrNone(Player player){
+        return building == null || building.getPlayer() == player;
+    }
+
     /**
      * Method to return an adjacent harbor, (Node can only have one adjacent harbor)
      * @return The adjacent harbor, null if none exists.

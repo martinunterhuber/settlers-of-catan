@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
@@ -30,6 +32,8 @@ public class Game {
     private boolean hasBuiltSettlement;
     private boolean hasBuiltRoad;
     private Node lastBuiltNode;
+
+    private Player longestRoadPlayer;
 
     private Game(){
         players = new ArrayList<>();
@@ -123,6 +127,7 @@ public class Game {
             } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
+                updateLongestRoadPlayer();
             }
         }
     }
@@ -131,9 +136,12 @@ public class Game {
         Player player = getPlayerById(playerId);
         if (node.hasPlayersSettlement(playerId)
                 && hasRolled
+                && player.hasResources(City.costs)
+                && !isBuildingPhase()
                 && isPlayersTurn(playerId)
                 && player.canPlaceCityOn(node)) {
             player.placeCity(node);
+            player.takeResources(City.costs);
         }
     }
 
@@ -149,6 +157,30 @@ public class Game {
             } else if (hasRolled && player.hasResources(Road.costs)){
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
+                updateLongestRoadPlayer();
+            }
+        }
+    }
+
+    public void updateLongestRoadPlayer(){
+        int previousLongestRoad = 4;
+        if (longestRoadPlayer != null){
+            previousLongestRoad = longestRoadPlayer.longestRoad();
+            if (previousLongestRoad < 5){
+                longestRoadPlayer.addVictoryPoints(-2);
+                longestRoadPlayer = null;
+                previousLongestRoad = 4;
+            }
+        }
+        for (Player player : players){
+            int longestRoad = player.longestRoad();
+            if (longestRoad > previousLongestRoad){
+                if (longestRoadPlayer != null){
+                    longestRoadPlayer.addVictoryPoints(-2);
+                }
+                longestRoadPlayer = player;
+                player.addVictoryPoints(2);
+                previousLongestRoad = longestRoad;
             }
         }
     }

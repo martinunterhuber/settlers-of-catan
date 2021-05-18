@@ -41,25 +41,33 @@ public class OpponentView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setOpponent();
-        textName = findViewById(R.id.txt_name);
-        textPointCount = findViewById(R.id.txt_countpoints);
-        opponentLayout = findViewById(R.id.layout_opponent);
-        updateValues();
+        updatePoints();
     }
 
     private void initView() {
         inflate(getContext(), R.layout.opponent_view, this);
         setWillNotDraw(false);
+        setOpponent();
+        textName = findViewById(R.id.txt_name);
+        textPointCount = findViewById(R.id.txt_countpoints);
+        opponentLayout = findViewById(R.id.layout_opponent);
+        initPlayer();
     }
 
-    private void updateValues(){
+    private void initPlayer(){
         if (opponent != null){
             textName.setText(opponent.getName());
             textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
             opponentLayout.setBackgroundColor(GameActivity.playerColors[opponent.getId()]);
         } else {
-            textName.setText("---");
+            textName.setText("--------");
+            textPointCount.setText("0");
+        }
+    }
+
+    private void updatePoints(){
+        if (opponent != null){
+            textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
         }
     }
 

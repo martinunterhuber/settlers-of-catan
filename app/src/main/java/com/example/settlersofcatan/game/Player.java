@@ -1,7 +1,5 @@
 package com.example.settlersofcatan.game;
 
-import android.graphics.Color;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -173,6 +171,33 @@ public class Player {
         }
     }
 
+    public int longestRoad(){
+        int maxLength = 0;
+        for (Road road : roads){
+            for (Node endpoint : road.getLocation().getEndpointNodes()){
+                maxLength = Math.max(maxLength, longestRoadRecursive(road, endpoint, new HashSet<>()));
+            }
+        }
+        return maxLength;
+    }
+
+    private int longestRoadRecursive(Road current, Node via, Set<Road> visited){
+        if (visited.contains(current)){
+            return 0;
+        }
+        visited.add(current);
+
+        int maxLength = 0;
+        Node node = current.getLocation().getOtherEndpoint(via);
+        for (Edge edge : node.getOutgoingEdgesExcept(current.getLocation())){
+            if (edge.hasPlayersRoad(this) && node.hasPlayersBuildingOrNone(this)){
+                int roadLength = longestRoadRecursive(edge.getRoad(), node, new HashSet<>(visited));
+                maxLength = Math.max(maxLength, roadLength);
+            }
+        }
+        return maxLength + 1;
+    }
+
     /**
      * Method to place a road, assumes that all the prerequisites have been met (resources available
      * road available, edge selected, edge connected, edge empty)
@@ -193,7 +218,8 @@ public class Player {
         Settlement settlementToPlace = new Settlement(this, n);
         settlements.add(settlementToPlace);
         n.setBuilding(settlementToPlace);
-        //DISCLAIMER: Remember to add same functionality to the initialSettlementPlacement Method
+        victoryPoints++;
+
         if (n.isAdjacentToHarbor()) {
             harborsSettledOn.add(n.getAdjacentHarbor());
         }
@@ -209,6 +235,7 @@ public class Player {
         cities.add(cityToPlace);
         settlements.remove((Settlement) n.getBuilding());
         n.setBuilding(cityToPlace);
+        victoryPoints++;
     }
 
     /**
@@ -231,5 +258,7 @@ public class Player {
         resources.incrementResourceMap(tradeOffer.getGive());
     }
 
-
+    void addVictoryPoints(int victoryPoints){
+        this.victoryPoints += victoryPoints;
+    }
 }
