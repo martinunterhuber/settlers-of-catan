@@ -60,35 +60,38 @@ public class GameActivity extends AppCompatActivity {
 
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
-        if (Game.getInstance().getCurrentPlayerId() != client.getId()){
-            endTurnButton.setEnabled(false);
-        }
+        endTurnButton.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
 
         moveRobberButton = findViewById(R.id.moveRobber);
-        moveRobberButton.setOnClickListener((v) -> {
-            Resource resource = selectResource();
-            int otherPlayerId = selectPlayer();
-
-            Game.getInstance().moveRobber(playerView.getSelectedTile(), resource, client.getId(), otherPlayerId);
-            playerView.invalidate();
-        });
+        moveRobberButton.setOnClickListener(this::moveRobber);
 
         dice = findViewById(R.id.btn_dice);
-        dice.setOnClickListener(
-                (v) -> {
-                    int result = Game.getInstance().rollDice(client.getId());
-                    if (result > 0){
-                        ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
-                        resources.invalidate();
-                    }
-                }
-        );
+        dice.setOnClickListener(this::rollDice);
 
         client.registerActivity(this);
 
         setButtonToPlayerColor();
 
         ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
+    }
+
+    private void moveRobber(View view){
+        Resource resource = selectResource();
+        int otherPlayerId = selectPlayer();
+        Game.getInstance().moveRobber(playerView.getSelectedTile(), resource, client.getId(), otherPlayerId);
+        playerView.invalidate();
+        findViewById(R.id.moveRobber).setEnabled(Game.getInstance().canMoveRobber());
+    }
+
+    private void rollDice(View view){
+        int result = Game.getInstance().rollDice(client.getId());
+        if (result > 0){
+            ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+            resources.invalidate();
+        }
+        if (result == 7){
+            findViewById(R.id.moveRobber).setEnabled(true);
+        }
     }
 
     private int selectPlayer(){

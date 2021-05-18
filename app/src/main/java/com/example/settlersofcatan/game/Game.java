@@ -99,6 +99,10 @@ public class Game {
         }
     }
 
+    public boolean canMoveRobber() {
+        return canMoveRobber;
+    }
+
     private void robPlayers(){
         for (Player player : players){
             for (Resource resource : Resource.values()){
