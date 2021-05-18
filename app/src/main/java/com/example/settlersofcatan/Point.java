@@ -40,7 +40,7 @@ public class Point extends HexagonPart {
     public double getDistanceTo(Point point){
         int dx = this.x - point.x;
         int dy = this.y - point.y;
-        return Math.sqrt(dx*dx  + dy*dy);
+        return Math.sqrt((double)dx*dx  + dy*dy);
     }
 
 

@@ -224,8 +224,9 @@ public class PlayerView extends View {
 
         for (Point p : hexGrid.getCorners()){
             Bitmap bitmap = getBitmap(p.getResID());
-
-            canvas.drawBitmap(bitmap,p.getX()-bitmap.getWidth()/2,p.getY()-bitmap.getHeight()/2,null);
+            if (bitmap != null){
+                canvas.drawBitmap(bitmap,p.getX()-bitmap.getWidth()/2,p.getY()-bitmap.getHeight()/2,null);
+            }
         }
     }
 
