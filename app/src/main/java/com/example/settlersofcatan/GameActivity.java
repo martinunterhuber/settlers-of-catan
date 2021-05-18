@@ -4,21 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.app.AlertDialog;
-import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -76,8 +79,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void moveRobber(View view){
-        Resource resource = selectResource();
-        int otherPlayerId = selectPlayer();
+        selectPlayerAndResource(playerView.getSelectedTile());
+    }
+
+    private void moveRobber(Resource resource, int otherPlayerId){
         Game.getInstance().moveRobber(playerView.getSelectedTile(), resource, client.getId(), otherPlayerId);
         playerView.invalidate();
         findViewById(R.id.moveRobber).setEnabled(Game.getInstance().canMoveRobber());
@@ -94,14 +99,39 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private int selectPlayer(){
-        // TODO
-        return 0;
-    }
+    private void selectPlayerAndResource(Tile tile){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_robber, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
 
-    private Resource selectResource(){
-        // TODO
-        return Resource.SHEEP;
+        List<String> spinnerArray = new ArrayList<>();
+        for (Node node : tile.getNodes()){
+            if (node.getBuilding() != null){
+                Player player = node.getBuilding().getPlayer();
+                if (player.getId() != client.getId() && !spinnerArray.contains(player.getName())){
+                    spinnerArray.add(player.getName());
+                }
+            }
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = dialogView.findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+
+        Button confirm = dialogView.findViewById(R.id.confirm);
+        confirm.setOnClickListener((view) -> {
+            String playerName = spinner.getSelectedItem().toString();
+            Player player = Game.getInstance().getPlayerByName(playerName);
+            Resource resource = Resource.SHEEP;
+            moveRobber(resource, player.getId());
+            alertDialog.dismiss();
+        });
+
+        alertDialog.show();
     }
 
     private void setButtonToPlayerColor(){

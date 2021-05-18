@@ -152,6 +152,15 @@ public class Game {
         throw new IllegalArgumentException("Player does not exits");
     }
 
+    public Player getPlayerByName(String playerName){
+        for (Player player : players){
+            if (player.getName().equals(playerName)){
+                return player;
+            }
+        }
+        throw new IllegalArgumentException("Player does not exits");
+    }
+
     public void buildSettlement(Node node, int playerId){
         Player player = getPlayerById(playerId);
 
