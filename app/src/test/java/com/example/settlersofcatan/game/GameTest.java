@@ -145,8 +145,8 @@ public class GameTest {
     @Test
     public void testEndTurnAfterRollingTheDice() {
         skipBuildingPhase();
-        game.rollDice(0);
+        int dice = game.rollDice(0);
         game.endTurn(0);
-        Assert.assertEquals(game.getCurrentPlayerId(), 1);
+        Assert.assertTrue(dice == 7 || game.getCurrentPlayerId() == 1);
     }
 }
