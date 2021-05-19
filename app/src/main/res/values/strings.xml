@@ -15,5 +15,7 @@
     <string name="quit_lobby_title">Leave Lobby?</string>
     <string name="quit_lobby_confirmation">Do you really want to leave the lobby?</string>
     <string name="title_activity_trade">TradeActivity</string>
-    <string name = "trade_title">Trade Overview</string>
+    <string name="trade_title">Trade Overview</string>
+    <string name="move_robber">Move Robber</string>
+    <string name="end_turn">End Turn</string>
 </resources>

@@ -28,6 +28,7 @@ public interface NetworkClient {
      */
     void sendMessage(BaseMessage message);
 
-    void close();
+    void disconnect();
 
+    boolean isConnected();
 }

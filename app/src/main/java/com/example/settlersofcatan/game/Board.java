@@ -23,6 +23,8 @@ public class Board {
      */
     private Tile[] packedTiles;
 
+    private Robber robber;
+
 
     public Board(){
 
@@ -67,6 +69,7 @@ public class Board {
                     if (isDesertTile(i, j)){
                         // For now we will use 'null' for the desert tile
                         tiles[i][j] = new Tile(null, 7);
+                        robber = new Robber(tiles[i][j]);
                     } else {
                         int resourceIndex;
                         do {
@@ -266,9 +269,19 @@ public class Board {
      */
     public void distributeResources(int rolledNumber) {
         for (Tile t : packedTiles) {
-            if (t.getNumber() == rolledNumber){
+            if (t.getNumber() == rolledNumber && !t.hasRobber()){
                 t.giveResource();
             }
         }
+    }
+
+    public void moveRobberTo(Tile tile){
+        robber.getTile().setRobber(null);
+        robber.setTile(tile);
+        tile.setRobber(robber);
+    }
+
+    public Robber getRobber() {
+        return robber;
     }
 }

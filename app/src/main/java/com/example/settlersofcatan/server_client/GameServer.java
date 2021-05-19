@@ -2,7 +2,6 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.Edge;
@@ -13,6 +12,7 @@ import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -27,7 +27,6 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServe
 import java.io.IOException;
 import java.net.BindException;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -107,6 +106,7 @@ public class GameServer {
         server.registerClass(Resource.class);
         server.registerClass(HashMap.class);
         server.registerClass(ResourceMap.class);
+        server.registerClass(Robber.class);
     }
 
     private void startServer(){

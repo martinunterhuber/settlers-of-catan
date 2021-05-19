@@ -2,7 +2,6 @@ package com.example.settlersofcatan.server_client;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,7 @@ import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
-import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
-
-import java.io.IOException;
 
 public class CreateServerFragment extends Fragment {
     EditText[] users = new EditText[4];
@@ -53,20 +49,16 @@ public class CreateServerFragment extends Fragment {
         String username = ((EditText)getView().findViewById(R.id.editTextPlayer)).getText().toString();
         new Thread(
                 () -> {
-                    try {
-                        GameClient client = GameClient.getInstance();
-                        client.init("localhost", username);
-                        client.registerStartGameCallback((message) -> {
-                            Intent intent = new Intent(getActivity(), GameActivity.class);
-                            startActivity(intent);
-                        });
+                    GameClient client = GameClient.getInstance();
+                    client.connect("localhost", username);
+                    client.registerStartGameCallback((message) -> {
+                        Intent intent = new Intent(getActivity(), GameActivity.class);
+                        startActivity(intent);
+                    });
 
-                        Game game = Game.getInstance();
-                        game.init(server.getClientUsernames());
-                        server.broadcastMessage(new GameStateMessage(game));
-                    } catch (IOException e) {
-                        Log.e(NetworkConstants.TAG, e.getMessage(), e);
-                    }
+                    Game game = Game.getInstance();
+                    game.init(server.getClientUsernames());
+                    server.broadcastMessage(new GameStateMessage(game));
                 }
         ).start();
     }
