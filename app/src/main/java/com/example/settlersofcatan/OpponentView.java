@@ -43,7 +43,7 @@ public class OpponentView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        updatePoints();
+        update();
     }
 
     private void initView() {
@@ -70,9 +70,10 @@ public class OpponentView extends FrameLayout {
         }
     }
 
-    private void updatePoints(){
+    private void update(){
         if (opponent != null){
             textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
+            dice.setText(String.valueOf(rolled));
         }
     }
 

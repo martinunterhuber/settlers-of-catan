@@ -30,12 +30,11 @@
       android:id="@+id/moveRobber"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="120dp"
       android:enabled="false"
       android:text="@string/move_robber"
       app:layout_constraintEnd_toStartOf="@+id/endTurnButton"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="@+id/endTurnButton" />
 
   <com.example.settlersofcatan.ResourceView
       android:id="@+id/resourceView"
@@ -47,7 +46,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/btn_settlement" />
 
-  <LinearLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/opponents"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -60,32 +59,29 @@
         android:id="@+id/opponent1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:tag="1" />
+        android:tag="1"
+        app:layout_constraintEnd_toStartOf="@+id/opponent2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.example.settlersofcatan.OpponentView
         android:id="@+id/opponent2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        app:layout_constraintStart_toEndOf="@id/opponent1"
+        app:layout_constraintEnd_toStartOf="@id/opponent3"
+        app:layout_constraintTop_toTopOf="parent"
         android:tag="2" />
 
     <com.example.settlersofcatan.OpponentView
         android:id="@+id/opponent3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        app:layout_constraintStart_toEndOf="@id/opponent2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:tag="3" />
-  </LinearLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
   <ImageView
       android:id="@+id/btn_city"
@@ -164,11 +160,11 @@
       android:id="@+id/endTurnButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="120dp"
+      android:layout_marginTop="8dp"
       android:text="@string/end_turn"
       app:layout_constraintEnd_toStartOf="@id/btn_trade"
       app:layout_constraintStart_toEndOf="@id/moveRobber"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toBottomOf="@+id/opponents" />
 
   <TextView
       android:id="@+id/rollResult"
@@ -184,11 +180,10 @@
       android:id="@+id/btn_trade"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="120dp"
       android:text="@string/trade"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.527"
       app:layout_constraintStart_toEndOf="@+id/endTurnButton"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="@+id/endTurnButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

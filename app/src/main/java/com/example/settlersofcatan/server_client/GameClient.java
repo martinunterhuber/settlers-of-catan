@@ -139,9 +139,9 @@ public class GameClient {
             }
         }
         if (message instanceof ClientDiceMessage){
-            if(gameActivity != null && gameActivity instanceof GameActivity) {
+            if(gameActivity != null) {
 
-                gameActivity.runOnUiThread(() -> ((GameActivity) gameActivity).updateOpponentView(
+                gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
                         ((ClientDiceMessage) message).getUsername(),
                         ((ClientDiceMessage) message).getRolled())
 
