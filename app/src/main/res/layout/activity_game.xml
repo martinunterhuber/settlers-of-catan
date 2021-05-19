@@ -166,7 +166,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="120dp"
       android:text="@string/end_turn"
-      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintEnd_toStartOf="@id/btn_trade"
       app:layout_constraintStart_toEndOf="@id/moveRobber"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -185,7 +185,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="120dp"
-      android:text="Trade"
+      android:text="@string/trade"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.527"
       app:layout_constraintStart_toEndOf="@+id/endTurnButton"

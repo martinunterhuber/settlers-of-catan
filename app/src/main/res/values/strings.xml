@@ -18,4 +18,5 @@
     <string name="trade_title">Trade Overview</string>
     <string name="move_robber">Move Robber</string>
     <string name="end_turn">End Turn</string>
+    <string name="trade">Trade</string>
 </resources>

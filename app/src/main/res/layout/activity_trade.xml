@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/border_black"
+    android:padding="1dp"
     tools:context=".TradeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
