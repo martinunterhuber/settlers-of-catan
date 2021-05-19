@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SettlersOfCatan">
       
-        <activity android:name=".GameEndActivity"/>
+        <activity android:name=".GameEndActivity"
+            android:parentActivityName=".MainActivity"/>
       
         <activity
             android:name=".TradeActivity"

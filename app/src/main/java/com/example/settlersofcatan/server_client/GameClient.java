@@ -106,6 +106,8 @@ public class GameClient {
     private void gameCallback(BaseMessage message){
         if (message instanceof GameStateMessage){
             sendMessage(message);
+        } else if (message instanceof ClientWinMessage){
+            sendMessage(message);
         }
     }
 

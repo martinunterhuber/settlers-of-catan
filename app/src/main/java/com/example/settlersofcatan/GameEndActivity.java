@@ -2,6 +2,7 @@ package com.example.settlersofcatan;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
@@ -15,6 +16,7 @@ public class GameEndActivity extends AppCompatActivity {
     private TextView second;
     private TextView third;
     private TextView fourth;
+    private Button endGameButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,9 @@ public class GameEndActivity extends AppCompatActivity {
         second=findViewById(R.id.txt_second);
         third=findViewById(R.id.txt_third);
         fourth=findViewById(R.id.txt_fourth);
+        endGameButton = findViewById(R.id.btn_end);
+
+        endGameButton.setOnClickListener((v) -> finish());
 
         // Text if you've won or lost
         if (GameClient.getInstance().getId() == Ranking.getInstance().getPlayer(0).getId()){
@@ -37,8 +42,14 @@ public class GameEndActivity extends AppCompatActivity {
         //----- Ranking -------------------------
         first.setText(String.format(getResources().getString(R.string.first),
                 Ranking.getInstance().getPlayer(0).getName()));
-        second.setText(String.format(getResources().getString(R.string.second),
-                Ranking.getInstance().getPlayer(1).getName()));
+
+        if (Game.getInstance().getPlayers().size()>2){
+            second.setText(String.format(getResources().getString(R.string.second),
+                    Ranking.getInstance().getPlayer(1).getName()));
+
+        }else{
+            second.setVisibility(View.GONE);
+        }
 
 
         if (Game.getInstance().getPlayers().size()>2){

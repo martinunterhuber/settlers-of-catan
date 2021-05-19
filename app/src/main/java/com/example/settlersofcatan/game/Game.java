@@ -125,9 +125,10 @@ public class Game {
 
     public void endTurn(int playerId){
         if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
-            if(getPlayerById(playerId).getVictoryPoints() == 10){
+            if(getPlayerById(playerId).getVictoryPoints() >= 10){
                 Ranking ranking = Ranking.getInstance();
-                new Thread(() -> GameClient.getInstance().sendMessage(new ClientWinMessage(ranking))).start();
+                new Thread(() -> clientCallback.callback(new ClientWinMessage(ranking))).start();
+                return;
             }
             hasRolled = false;
             hasBuiltRoad = false;
