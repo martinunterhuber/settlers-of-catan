@@ -18,6 +18,7 @@ import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
@@ -77,6 +78,8 @@ public class GameServer {
             broadcastMessage(message);
         }else if (message instanceof ClientWinMessage){
             broadcastMessage(message);
+        }else if (message instanceof ClientDiceMessage){
+            broadcastMessage(message);
         }else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
@@ -112,6 +115,7 @@ public class GameServer {
         server.registerClass(Resource.class);
         server.registerClass(HashMap.class);
         server.registerClass(ResourceMap.class);
+        server.registerClass(ClientDiceMessage.class);
         server.registerClass(Robber.class);
     }
 

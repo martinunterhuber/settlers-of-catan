@@ -13,6 +13,7 @@ import android.app.AlertDialog;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -92,7 +93,8 @@ public class GameActivity extends AppCompatActivity {
         client.registerActivity(this);
 
         setButtonToPlayerColor();
-
+        showCurrentPlayer();
+      
         ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
     }
 
@@ -217,4 +219,48 @@ public class GameActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void showCurrentPlayer(){
+        Game game = Game.getInstance();
+        int currentPlayerId = game.getCurrentPlayerId();
+        String currentPlayerName = game.getPlayerById(currentPlayerId).getName();
+
+        unselectPlayer();
+
+        if (opponent1.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent1.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }else if (opponent2.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent2.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }else if (opponent3.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent3.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void unselectPlayer(){
+        FrameLayout border = opponent1.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+
+        border = opponent2.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+
+        border = opponent3.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+    }
+
+    public void updateOpponentView(String username, int rolled){
+
+        if (opponent1.getPlayerName().equals(username)){
+            opponent1.updateDice(rolled);
+            opponent1.invalidate();
+        }else if (Game.getInstance().getPlayers().size() > 2 && opponent2.getPlayerName().equals(username)){
+            opponent2.updateDice(rolled);
+            opponent2.invalidate();
+        }else if (Game.getInstance().getPlayers().size() > 3 && opponent3.getPlayerName().equals(username)){
+            opponent3.updateDice(rolled);
+            opponent3.invalidate();
+        }
+
+    }
 }

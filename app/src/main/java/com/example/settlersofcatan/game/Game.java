@@ -4,6 +4,7 @@ package com.example.settlersofcatan.game;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.GameServer;
+import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 
 import android.util.Log;
@@ -77,6 +78,10 @@ public class Game {
     public int rollDice(int playerId) {
         if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
+            new Thread(() -> GameClient.getInstance()
+                                    .sendMessage(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled)))
+                                    .start();
+
             if (numberRolled == 7){
                 robPlayers();
                 canMoveRobber = true;
