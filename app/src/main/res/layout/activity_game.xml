@@ -8,58 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".GameActivity">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:divider="?android:listDivider"
-                android:dividerPadding="2.5dp"
-                android:orientation="vertical"
-                android:showDividers="middle">
-
-                <com.example.settlersofcatan.DevelopmentCardView
-                    android:id="@+id/view_knights"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="1" />
-
-                <com.example.settlersofcatan.DevelopmentCardView
-                    android:id="@+id/view_victory_point_cards"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="2" />
-
-                <com.example.settlersofcatan.DevelopmentCardView
-                    android:id="@+id/view_monopoly"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="3" />
-
-                <com.example.settlersofcatan.DevelopmentCardView
-                    android:id="@+id/view_road_building"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="4" />
-
-                <com.example.settlersofcatan.DevelopmentCardView
-                    android:id="@+id/view_year_of_plenty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="5" />
-            </LinearLayout>
-        </ScrollView>
-    </com.google.android.material.navigation.NavigationView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -281,4 +230,57 @@
                 app:layout_constraintStart_toEndOf="@+id/btn_trade" />
         </GridLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:divider="?android:listDivider"
+                android:dividerPadding="2.5dp"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <com.example.settlersofcatan.DevelopmentCardView
+                    android:id="@+id/view_knights"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="1" />
+
+                <com.example.settlersofcatan.DevelopmentCardView
+                    android:id="@+id/view_victory_point_cards"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="2" />
+
+                <com.example.settlersofcatan.DevelopmentCardView
+                    android:id="@+id/view_monopoly"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="3" />
+
+                <com.example.settlersofcatan.DevelopmentCardView
+                    android:id="@+id/view_road_building"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="4" />
+
+                <com.example.settlersofcatan.DevelopmentCardView
+                    android:id="@+id/view_year_of_plenty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="5" />
+            </LinearLayout>
+        </ScrollView>
+    </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
