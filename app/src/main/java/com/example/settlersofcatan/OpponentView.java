@@ -2,15 +2,9 @@ package com.example.settlersofcatan;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
@@ -18,10 +12,16 @@ import com.example.settlersofcatan.server_client.GameClient;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 public class OpponentView extends FrameLayout {
     private TextView textName;
     private TextView textPointCount;
     private ConstraintLayout opponentLayout;
+    private TextView dice;
+    private int rolled;
 
     private Player opponent;
 
@@ -43,7 +43,7 @@ public class OpponentView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        updateValues();
+        update();
     }
 
     private void initView() {
@@ -53,16 +53,27 @@ public class OpponentView extends FrameLayout {
         textName = findViewById(R.id.txt_name);
         textPointCount = findViewById(R.id.txt_countpoints);
         opponentLayout = findViewById(R.id.layout_opponent);
-        updateValues();
+        dice = findViewById(R.id.txt_dice);
+        rolled = 0;
+        initPlayer();
     }
 
-    private void updateValues(){
+    private void initPlayer(){
         if (opponent != null){
             textName.setText(opponent.getName());
             textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
             opponentLayout.setBackgroundColor(GameActivity.playerColors[opponent.getId()]);
+            dice.setText(String.valueOf(rolled));
         } else {
-            textName.setText("---");
+            textName.setText("--------");
+            textPointCount.setText("0");
+        }
+    }
+
+    private void update(){
+        if (opponent != null){
+            textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
+            dice.setText(String.valueOf(rolled));
         }
     }
 
@@ -81,5 +92,17 @@ public class OpponentView extends FrameLayout {
                 count++;
             }
         }
+    }
+
+    public String getPlayerName(){
+        if (opponent != null){
+        return opponent.getName();
+        }
+
+        return "---";
+    }
+
+    public void updateDice(int rolled){
+        this.rolled = (rolled);
     }
 }

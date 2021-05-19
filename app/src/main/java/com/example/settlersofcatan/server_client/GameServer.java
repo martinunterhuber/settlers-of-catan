@@ -2,6 +2,7 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.DevelopmentCard;
@@ -17,14 +18,17 @@ import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.RoadBuilding;
+import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
@@ -80,7 +84,11 @@ public class GameServer {
             userChangedCallback.callback(username);
         } else if (message instanceof GameStateMessage) {
             broadcastMessage(message);
-         }else {
+        }else if (message instanceof ClientWinMessage){
+            broadcastMessage(message);
+        }else if (message instanceof ClientDiceMessage){
+            broadcastMessage(message);
+        }else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }
@@ -94,6 +102,8 @@ public class GameServer {
         server.registerClass(ClientJoinedMessage.class);
         server.registerClass(ClientLeftMessage.class);
         server.registerClass(GameStateMessage.class);
+        server.registerClass(ClientWinMessage.class);
+        server.registerClass(Ranking.class);
         server.registerClass(Game.class);
         server.registerClass(HashSet.class);
         server.registerClass(ArrayList.class);
@@ -123,6 +133,8 @@ public class GameServer {
         server.registerClass(YearOfPlenty.class);
         server.registerClass(int[].class);
         server.registerClass(SecureRandom.class);
+        server.registerClass(ClientDiceMessage.class);
+        server.registerClass(Robber.class);
     }
 
     private void startServer(){

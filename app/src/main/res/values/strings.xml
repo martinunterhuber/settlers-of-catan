@@ -30,4 +30,18 @@
     <string name="development_road_building">Road building</string>
     <string name="road_building_description">When you play this card,
         you can immediately place 2 roads free of charge.</string>
+    <string name="win">WIN</string>
+    <string name="lose">LOSE</string>
+    <string name="end_game">End Game</string>
+    <string name="first">1. %1$s </string>
+    <string name="second">2. %1$s </string>
+    <string name="third">3. %1$s </string>
+    <string name="fourth">4. %1$s </string>
+    <string name="title_activity_trade">TradeActivity</string>
+    <string name="trade_title">Trade Overview</string>
+    <string name="move_robber">Move Robber</string>
+    <string name="end_turn">End Turn</string>
+    <string name="trade">Trade</string>
+    <string name="points">Points:</string>
+    <string name="player_name">Player name</string>
 </resources>

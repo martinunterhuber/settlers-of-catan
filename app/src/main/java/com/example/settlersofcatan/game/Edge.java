@@ -79,6 +79,10 @@ public class Edge {
         return false;
     }
 
+    public boolean hasPlayersRoad(Player player){
+        return road != null  && road.getPlayer() == player;
+    }
+
     public Set<Tile> getAdjacentTiles() {
         return adjacentTiles;
     }
