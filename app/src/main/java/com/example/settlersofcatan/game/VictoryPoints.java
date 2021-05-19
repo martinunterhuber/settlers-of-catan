@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import com.example.settlersofcatan.server_client.GameClient;
+
 public class VictoryPoints extends DevelopmentCard{
 
     public VictoryPoints() {
@@ -8,6 +10,7 @@ public class VictoryPoints extends DevelopmentCard{
 
     @Override
     public void playCard() {
-        //TODO implement rule
+        Game.getInstance().getPlayerById(GameClient.getInstance().getId())
+                            .increaseHiddenVictoryPoints();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.settlersofcatan.game;
 
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ public class Game {
 
     private ArrayList<Player> players;
     private Board board;
-    private DevelopmentCardDeck developmentCardDeck;
 
     private int currentPlayerId;
     private int turnCounter;
@@ -26,7 +26,6 @@ public class Game {
     private Game(){
         players = new ArrayList<>();
         board = new Board();
-        developmentCardDeck = new DevelopmentCardDeck();
         currentPlayerId = 0;
         turnCounter = 0;
         alreadyRolled = false;
@@ -67,7 +66,10 @@ public class Game {
             alreadyRolled = false;
             turnCounter++;
             // TODO: send messages for every action
-            new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+            new Thread(() -> {
+                GameClient.getInstance().sendMessage(new GameStateMessage(this));
+                GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+            }).start();
         }
     }
 
@@ -113,9 +115,16 @@ public class Game {
     public int drawDevelopmentCard(int playerId){
         if (playerId == currentPlayerId
                 && alreadyRolled
-                && developmentCardDeck.getNumberOfCards() > 0){
-            DevelopmentCard card = developmentCardDeck.drawDevelopmentCard();
+                && DevelopmentCardDeck.getInstance().getNumberOfCards() > 0
+                && getPlayerById(playerId).getResourceCount(Resource.ORE) > 0
+                && getPlayerById(playerId).getResourceCount(Resource.SHEEP) > 0
+                && getPlayerById(playerId).getResourceCount(Resource.WHEAT )> 0){
+            DevelopmentCard card = DevelopmentCardDeck.getInstance().drawDevelopmentCard();
             Player player=getPlayerById(playerId);
+
+            player.takeResource(Resource.ORE,1);
+            player.takeResource(Resource.SHEEP,1);
+            player.takeResource(Resource.WHEAT,1);
 
             if (card instanceof Knights){
                 player.increaseDevelopmentCard(0);
@@ -143,7 +152,7 @@ public class Game {
 
     public void playDevelopmentCard(int playerId, int tag){
         if (playerId == currentPlayerId && alreadyRolled ) {
-            developmentCardDeck.getDevelopmentCard(tag - 1).playCard();
+            DevelopmentCardDeck.getInstance().getDevelopmentCard(tag - 1).playCard();
             getPlayerById(playerId).decreaseDevelopmentCard(tag-1);
         }
     }

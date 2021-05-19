@@ -25,6 +25,7 @@ import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
+import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
@@ -99,6 +100,8 @@ public class GameClient {
         client.registerClass(YearOfPlenty.class);
         client.registerClass(int[].class);
         client.registerClass(SecureRandom.class);
+        client.registerClass(DevelopmentCardDeck.class);
+        client.registerClass(DevelopmentCardMessage.class);
     }
 
     private void callback(BaseMessage message){
@@ -115,6 +118,8 @@ public class GameClient {
             if (gameActivity != null) {
                 gameActivity.runOnUiThread(() -> gameActivity.recreate());
             }
+        } else if (message instanceof DevelopmentCardMessage){
+            DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }
@@ -150,5 +155,9 @@ public class GameClient {
 
     public int getId() {
         return id;
+    }
+
+    public AppCompatActivity getGameActivity(){
+        return gameActivity;
     }
 }

@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
 
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ public class DevelopmentCardView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        updateView(Integer.parseInt(this.getTag().toString())-1);
     }
 
     private void initView() {
@@ -65,6 +67,7 @@ public class DevelopmentCardView extends FrameLayout {
     }
 
     public void initDevelopmentCard() {
+        Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
 
         switch (this.getTag().toString()){
             case "1":
@@ -90,7 +93,8 @@ public class DevelopmentCardView extends FrameLayout {
                 break;
 
         }
-        count.setText("0");
+
+        updateView(Integer.parseInt(this.getTag().toString())-1);
 
     }
 

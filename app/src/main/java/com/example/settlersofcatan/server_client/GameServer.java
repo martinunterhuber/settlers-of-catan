@@ -25,6 +25,7 @@ import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
+import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
@@ -80,7 +81,9 @@ public class GameServer {
             userChangedCallback.callback(username);
         } else if (message instanceof GameStateMessage) {
             broadcastMessage(message);
-         }else {
+         }else if (message instanceof DevelopmentCardMessage) {
+            broadcastMessage(message);
+        }else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }
@@ -123,6 +126,8 @@ public class GameServer {
         server.registerClass(YearOfPlenty.class);
         server.registerClass(int[].class);
         server.registerClass(SecureRandom.class);
+        server.registerClass(DevelopmentCardDeck.class);
+        server.registerClass(DevelopmentCardMessage.class);
     }
 
     private void startServer(){

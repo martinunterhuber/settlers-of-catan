@@ -23,7 +23,6 @@ public class DevelopmentCard {
 
     // Player plays a development card
     public void playCard(){
-        count++;
         Log.i("DEVELOPMENT","Development card was played.");
     }
 

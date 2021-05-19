@@ -19,6 +19,8 @@ public class Player {
     private int id;
 
     private int victoryPoints;
+    // for victory point development cards, longest road, largest army
+    private int hiddenVictoryPoints;
     // {Knights, victory point, monopoly, road building, year of plenty}
     private int[] developmetCards = new int[]{0, 0, 0, 0, 0};
 
@@ -42,6 +44,7 @@ public class Player {
         this.name = name;
         this.resources = new ResourceMap();
         this.victoryPoints = 0;
+        this.hiddenVictoryPoints = 0;
     }
 
     public String getName() {
@@ -223,5 +226,9 @@ public class Player {
 
     public int getDevelopmentCardCount(int index){
         return developmetCards[index];
+    }
+
+    public void increaseHiddenVictoryPoints(){
+        hiddenVictoryPoints++;
     }
 }
