@@ -1,5 +1,6 @@
 package com.example.settlersofcatan;
 
+import android.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -22,6 +23,9 @@ import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
+
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,7 +187,7 @@ public class GameActivity extends AppCompatActivity {
         findViewById(R.id.playerView).invalidate();
         findViewById(R.id.resourceView).invalidate();
     }
-
+  
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:

@@ -1,5 +1,11 @@
 package com.example.settlersofcatan.game;
 
+
+import com.example.settlersofcatan.Ranking;
+import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.GameServer;
+import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
+
 import android.util.Log;
 
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -119,6 +125,11 @@ public class Game {
 
     public void endTurn(int playerId){
         if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
+            if(getPlayerById(playerId).getVictoryPoints() >= 10){
+                Ranking ranking = Ranking.getInstance();
+                new Thread(() -> clientCallback.callback(new ClientWinMessage(ranking))).start();
+                return;
+            }
             hasRolled = false;
             hasBuiltRoad = false;
             hasBuiltSettlement = false;

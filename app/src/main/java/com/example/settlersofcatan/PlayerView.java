@@ -24,6 +24,9 @@ import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * View class on which the cities, settlements and roads of the players are placed.
  */
@@ -35,9 +38,9 @@ public class PlayerView extends View {
 
     private GameClient client = GameClient.getInstance();
 
-    final static int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_green , R.drawable.settlement_orange, R.drawable.settlement_red, R.drawable.settlement_blue};
-    final static int[] ROAD_IDS = new int[]{R.drawable.road_green, R.drawable.road_orange, R.drawable.road_red, R.drawable.road_blue};
-    final static int[] CITY_IDS = new int[]{R.drawable.city_green, R.drawable.city_orange, R.drawable.city_red, R.drawable.city_blue};
+    final static int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_green , R.drawable.settlement_red, R.drawable.settlement_orange, R.drawable.settlement_blue};
+    final static int[] ROAD_IDS = new int[]{R.drawable.road_green, R.drawable.road_red, R.drawable.road_orange, R.drawable.road_blue};
+    final static int[] CITY_IDS = new int[]{R.drawable.city_green, R.drawable.city_red, R.drawable.city_orange, R.drawable.city_blue};
 
     public PlayerView(Context context) {
         super(context);

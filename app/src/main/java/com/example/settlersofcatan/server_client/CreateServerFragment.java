@@ -8,15 +8,17 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.GameActivity;
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
+
+import java.io.IOException;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class CreateServerFragment extends Fragment {
     EditText[] users = new EditText[4];
