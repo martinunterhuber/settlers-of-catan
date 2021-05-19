@@ -9,8 +9,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.settlersofcatan.GameActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.game.DevelopmentCardDeck;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
@@ -19,10 +23,6 @@ import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConst
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
 import java.io.IOException;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 public class CreateServerFragment extends Fragment {
     EditText[] users = new EditText[4];
@@ -55,22 +55,18 @@ public class CreateServerFragment extends Fragment {
         String username = ((EditText)getView().findViewById(R.id.editTextPlayer)).getText().toString();
         new Thread(
                 () -> {
-                    try {
-                        GameClient client = GameClient.getInstance();
-                        client.init("localhost", username);
-                        client.registerStartGameCallback((message) -> {
-                            Intent intent = new Intent(getActivity(), GameActivity.class);
-                            startActivity(intent);
-                        });
+                    GameClient client = GameClient.getInstance();
+                    client.connect("localhost", username);
+                    client.registerStartGameCallback((message) -> {
+                        Intent intent = new Intent(getActivity(), GameActivity.class);
+                        startActivity(intent);
+                    });
 
-                        Game game = Game.getInstance();
-                        DevelopmentCardDeck deck = DevelopmentCardDeck.getInstance();
-                        game.init(server.getClientUsernames());
-                        server.broadcastMessage(new GameStateMessage(game));
-                        server.broadcastMessage(new DevelopmentCardMessage(deck));
-                    } catch (IOException e) {
-                        Log.e(NetworkConstants.TAG, e.getMessage(), e);
-                    }
+                    Game game = Game.getInstance();
+                    DevelopmentCardDeck deck = DevelopmentCardDeck.getInstance();
+                    game.init(server.getClientUsernames());
+                    server.broadcastMessage(new GameStateMessage(game));
+                    server.broadcastMessage(new DevelopmentCardMessage(deck));
                 }
         ).start();
     }

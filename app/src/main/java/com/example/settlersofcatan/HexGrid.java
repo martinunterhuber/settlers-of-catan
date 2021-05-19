@@ -12,15 +12,18 @@ public class HexGrid {
     private final ArrayList<Path> paths;
     private final HashMap<Point, ArrayList<Point>> neighbouringCities;
     private final HashMap<Point, ArrayList<Path>> neighbouringRoads;
+    private final Hexagon[] tiles;
 
     private Path touchedPath;
     private Point touchedCorner;
+    private Hexagon touchedTile;
 
     public HexGrid(Hexagon[] tiles) {
         this.corners = new ArrayList<>();
         this.paths = new ArrayList<>();
         this.neighbouringCities = new HashMap<>();
         this.neighbouringRoads = new HashMap<>();
+        this.tiles = tiles;
 
         for (Hexagon hex : tiles) {
             for (Point p : hex.getPoints()){
@@ -114,6 +117,17 @@ public class HexGrid {
         return false;
     }
 
+    public boolean isInTile(Point point){
+        for (Hexagon tile : tiles){
+            double distance = point.getDistanceTo(tile.getCenter());
+            if (distance < 40){
+                touchedTile = tile;
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void addNeighbouringCities(Point corner){
         ArrayList<Path> roads = neighbouringRoads.get(corner);
         ArrayList<Point> cities = neighbouringCities.get(corner);
@@ -197,6 +211,14 @@ public class HexGrid {
 
     public Point getTouchedCorner() {
         return touchedCorner;
+    }
+
+    public Hexagon getTouchedTile() {
+        return touchedTile;
+    }
+
+    public Hexagon[] getTiles() {
+        return tiles;
     }
 
     public HashMap<Point, ArrayList<Point>> getNeighbouringCities() {
