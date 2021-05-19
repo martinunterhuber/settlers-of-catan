@@ -9,7 +9,7 @@ import com.example.settlersofcatan.game.Tile;
 /**
  * The class calculates corner points and paths of a hexagon based on the center point.
  */
-public class Hexagon {
+public class Hexagon extends HexagonPart {
     private final Point center;
     private final int radius;
     private final int width;
@@ -135,5 +135,14 @@ public class Hexagon {
 
     public int getHalfWidth() {
         return halfWidth;
+    }
+
+    public Tile getTile() {
+        return tile;
+    }
+
+    @Override
+    void setSelectedResID() {
+        this.setResID(R.drawable.tile_selected);
     }
 }

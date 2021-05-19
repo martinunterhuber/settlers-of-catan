@@ -6,6 +6,8 @@ package com.example.settlersofcatan.game;
  */
 
 public class Settlement extends NodePlaceable {
+    static final ResourceMap costs = new ResourceMap(new int[]{1, 1, 1, 1, 0});
+
     private Settlement(){
         super(null, null);
     }

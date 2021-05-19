@@ -21,4 +21,9 @@
     <string name="second">2. %1$s </string>
     <string name="third">3. %1$s </string>
     <string name="fourth">4. %1$s </string>
+    <string name="title_activity_trade">TradeActivity</string>
+    <string name="trade_title">Trade Overview</string>
+    <string name="move_robber">Move Robber</string>
+    <string name="end_turn">End Turn</string>
+    <string name="trade">Trade</string>
 </resources>

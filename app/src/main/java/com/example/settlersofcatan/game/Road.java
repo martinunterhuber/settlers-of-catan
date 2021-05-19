@@ -1,9 +1,12 @@
 package com.example.settlersofcatan.game;
 
+import java.util.Set;
+
 /**
  * Class to represent a road. Always belongs to a player.
  */
 public class Road extends Placeable {
+    static final ResourceMap costs = new ResourceMap(new int[]{0, 1, 0, 1, 0});
 
     private Edge location;
 

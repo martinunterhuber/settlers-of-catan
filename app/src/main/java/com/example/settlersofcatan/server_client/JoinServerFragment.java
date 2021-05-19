@@ -3,7 +3,6 @@ package com.example.settlersofcatan.server_client;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
-
-import java.io.IOException;
 
 public class JoinServerFragment extends Fragment {
     @Nullable
@@ -32,14 +28,13 @@ public class JoinServerFragment extends Fragment {
         String username = ((EditText) getView().findViewById(R.id.editTextUsername)).getText().toString();
 
         new Thread(() -> {
-                try {
-                    GameClient client = GameClient.getInstance();
-                    client.init(host, username);
+                GameClient client = GameClient.getInstance();
+                client.connect(host, username);
+                if (!client.isConnected()){
+                    alertConnectionError(host);
+                } else {
                     Intent intent = new Intent(this.getActivity(), WaitForHostActivity.class);
                     startActivity(intent);
-                } catch (IOException e){
-                    Log.e(NetworkConstants.TAG, "Failed to connect to " + host);
-                    alertConnectionError(host);
                 }
             }
         ).start();

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="#A3A3A3">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/img_wood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

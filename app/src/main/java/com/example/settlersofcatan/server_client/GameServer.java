@@ -13,6 +13,7 @@ import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -111,6 +112,7 @@ public class GameServer {
         server.registerClass(Resource.class);
         server.registerClass(HashMap.class);
         server.registerClass(ResourceMap.class);
+        server.registerClass(Robber.class);
     }
 
     private void startServer(){

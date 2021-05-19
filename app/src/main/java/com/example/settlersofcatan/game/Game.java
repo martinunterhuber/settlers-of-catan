@@ -1,9 +1,15 @@
 package com.example.settlersofcatan.game;
 
+
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.GameServer;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
+
+import android.util.Log;
+
+import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -17,20 +23,32 @@ public class Game {
     private static Game instance;
     public static final Random random = new Random();
 
+    // transient = "do not serialize this"
+    transient private Callback<BaseMessage> clientCallback;
+
     private ArrayList<Player> players;
     private Board board;
 
     private int currentPlayerId;
     private int turnCounter;
 
-    private boolean alreadyRolled;
+    private boolean hasRolled;
+
+    // Variables for initial building phase
+    private boolean hasBuiltSettlement;
+    private boolean hasBuiltRoad;
+    private Node lastBuiltNode;
+
+    private Player longestRoadPlayer;
+
+    private boolean canMoveRobber;
 
     private Game(){
         players = new ArrayList<>();
         board = new Board();
         currentPlayerId = 0;
         turnCounter = 0;
-        alreadyRolled = false;
+        hasRolled = false;
     }
 
     public static Game getInstance() {
@@ -52,27 +70,88 @@ public class Game {
         }
     }
 
+    public void setClientCallback(Callback<BaseMessage> callback){
+        this.clientCallback = callback;
+    }
+
     public int rollDice(int playerId) {
-        if (playerId == currentPlayerId && !alreadyRolled){
+        if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
-            board.distributeResources(numberRolled);
-            alreadyRolled = true;
+            if (numberRolled == 7){
+                robPlayers();
+                canMoveRobber = true;
+            } else {
+                board.distributeResources(numberRolled);
+            }
+            hasRolled = true;
             return numberRolled;
         }
         return -1;
     }
 
+    public void moveRobber(Tile tile, Resource resource, int playerToId, int playerFromId){
+        if (tile != null
+                && isPlayersTurn(playerToId)
+                && canMoveRobber
+                && !tile.hasRobber()){
+            board.moveRobberTo(tile);
+            if (playerFromId != -1){
+                Player playerFrom = getPlayerById(playerFromId);
+                Player playerTo = getPlayerById(playerToId);
+
+                if (playerFrom.getResourceCount(resource) > 0){
+                    playerFrom.takeResource(resource, 1);
+                    playerTo.giveSingleResource(resource);
+                }
+            }
+            canMoveRobber = false;
+        }
+    }
+
+    public boolean canMoveRobber() {
+        return canMoveRobber;
+    }
+
+    private void robPlayers(){
+        for (Player player : players){
+            for (Resource resource : Resource.values()){
+                int resourceCount = player.getResourceCount(resource);
+                if (resourceCount >= 7){
+                    player.takeResource(resource, resourceCount / 2);
+                }
+            }
+        }
+    }
+
     public void endTurn(int playerId){
-        if (playerId == currentPlayerId) {
+        if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
             if(getPlayerById(playerId).getVictoryPoints() == 10){
                 Ranking ranking = Ranking.getInstance();
-                new Thread(() -> GameServer.getInstance().broadcastMessage(new ClientWinMessage(ranking))).start();
-            }else {
-                currentPlayerId = (playerId + 1) % players.size();
-                alreadyRolled = false;
-                turnCounter++;
-                // TODO: send messages for every action
-                new Thread(() -> GameClient.getInstance().sendMessage(new GameStateMessage(this))).start();
+                new Thread(() -> GameClient.getInstance().sendMessage(new ClientWinMessage(ranking))).start();
+            }
+            hasRolled = false;
+            hasBuiltRoad = false;
+            hasBuiltSettlement = false;
+            lastBuiltNode = null;
+            turnCounter++;
+            setCurrentPlayerId();
+            // TODO: send messages for every action
+            new Thread(() -> clientCallback.callback(new GameStateMessage(this))).start();
+        }
+    }
+
+    private boolean canEndTurn(){
+        return (!isBuildingPhase() && hasRolled) || (isBuildingPhase() && hasBuiltSettlement && hasBuiltRoad);
+    }
+
+    private void setCurrentPlayerId(){
+        if (isBuildingPhase() && isSecondRound()){
+            if (turnCounter != players.size()){
+                currentPlayerId = (currentPlayerId - 1) % players.size();
+            }
+        } else {
+            if (turnCounter != players.size() * 2){
+                currentPlayerId = (currentPlayerId + 1) % players.size();
             }
         }
     }
@@ -86,38 +165,96 @@ public class Game {
         throw new IllegalArgumentException("Player does not exits");
     }
 
+    public Player getPlayerByName(String playerName){
+        for (Player player : players){
+            if (player.getName().equals(playerName)){
+                return player;
+            }
+        }
+        throw new IllegalArgumentException("Player does not exits");
+    }
+
     public void buildSettlement(Node node, int playerId){
         Player player = getPlayerById(playerId);
-        if (node.getBuilding() == null
-                && playerId == currentPlayerId
-                && node.hasNoAdjacentBuildings()
-                && player.canPlayerPlaceSettlement()) {
-            player.placeSettlement(node);
+
+        if (node.hasNoAdjacentBuildings() && isPlayersTurn(playerId)){
+            if (isBuildingPhase()){
+                if (!hasBuiltSettlement){
+                    player.placeSettlement(node);
+                    lastBuiltNode = node;
+                    hasBuiltSettlement = true;
+                }
+            } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
+                player.takeResources(Settlement.costs);
+                player.placeSettlement(node);
+                updateLongestRoadPlayer();
+            }
         }
     }
 
     public void buildCity(Node node, int playerId){
         Player player = getPlayerById(playerId);
-        if (node.getBuilding() != null
-                && node.getBuilding() instanceof Settlement
-                && ((Settlement) node.getBuilding()).player.getId() == currentPlayerId
-                && playerId == currentPlayerId
-                && player.canPlayerPlaceCity()) {
+        if (node.hasPlayersSettlement(playerId)
+                && hasRolled
+                && player.hasResources(City.costs)
+                && !isBuildingPhase()
+                && isPlayersTurn(playerId)
+                && player.canPlaceCityOn(node)) {
             player.placeCity(node);
+            player.takeResources(City.costs);
         }
     }
 
     public void buildRoad(Edge edge, int playerId){
         Player player = getPlayerById(playerId);
-        if (edge.getRoad() == null
-                && playerId == currentPlayerId
-                && player.canPlayerPlaceRoad()) {
-            player.placeRoad(edge);
+
+        if (isPlayersTurn(playerId) && player.canPlaceRoadOn(edge)) {
+            if (isBuildingPhase()){
+                if (!hasBuiltRoad && lastBuiltNode != null && lastBuiltNode.getOutgoingEdges().contains(edge)){
+                    player.placeRoad(edge);
+                    hasBuiltRoad = true;
+                }
+            } else if (hasRolled && player.hasResources(Road.costs)){
+                player.takeResources(Road.costs);
+                player.placeRoad(edge);
+                updateLongestRoadPlayer();
+            }
+        }
+    }
+
+    public void updateLongestRoadPlayer(){
+        int previousLongestRoad = 4;
+        if (longestRoadPlayer != null){
+            previousLongestRoad = longestRoadPlayer.longestRoad();
+            if (previousLongestRoad < 5){
+                longestRoadPlayer.addVictoryPoints(-2);
+                longestRoadPlayer = null;
+                previousLongestRoad = 4;
+            }
+        }
+        for (Player player : players){
+            int longestRoad = player.longestRoad();
+            if (longestRoad > previousLongestRoad){
+                if (longestRoadPlayer != null){
+                    longestRoadPlayer.addVictoryPoints(-2);
+                }
+                longestRoadPlayer = player;
+                player.addVictoryPoints(2);
+                previousLongestRoad = longestRoad;
+            }
         }
     }
 
     public boolean isBuildingPhase(){
         return (turnCounter / players.size()) < 2;
+    }
+
+    public boolean isSecondRound(){
+        return (turnCounter / players.size()) == 1;
+    }
+
+    public boolean isPlayersTurn(int playerId){
+        return playerId == currentPlayerId;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -126,5 +263,9 @@ public class Game {
 
     public Board getBoard() {
         return board;
+    }
+
+    public int getCurrentPlayerId() {
+        return currentPlayerId;
     }
 }
