@@ -255,7 +255,7 @@ public class Game {
 
     public int drawDevelopmentCard(int playerId){
         if (playerId == currentPlayerId
-                && alreadyRolled
+                && hasRolled
                 && developmentCardDeck.getNumberOfCards() > 0){
             DevelopmentCard card = developmentCardDeck.drawDevelopmentCard();
             Player player=getPlayerById(playerId);
@@ -285,7 +285,7 @@ public class Game {
     }
 
     public void playDevelopmentCard(int playerId, int tag){
-        if (playerId == currentPlayerId && alreadyRolled ) {
+        if (playerId == currentPlayerId && hasRolled ) {
             developmentCardDeck.getDevelopmentCard(tag - 1).playCard();
             getPlayerById(playerId).decreaseDevelopmentCard(tag-1);
         }
