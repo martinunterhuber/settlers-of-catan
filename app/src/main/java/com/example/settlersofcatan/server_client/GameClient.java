@@ -6,6 +6,10 @@ import android.util.Log;
 import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.GameEndActivity;
 import com.example.settlersofcatan.Ranking;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.settlersofcatan.GameActivity;
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.Edge;
@@ -16,6 +20,7 @@ import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -42,7 +47,7 @@ public class GameClient {
     private String username = "";
     private int id;
     private Callback<BaseMessage> startGameCallback;
-    private AppCompatActivity gameActivity;
+    private GameActivity gameActivity;
 
     private GameClient(){
 
@@ -55,12 +60,20 @@ public class GameClient {
         return instance;
     }
 
-    public void init(String host, String username) throws IOException {
+    public void connect(String host, String username) {
         this.username = username;
         client = new NetworkClientKryo();
         registerMessageClasses();
         client.registerCallback(this::callback);
-        connect(host);
+        try {
+            connect(host);
+        } catch (IOException e){
+            Log.e(NetworkConstants.TAG, "Failed to connect to " + host);
+        }
+    }
+
+    public boolean isConnected(){
+        return client.isConnected();
     }
 
     private void registerMessageClasses(){
@@ -90,11 +103,22 @@ public class GameClient {
         client.registerClass(HashMap.class);
         client.registerClass(ResourceMap.class);
         client.registerClass(ClientDiceMessage.class);
+        client.registerClass(Robber.class);
+    }
+
+    private void gameCallback(BaseMessage message){
+        if (message instanceof GameStateMessage){
+            sendMessage(message);
+        } else if (message instanceof ClientWinMessage){
+            sendMessage(message);
+        }
     }
 
     private void callback(BaseMessage message){
         if (message instanceof GameStateMessage){
-            Game.setInstance(((GameStateMessage) message).game);
+            Game game = ((GameStateMessage) message).game;
+            game.setClientCallback(this::gameCallback);
+            Game.setInstance(game);
             for (Player player : Game.getInstance().getPlayers()){
                 if (player.getName().equals(this.username)){
                     id = player.getId();
@@ -104,7 +128,7 @@ public class GameClient {
                 startGameCallback.callback(message);
             }
             if (gameActivity != null) {
-                gameActivity.runOnUiThread(() -> gameActivity.recreate());
+                // gameActivity.redrawViews();
             }
         }
         if (message instanceof ClientWinMessage){
@@ -128,7 +152,7 @@ public class GameClient {
         Log.i(NetworkConstants.TAG, message.toString());
     }
 
-    public void registerActivity(AppCompatActivity activity){
+    public void registerActivity(GameActivity activity){
         gameActivity = activity;
     }
 
@@ -145,7 +169,7 @@ public class GameClient {
 
     public void disconnect(){
         client.sendMessage(new ClientLeftMessage(username));
-        client.close();
+        client.disconnect();
         Log.i(NetworkConstants.TAG, "Disconnected from Host");
     }
 

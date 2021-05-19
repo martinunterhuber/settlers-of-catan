@@ -27,12 +27,11 @@ public class MapView extends View {
     private final int WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
     private final int HEXAGON_WIDTH = WIDTH / 5;
 
-    private final Hexagon[] tiles= new Hexagon[19];
-    private final HexGrid hexGrid;
+    private Hexagon[] tiles= new Hexagon[19];
+    private HexGrid hexGrid;
 
     public MapView(Context context) {
         super(context);
-
         generateTiles();
 
         hexGrid = new HexGrid(tiles);
@@ -40,24 +39,26 @@ public class MapView extends View {
 
     public MapView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
         generateTiles();
 
-        hexGrid=new HexGrid(tiles);
+        hexGrid = new HexGrid(tiles);
     }
 
     public MapView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         generateTiles();
 
-        hexGrid=new HexGrid(tiles);
+        hexGrid = new HexGrid(tiles);
     }
 
     @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        generateTiles();
+
+        hexGrid = new HexGrid(tiles);
 
         drawBitmaps(canvas);
         drawNumberTokens(canvas);

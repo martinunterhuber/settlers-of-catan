@@ -3,7 +3,6 @@ package com.example.settlersofcatan;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -13,7 +12,6 @@ import androidx.annotation.Nullable;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
-import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.server_client.GameClient;
 
 public class ResourceView extends FrameLayout {
@@ -22,8 +20,6 @@ public class ResourceView extends FrameLayout {
     private TextView sheepTxt;
     private TextView clayTxt;
     private TextView oreTxt;
-
-    private Player player;
 
     public ResourceView(@NonNull Context context) {
         super(context);
@@ -46,21 +42,37 @@ public class ResourceView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        doOnDraw();
+    }
+
+    protected void doOnDraw(){
         setResourceValues();
     }
 
     private void initView() {
         inflate(getContext(), R.layout.resource_view, this);
         setWillNotDraw(false);
-        player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
     }
 
     private void setResourceValues(){
+        Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
+        setResourceValuesOf(player);
+    }
+
+    public void setResourceValuesOf(Player player){
         woodTxt.setText(String.valueOf(player.getResourceCount(Resource.FOREST)));
         wheatTxt.setText(String.valueOf(player.getResourceCount(Resource.WHEAT)));
         sheepTxt.setText(String.valueOf(player.getResourceCount(Resource.SHEEP)));
         clayTxt.setText(String.valueOf(player.getResourceCount(Resource.CLAY)));
         oreTxt.setText(String.valueOf(player.getResourceCount(Resource.ORE)));
+    }
+
+    public void setEmptyResources(){
+        woodTxt.setText(String.valueOf(0));
+        wheatTxt.setText(String.valueOf(0));
+        sheepTxt.setText(String.valueOf(0));
+        clayTxt.setText(String.valueOf(0));
+        oreTxt.setText(String.valueOf(0));
     }
 
     private void initResourceTextFields() {

@@ -43,7 +43,7 @@ public class OpponentView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        updateValues();
+        updatePoints();
     }
 
     private void initView() {
@@ -56,16 +56,24 @@ public class OpponentView extends FrameLayout {
         dice = findViewById(R.id.txt_dice);
         rolled = 0;
         updateValues();
+        initPlayer();
     }
 
-    private void updateValues(){
+    private void initPlayer(){
         if (opponent != null){
             textName.setText(opponent.getName());
             textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
             opponentLayout.setBackgroundColor(GameActivity.playerColors[opponent.getId()]);
             dice.setText(String.valueOf(rolled));
         } else {
-            textName.setText("---");
+            textName.setText("--------");
+            textPointCount.setText("0");
+        }
+    }
+
+    private void updatePoints(){
+        if (opponent != null){
+            textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
         }
     }
 

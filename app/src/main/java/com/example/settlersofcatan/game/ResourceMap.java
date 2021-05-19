@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.content.res.Resources;
+
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +13,15 @@ public class ResourceMap {
     public ResourceMap() {
         resources = new HashMap<>();
         for (Resource resource : Resource.values()){
-            resources.put(resource, 10);
+            resources.put(resource, 5);
+        }
+    }
+
+    public ResourceMap(int[] values) {
+        resources = new HashMap<>();
+        for (int i = 0; i < values.length; i++) {
+            Resource resource = Resource.valueOf(i);
+            resources.put(resource, values[i]);
         }
     }
 
@@ -51,4 +61,17 @@ public class ResourceMap {
         }
         return true;
     }
+
+    public static ResourceMap cloneResourceMap(ResourceMap resourceMapToCopy) {
+        ResourceMap resourceMap = getEmptyResourceMap();
+        for (Resource resource : Resource.values()) {
+            resourceMap.incrementResourceCount(resource, resourceMapToCopy.getResourceCount(resource));
+        }
+        return resourceMap;
+    }
+
+    public static ResourceMap getEmptyResourceMap() {
+        return new ResourceMap(new int[]{0, 0, 0, 0, 0});
+    }
+
 }

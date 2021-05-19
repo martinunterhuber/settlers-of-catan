@@ -5,6 +5,7 @@ package com.example.settlersofcatan.game;
  * Implements the giveResource method to give two copies of the resource to the owning player.
  */
 public class City extends NodePlaceable {
+    static final ResourceMap costs = new ResourceMap(new int[]{0, 0, 2, 0, 3});
 
     private City() {
         this(null, null);

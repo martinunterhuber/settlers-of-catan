@@ -1,9 +1,7 @@
 package com.example.settlersofcatan.game;
 
-import android.graphics.Color;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Player of the game, has an inventory of resource cards, development cards, placed cities,
@@ -21,15 +19,16 @@ public class Player {
     private int victoryPoints;
 
     private ResourceMap resources;
-    private ArrayList<DevelopmentCard> unrevealedDevelopmentCards = new ArrayList<>();
-    private ArrayList<Settlement> settlements = new ArrayList<>();
-    private ArrayList<City> cities = new ArrayList<>();
-    private ArrayList<Road> roads = new ArrayList<>();
-    private ArrayList<Harbor> harborsSettledOn;
 
-    private ArrayList<Edge> potentialRoadPlacements = new ArrayList<>();
-    private ArrayList<Node> potentialSettlementPlacements = new ArrayList<>();
-    private ArrayList<Node> potentialCityPlacements = new ArrayList<>();
+    private HashSet<DevelopmentCard> unrevealedDevelopmentCards = new HashSet<>();
+    private HashSet<Settlement> settlements = new HashSet<>();
+    private HashSet<City> cities = new HashSet<>();
+    private HashSet<Road> roads = new HashSet<>();
+    private HashSet<Harbor> harborsSettledOn = new HashSet<>();
+
+    private HashSet<Edge> potentialRoadPlacements = new HashSet<>();
+    private HashSet<Node> potentialSettlementPlacements = new HashSet<>();
+    private HashSet<Node> potentialCityPlacements = new HashSet<>();
 
     private Player(){
         this(-1, null);
@@ -58,6 +57,14 @@ public class Player {
         resources.decrementResourceCount(resource, count);
     }
 
+    public ResourceMap getResources() {
+        return resources;
+    }
+
+    public void setResources(ResourceMap resources) {
+        this.resources = resources;
+    }
+
     public int getId() {
         return id;
     }
@@ -67,24 +74,24 @@ public class Player {
     }
 
     // Calculation in getters subject to change, just there to guarantee authenticity
-    public ArrayList<Edge> getPotentialRoadPlacements() {
+    public HashSet<Edge> getPotentialRoadPlacements() {
         calculatePotentialRoadPlacements();
         return potentialRoadPlacements;
     }
 
-    public ArrayList<Node> getPotentialSettlementPlacements() {
+    public HashSet<Node> getPotentialSettlementPlacements() {
         calculatePotentialSettlementPlacements();
         return potentialSettlementPlacements;
     }
 
-    public ArrayList<Node> getPotentialCityPlacements() {
+    public HashSet<Node> getPotentialCityPlacements() {
         calculatePotentialCityPlacements();
         return potentialCityPlacements;
     }
-    // Does not take into account the Road Placement during the start of the game.
+
     private void calculatePotentialRoadPlacements() {
         potentialRoadPlacements.clear();
-        List<Edge> correspondingEdges = new ArrayList<>();
+        Set<Edge> correspondingEdges = new HashSet<>();
         for (Road r : roads) {
             correspondingEdges.add(r.getLocation());
         }
@@ -93,11 +100,27 @@ public class Player {
                 if (n.getBuilding() != null && n.getBuilding().getPlayer() != this) {
                     break;
                 }
-                List<Edge> potentialCandidates = n.getOtherOutgoingEdges(correspondingEdge);
+                Set<Edge> potentialCandidates = n.getOtherOutgoingEdges(correspondingEdge);
                 for (Edge potentialCandidate : potentialCandidates) {
                     if (potentialCandidate.getRoad() == null) {
                         potentialRoadPlacements.add(potentialCandidate);
                     }
+                }
+            }
+        }
+
+        calculatePotentialRoadsFromBuildings();
+    }
+
+    private void calculatePotentialRoadsFromBuildings(){
+        Set<NodePlaceable> buildings = new HashSet<>();
+        buildings.addAll(settlements);
+        buildings.addAll(cities);
+        for (NodePlaceable building : buildings){
+            Node node = building.getLocation();
+            for (Edge edge : node.getOutgoingEdges()){
+                if (edge.getRoad() == null){
+                    potentialRoadPlacements.add(edge);
                 }
             }
         }
@@ -106,7 +129,7 @@ public class Player {
     // Does not take into account the settlement placement at the start of the game
     private void calculatePotentialSettlementPlacements() {
         potentialSettlementPlacements.clear();
-        List<Node> allAccessibleNodes = new ArrayList<>();
+        Set<Node> allAccessibleNodes = new HashSet<>();
         for (Road r : roads) {
             allAccessibleNodes.addAll(r.getLocation().getEndpointNodes());
         }
@@ -124,23 +147,64 @@ public class Player {
         }
     }
 
-    public boolean canPlayerPlaceRoad() {
+    public boolean canPlaceRoadOn(Edge edge) {
         calculatePotentialRoadPlacements();
-        boolean canAffordRoad = getResourceCount(Resource.FOREST) > 0 && getResourceCount(Resource.CLAY) > 0;
-        return canAffordRoad && roads.size() < ROAD_COUNT && !potentialRoadPlacements.isEmpty();
+        return roads.size() < ROAD_COUNT
+                 && potentialRoadPlacements.contains(edge);
     }
 
-    public boolean canPlayerPlaceSettlement() {
+    public boolean canPlaceSettlementOn(Node node) {
         calculatePotentialSettlementPlacements();
-        boolean canAffordSettlement = getResourceCount(Resource.FOREST) > 0 && getResourceCount(Resource.CLAY) > 0
-                && getResourceCount(Resource.SHEEP) > 0 && getResourceCount(Resource.WHEAT) > 0;
-        return canAffordSettlement && settlements.size() < SETTLEMENT_COUNT && !potentialSettlementPlacements.isEmpty();
+        return settlements.size() < SETTLEMENT_COUNT
+                && potentialSettlementPlacements.contains(node);
     }
 
-    public boolean canPlayerPlaceCity() {
+    public boolean canPlaceCityOn(Node node) {
         calculatePotentialCityPlacements();
-        boolean canAffordCity = getResourceCount(Resource.WHEAT) > 2 && getResourceCount(Resource.ORE) > 3;
-        return canAffordCity && cities.size() < CITY_COUNT && !potentialCityPlacements.isEmpty();
+        return cities.size() < CITY_COUNT
+                && potentialCityPlacements.contains(node);
+    }
+
+    public boolean hasResources(ResourceMap costs){
+        for (Resource resource : Resource.values()){
+            if (getResourceCount(resource) < costs.getResourceCount(resource)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void takeResources(ResourceMap costs){
+        for (Resource resource : Resource.values()){
+            takeResource(resource, costs.getResourceCount(resource));
+        }
+    }
+
+    public int longestRoad(){
+        int maxLength = 0;
+        for (Road road : roads){
+            for (Node endpoint : road.getLocation().getEndpointNodes()){
+                maxLength = Math.max(maxLength, longestRoadRecursive(road, endpoint, new HashSet<>()));
+            }
+        }
+        return maxLength;
+    }
+
+    private int longestRoadRecursive(Road current, Node via, Set<Road> visited){
+        if (visited.contains(current)){
+            return 0;
+        }
+        visited.add(current);
+
+        int maxLength = 0;
+        Node node = current.getLocation().getOtherEndpoint(via);
+        for (Edge edge : node.getOutgoingEdgesExcept(current.getLocation())){
+            if (edge.hasPlayersRoad(this) && node.hasPlayersBuildingOrNone(this)){
+                int roadLength = longestRoadRecursive(edge.getRoad(), node, new HashSet<>(visited));
+                maxLength = Math.max(maxLength, roadLength);
+            }
+        }
+        return maxLength + 1;
     }
 
     /**
@@ -149,8 +213,6 @@ public class Player {
      * @param e the edge to place the road on
      */
     public void placeRoad(Edge e) {
-        takeResource(Resource.FOREST, 1);
-        takeResource(Resource.CLAY, 1);
         Road roadToPlace = new Road(this, e);
         roads.add(roadToPlace);
         e.setRoad(roadToPlace);
@@ -162,14 +224,11 @@ public class Player {
      * @param n the node to place the settlement on
      */
     public void placeSettlement(Node n) {
-        takeResource(Resource.FOREST, 1);
-        takeResource(Resource.CLAY, 1);
-        takeResource(Resource.WHEAT, 1);
-        takeResource(Resource.SHEEP,1);
         Settlement settlementToPlace = new Settlement(this, n);
         settlements.add(settlementToPlace);
         n.setBuilding(settlementToPlace);
-        //DISCLAIMER: Remember to add same functionality to the initialSettlementPlacement Method
+        victoryPoints++;
+
         if (n.isAdjacentToHarbor()) {
             harborsSettledOn.add(n.getAdjacentHarbor());
         }
@@ -181,13 +240,33 @@ public class Player {
      * @param n the node to place the city on
      */
     public void placeCity(Node n) {
-        takeResource(Resource.ORE, 3);
-        takeResource(Resource.WHEAT, 2);
         City cityToPlace = new City(this, n);
         cities.add(cityToPlace);
         settlements.remove((Settlement) n.getBuilding());
         n.setBuilding(cityToPlace);
+        victoryPoints++;
     }
+
+    /**
+     * Method to calculate the exchange rates of resources for trading with the bank.
+     * @return an array with the exchange rate at the index of the resource.
+     */
+    public int[] getResourceExchangeRates() {
+        int[] resourceExchangeRates = {4,4,4,4,4};
+        int[] resourceExchangeRatesWithWildcard = {3,3,3,3,3};
+        boolean onWildcardHarbor = false;
+        for (Harbor harbor : harborsSettledOn) {
+            if (harbor.getResource() != null) {
+                resourceExchangeRates[harbor.getResource().getIndex()] = 2;
+                resourceExchangeRatesWithWildcard[harbor.getResource().getIndex()] = 2;
+            }
+            else {
+                onWildcardHarbor = true;
+            }
+        }
+        return onWildcardHarbor ? resourceExchangeRatesWithWildcard : resourceExchangeRates;
+    }
+
 
     /**
      * Method to check if a player has the resources necessary to be able to accept a specific trade offer
@@ -209,5 +288,7 @@ public class Player {
         resources.incrementResourceMap(tradeOffer.getGive());
     }
 
-
+    void addVictoryPoints(int victoryPoints){
+        this.victoryPoints += victoryPoints;
+    }
 }
