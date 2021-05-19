@@ -55,7 +55,6 @@ public class OpponentView extends FrameLayout {
         opponentLayout = findViewById(R.id.layout_opponent);
         dice = findViewById(R.id.txt_dice);
         rolled = 0;
-        updateValues();
         initPlayer();
     }
 
