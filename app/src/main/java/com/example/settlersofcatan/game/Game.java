@@ -1,16 +1,11 @@
 package com.example.settlersofcatan.game;
 
-import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.server_client.GameServer;
-import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
-import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
-
-import android.util.Log;
-
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
@@ -131,7 +126,7 @@ public class Game {
 
     public void endTurn(int playerId){
         if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
-            if(getPlayerById(playerId).getVictoryPoints() >= 10){
+            if(getPlayerById(playerId).getVictoryPoints() + getPlayerById(playerId).getHiddenVictoryPoints() >= 10){
                 Ranking ranking = Ranking.getInstance();
                 new Thread(() -> clientCallback.callback(new ClientWinMessage(ranking))).start();
                 return;
@@ -143,10 +138,6 @@ public class Game {
             turnCounter++;
             setCurrentPlayerId();
             // TODO: send messages for every action
-            new Thread(() -> {
-                GameClient.getInstance().sendMessage(new GameStateMessage(this));
-
-            }).start();
             new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
                 GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
             }).start();

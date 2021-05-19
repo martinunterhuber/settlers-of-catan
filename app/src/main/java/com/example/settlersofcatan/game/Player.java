@@ -2,8 +2,6 @@ package com.example.settlersofcatan.game;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -317,5 +315,9 @@ public class Player {
 
     public void increaseHiddenVictoryPoints(){
         hiddenVictoryPoints++;
+    }
+
+    public int getHiddenVictoryPoints() {
+        return hiddenVictoryPoints;
     }
 }
