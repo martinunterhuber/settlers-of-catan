@@ -269,6 +269,7 @@ public class Game {
 
             }else if (card instanceof VictoryPoints){
                 player.increaseDevelopmentCard(1);
+                card.playCard();
                 return 1;
 
             }else if (card instanceof Monopoly){
@@ -316,5 +317,9 @@ public class Game {
 
     public int getCurrentPlayerId() {
         return currentPlayerId;
+    }
+
+    public void setCanMoveRobber(boolean canMoveRobber) {
+        this.canMoveRobber = canMoveRobber;
     }
 }

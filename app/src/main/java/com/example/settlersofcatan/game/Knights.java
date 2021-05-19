@@ -2,6 +2,9 @@ package com.example.settlersofcatan.game;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.server_client.GameClient;
+
 public class Knights extends DevelopmentCard{
 
     public Knights() {
@@ -13,6 +16,8 @@ public class Knights extends DevelopmentCard{
         super.playCard();
         Log.i("DEVELOPMENTCARDS: ", "Knights played.");
 
-        //TODO implement rule
+        Game.getInstance().setCanMoveRobber(true);
+        GameClient.getInstance().getGameActivity().findViewById(R.id.moveRobber).setEnabled(true);
+
     }
 }

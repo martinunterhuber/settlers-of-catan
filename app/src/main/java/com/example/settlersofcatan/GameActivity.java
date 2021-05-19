@@ -1,15 +1,11 @@
 package com.example.settlersofcatan;
 
 import android.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.app.AlertDialog;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,18 +15,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -128,7 +120,8 @@ public class GameActivity extends AppCompatActivity {
         setButtonToPlayerColor();
         showCurrentPlayer();
       
-        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
+        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()
+                                                                                    + Game.getInstance().getPlayerById(client.getId()).getHiddenVictoryPoints()));
     }
 
     @Override
