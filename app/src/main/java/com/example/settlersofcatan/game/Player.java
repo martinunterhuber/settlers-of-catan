@@ -19,11 +19,12 @@ public class Player {
     private int victoryPoints;
 
     private ResourceMap resources;
+
     private HashSet<DevelopmentCard> unrevealedDevelopmentCards = new HashSet<>();
     private HashSet<Settlement> settlements = new HashSet<>();
     private HashSet<City> cities = new HashSet<>();
     private HashSet<Road> roads = new HashSet<>();
-    private HashSet<Harbor> harborsSettledOn;
+    private HashSet<Harbor> harborsSettledOn = new HashSet<>();
 
     private HashSet<Edge> potentialRoadPlacements = new HashSet<>();
     private HashSet<Node> potentialSettlementPlacements = new HashSet<>();
@@ -54,6 +55,14 @@ public class Player {
 
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
+    }
+
+    public ResourceMap getResources() {
+        return resources;
+    }
+
+    public void setResources(ResourceMap resources) {
+        this.resources = resources;
     }
 
     public int getId() {
@@ -237,6 +246,27 @@ public class Player {
         n.setBuilding(cityToPlace);
         victoryPoints++;
     }
+
+    /**
+     * Method to calculate the exchange rates of resources for trading with the bank.
+     * @return an array with the exchange rate at the index of the resource.
+     */
+    public int[] getResourceExchangeRates() {
+        int[] resourceExchangeRates = {4,4,4,4,4};
+        int[] resourceExchangeRatesWithWildcard = {3,3,3,3,3};
+        boolean onWildcardHarbor = false;
+        for (Harbor harbor : harborsSettledOn) {
+            if (harbor.getResource() != null) {
+                resourceExchangeRates[harbor.getResource().getIndex()] = 2;
+                resourceExchangeRatesWithWildcard[harbor.getResource().getIndex()] = 2;
+            }
+            else {
+                onWildcardHarbor = true;
+            }
+        }
+        return onWildcardHarbor ? resourceExchangeRatesWithWildcard : resourceExchangeRates;
+    }
+
 
     /**
      * Method to check if a player has the resources necessary to be able to accept a specific trade offer

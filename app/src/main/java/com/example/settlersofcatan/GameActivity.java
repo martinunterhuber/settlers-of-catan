@@ -2,6 +2,8 @@ package com.example.settlersofcatan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,6 +37,7 @@ public class GameActivity extends AppCompatActivity {
     private Button endTurnButton;
     private Button moveRobberButton;
     private ImageView dice;
+    private Button btnTrade;
 
     private GameClient client;
 
@@ -72,11 +75,27 @@ public class GameActivity extends AppCompatActivity {
         dice = findViewById(R.id.btn_dice);
         dice.setOnClickListener(this::rollDice);
 
+        btnTrade = findViewById(R.id.btn_trade);
+        btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
+        btnTrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), TradeActivity.class);
+                startActivity(i);
+            }
+        });
+
         client.registerActivity(this);
 
         setButtonToPlayerColor();
 
         ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resources.invalidate();
     }
 
     private void moveRobber(View view){

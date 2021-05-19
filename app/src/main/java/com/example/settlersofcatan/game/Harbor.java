@@ -21,4 +21,8 @@ public class Harbor {
     public Harbor () {
 
     }
+
+    public Resource getResource() {
+        return resource;
+    }
 }

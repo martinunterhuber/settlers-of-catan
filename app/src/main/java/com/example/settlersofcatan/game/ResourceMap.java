@@ -61,4 +61,17 @@ public class ResourceMap {
         }
         return true;
     }
+
+    public static ResourceMap cloneResourceMap(ResourceMap resourceMapToCopy) {
+        ResourceMap resourceMap = getEmptyResourceMap();
+        for (Resource resource : Resource.values()) {
+            resourceMap.incrementResourceCount(resource, resourceMapToCopy.getResourceCount(resource));
+        }
+        return resourceMap;
+    }
+
+    public static ResourceMap getEmptyResourceMap() {
+        return new ResourceMap(new int[]{0, 0, 0, 0, 0});
+    }
+
 }
