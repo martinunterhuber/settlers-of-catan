@@ -49,7 +49,6 @@ public class BankFragment extends Fragment {
     private void executeTrade() {
         if (bankTradeFragment.isInAcceptedState()) {
             Game.getInstance().getPlayerById(GameClient.getInstance().getId()).setResources(bankTradeFragment.getCurrentInventoryView().getContent());
-
             getActivity().finish();
         } else {
             Animation shake = AnimationUtils.loadAnimation(completeTrade.getContext(), R.anim.shake);

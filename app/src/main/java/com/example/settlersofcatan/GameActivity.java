@@ -75,9 +75,8 @@ public class GameActivity extends AppCompatActivity {
         dice = findViewById(R.id.btn_dice);
         dice.setOnClickListener(this::rollDice);
 
-
-        //TODO implement that button can only be pressed by player who's turn it is
         btnTrade = findViewById(R.id.btn_trade);
+        btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
         btnTrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
