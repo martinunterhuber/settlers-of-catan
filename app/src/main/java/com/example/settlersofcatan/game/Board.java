@@ -35,6 +35,7 @@ public class Board {
         initializeEdges();
         initializeNodes();
         initializeEdgeEndpoints();
+        initializeHarbors();
     }
 
     private void initializeEdgeEndpoints(){
@@ -231,15 +232,15 @@ public class Board {
         eligibleEdges.add(tiles[4][0].getNortheastEdge());
         eligibleEdges.add(tiles[4][2].getEastEdge());
         eligibleEdges.add(tiles[2][4].getSoutheastEdge());
-        eligibleEdges.add(tiles[0][4].getSoutheastEdge());
+        eligibleEdges.add(tiles[0][4].getSouthwestEdge());
 
         //Edges from tiles with two eligible Edges, thus one is chosen at random.
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[1][1].getWestEdge() : tiles[1][1].getNorthwestEdge());
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[3][0].getNorthwestEdge() : tiles[3][0].getNortheastEdge());
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[4][1].getNortheastEdge() : tiles[4][1].getEastEdge());
         eligibleEdges.add(Math.random() >= 0.5 ? tiles[3][3].getEastEdge() : tiles[3][3].getSoutheastEdge());
-        eligibleEdges.add(Math.random() >= 0.5 ? tiles[1][4].getSoutheastEdge() : tiles[1][4].getNortheastEdge());
-        eligibleEdges.add(Math.random() >= 0.5 ? tiles[0][3].getSoutheastEdge() : tiles[0][3].getWestEdge());
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[1][4].getSoutheastEdge() : tiles[1][4].getSouthwestEdge());
+        eligibleEdges.add(Math.random() >= 0.5 ? tiles[0][3].getSouthwestEdge() : tiles[0][3].getWestEdge());
 
         //Shuffled to ensure randomness, as only the first 9 are assigned harbors
         Collections.shuffle(eligibleEdges);

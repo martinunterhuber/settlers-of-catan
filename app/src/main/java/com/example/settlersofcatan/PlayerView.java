@@ -164,58 +164,69 @@ public class PlayerView extends View {
 
 //----------- Methods for drawing -------------------------------------------------------------------------
 
+    /**
+     *                        A
+     *                        ^
+     *                     /    \
+     *                F  +       +  B
+     *                   |       |
+     *                E  +       +  C
+     *                    \   /
+     *                      v
+     *                      D
+     */
+
     private void drawRoads(Canvas canvas){
+        Bitmap ship = getBitmap(R.drawable.ship);
+        ship = Bitmap.createScaledBitmap(ship, 100,100, false);
         for (Path p : hexGrid.getPaths()){
             Bitmap bitmap = getBitmap(p.getResID());
+            float offsetX = 0f;
+            float offsetY = 0f;
             bitmap = Bitmap.createScaledBitmap(bitmap, p.getLength(),20, false);
-
-            /**
-             *                        A
-             *                        ^
-             *                     /    \
-             *                F  +       +  B
-             *                   |       |
-             *                E  +       +  C
-             *                    \   /
-             *                      v
-             *                      D
-             */
-
-
 
             //vertical lines [BC] and [EF]
             if (p.getX1().getX()==p.getX2().getX()){
                 bitmap = rotateBitmap(bitmap, 90);
 
                 if (p.getX1().getY()<p.getX2().getY()) {
+                    offsetX = +1;
                     canvas.drawBitmap(bitmap, p.getX1().getX()-10, p.getX1().getY(), null);
                 }else {
+                    offsetX = -1;
                     canvas.drawBitmap(bitmap, p.getX2().getX()-10, p.getX2().getY(), null);
                 }
 
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [AB]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-
+                offsetY = -1;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [CD]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-
+                offsetY = +1;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [DE]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-
+                offsetY = +1;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX2().getY()-10,null);
 
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [FA]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-
+                offsetY = -1;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX2().getY()-10,null);
+            }
+
+            if (p.getEdge().getHarbor() != null){
+                canvas.drawBitmap(ship,
+                        p.getX2().getX() + (- p.getX2().getX() + p.getX1().getX()) / 2f - 50f + offsetX * 50f,
+                        p.getX2().getY() + (- p.getX2().getY() + p.getX1().getY()) / 2f - 50f + offsetY * 50f,
+                        null);
             }
         }
     }
