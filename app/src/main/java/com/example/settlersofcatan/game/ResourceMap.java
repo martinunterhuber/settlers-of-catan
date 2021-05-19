@@ -71,11 +71,7 @@ public class ResourceMap {
     }
 
     public static ResourceMap getEmptyResourceMap() {
-        ResourceMap resourceMap = new ResourceMap();
-        for (Resource resource : Resource.values()){
-            resourceMap.decrementResourceCount(resource, 10);
-        }
-        return resourceMap;
+        return new ResourceMap(new int[]{0, 0, 0, 0, 0});
     }
 
 }

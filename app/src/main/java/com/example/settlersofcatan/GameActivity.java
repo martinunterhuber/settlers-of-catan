@@ -93,6 +93,12 @@ public class GameActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resources.invalidate();
+    }
+
     private void moveRobber(View view){
         selectPlayerAndResource(playerView.getSelectedTile());
     }
