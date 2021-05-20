@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.settlersofcatan.Fragment_Info;
+import com.example.settlersofcatan.FragmentInfo;
 import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
@@ -79,6 +79,6 @@ public class CreateServerFragment extends Fragment {
         }
     }
     private void showInfo(){
-       getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.infoframe,new Fragment_Info()).commit();
+       getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.infoframe,new FragmentInfo()).commit();
     }
 }
