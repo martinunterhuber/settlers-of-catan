@@ -169,4 +169,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_help" />
 
+    <FrameLayout
+        android:id="@+id/infoframe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="20dp">
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
