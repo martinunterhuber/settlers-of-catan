@@ -31,6 +31,8 @@ public class Game {
     private int turnCounter;
 
     private boolean hasRolled;
+    private boolean hasPlayedCard;
+    private int freeRoads;
 
     // Variables for initial building phase
     private boolean hasBuiltSettlement;
@@ -47,6 +49,7 @@ public class Game {
         currentPlayerId = 0;
         turnCounter = 0;
         hasRolled = false;
+        hasPlayedCard = false;
     }
 
     public static Game getInstance() {
@@ -140,7 +143,7 @@ public class Game {
             setCurrentPlayerId();
             // TODO: send messages for every action
             new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
-                clientCallback.callback(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+                GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
             }).start();
         }
     }
@@ -219,10 +222,18 @@ public class Game {
                     player.placeRoad(edge);
                     hasBuiltRoad = true;
                 }
-            } else if (hasRolled && player.hasResources(Road.costs)){
+            } else if (hasRolled && player.hasResources(Road.costs) && !hasPlayedCard){
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
                 updateLongestRoadPlayer();
+            } else if (hasRolled && hasPlayedCard){
+                player.placeRoad(edge);
+                freeRoads--;
+                updateLongestRoadPlayer();
+
+                if (freeRoads == 0){
+                    hasPlayedCard = false;
+                }
             }
         }
     }
@@ -323,5 +334,13 @@ public class Game {
 
     public void setCanMoveRobber(boolean canMoveRobber) {
         this.canMoveRobber = canMoveRobber;
+    }
+
+    public void setHasPlayedCard(boolean hasPlayedCard) {
+        this.hasPlayedCard = hasPlayedCard;
+    }
+
+    public void setFreeRoads(int freeRoads) {
+        this.freeRoads = freeRoads;
     }
 }

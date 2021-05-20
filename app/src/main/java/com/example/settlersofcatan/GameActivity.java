@@ -49,8 +49,8 @@ public class GameActivity extends AppCompatActivity {
 
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
-            Color.parseColor("#FF9800"),
             Color.parseColor("#F44336"),
+            Color.parseColor("#FF9800"),
             Color.parseColor("#2196F3"), };
 
     @Override

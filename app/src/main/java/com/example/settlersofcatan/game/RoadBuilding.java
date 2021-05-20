@@ -13,6 +13,7 @@ public class RoadBuilding extends DevelopmentCard{
         super.playCard();
         Log.i("DEVELOPMENTCARDS: ", "RoadBuilding played.");
 
-        //TODO implement rule
+        Game.getInstance().setHasPlayedCard(true);
+        Game.getInstance().setFreeRoads(2);
     }
 }
