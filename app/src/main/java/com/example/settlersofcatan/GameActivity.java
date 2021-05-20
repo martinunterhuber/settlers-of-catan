@@ -1,0 +1,292 @@
+package com.example.settlersofcatan;
+
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.Resource;
+import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.server_client.GameClient;
+
+import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class GameActivity extends AppCompatActivity {
+
+    private MapView map;
+    private PlayerView playerView;
+    private ResourceView resources;
+    private OpponentView opponent1;
+    private OpponentView opponent2;
+    private OpponentView opponent3;
+    private Button endTurnButton;
+    private Button moveRobberButton;
+    private ImageView dice;
+
+    private DevelopmentCardView knights;
+    private DevelopmentCardView victoryPoints;
+    private DevelopmentCardView monopoly;
+    private DevelopmentCardView roadBuilding;
+    private DevelopmentCardView yearOfPlenty;
+    private Button drawDevelopmentCard;
+
+    private Button btnTrade;
+
+    private GameClient client;
+
+    static final int[] playerColors = new int[]{
+            Color.parseColor("#05A505"),
+            Color.parseColor("#F44336"),
+            Color.parseColor("#FF9800"),
+            Color.parseColor("#2196F3"), };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_game);
+      
+        client = GameClient.getInstance();
+
+        map=findViewById(R.id.mapView);
+        playerView =findViewById(R.id.playerView);
+        playerView.setHexGrid(map.getHexGrid());
+        playerView.invalidate();
+        resources=findViewById(R.id.resourceView);
+
+        opponent1=findViewById(R.id.opponent1);
+        opponent2=findViewById(R.id.opponent2);
+        opponent3=findViewById(R.id.opponent3);
+
+        knights=findViewById(R.id.view_knights);
+        victoryPoints=findViewById(R.id.view_victory_point_cards);
+        monopoly=findViewById(R.id.view_monopoly);
+        roadBuilding=findViewById(R.id.view_road_building);
+        yearOfPlenty=findViewById(R.id.view_year_of_plenty);
+
+        endTurnButton = findViewById(R.id.endTurnButton);
+        endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
+        endTurnButton.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
+
+        moveRobberButton = findViewById(R.id.moveRobber);
+        moveRobberButton.setOnClickListener(this::moveRobber);
+
+        dice = findViewById(R.id.btn_dice);
+        dice.setOnClickListener(this::rollDice);
+
+        drawDevelopmentCard=findViewById(R.id.btn_draw_development);
+        drawDevelopmentCard.setOnClickListener(
+                view -> {
+                    int type = Game.getInstance().drawDevelopmentCard(GameClient.getInstance().getId());
+
+                    if (type == 0){
+                        knights.updateView(type);
+                    }else if (type == 1){
+                        victoryPoints.updateView(type);
+                    }else if (type == 2){
+                        monopoly.updateView(type);
+                    }else if (type == 3){
+                        roadBuilding.updateView(type);
+                    }else if (type == 4){
+                        yearOfPlenty.updateView(type);
+                    }
+                }
+        );
+      
+        btnTrade = findViewById(R.id.btn_trade);
+        btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
+        btnTrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), TradeActivity.class);
+                startActivity(i);
+            }
+        });
+
+        client.registerActivity(this);
+
+        setButtonToPlayerColor();
+        showCurrentPlayer();
+      
+        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()
+                                                                                    + Game.getInstance().getPlayerById(client.getId()).getHiddenVictoryPoints()));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resources.invalidate();
+    }
+
+    private void moveRobber(View view){
+        selectPlayerAndResource(playerView.getSelectedTile());
+    }
+
+    private void moveRobber(Resource resource, int otherPlayerId){
+        Game.getInstance().moveRobber(playerView.getSelectedTile(), resource, client.getId(), otherPlayerId);
+        playerView.invalidate();
+        findViewById(R.id.moveRobber).setEnabled(Game.getInstance().canMoveRobber());
+        resources.invalidate();
+    }
+
+    private void rollDice(View view){
+        int result = Game.getInstance().rollDice(client.getId());
+        if (result > 0){
+            ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+            resources.invalidate();
+        }
+        if (result == 7){
+            findViewById(R.id.moveRobber).setEnabled(true);
+        }
+    }
+
+    private void selectPlayerAndResource(Tile tile){
+        Player currentPlayer = Game.getInstance().getPlayerById(client.getId());
+        List<String> spinnerArray = tile.getAdjacentPlayersNamesExcept(currentPlayer);
+        if (spinnerArray.isEmpty()){
+            moveRobber(null, -1);
+            return;
+        }
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_robber, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = dialogView.findViewById(R.id.spinner);
+        spinner.setAdapter(adapter);
+
+        Button confirm = dialogView.findViewById(R.id.confirm);
+        SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
+
+        confirm.setOnClickListener((view) -> {
+            String playerName = spinner.getSelectedItem().toString();
+            Player player = Game.getInstance().getPlayerByName(playerName);
+            Resource resource = resourceView.getSelectedResource();
+            moveRobber(resource, player.getId());
+            alertDialog.dismiss();
+        });
+
+        AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Player player = Game.getInstance().getPlayerByName(parent.getItemAtPosition(position).toString());
+                resourceView.setResourceValuesOf(player);
+                resourceView.initListeners(() -> confirm.setEnabled(true));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                confirm.setEnabled(false);
+                resourceView.setEmptyResources();
+            }
+        };
+        spinner.setOnItemSelectedListener(onItemSelectedListener);
+
+        alertDialog.show();
+    }
+
+    private void setButtonToPlayerColor(){
+        Player player = Game.getInstance().getPlayerById(client.getId());
+        ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[player.getId()]);
+        ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[player.getId()]);
+        ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
+    }
+
+    public void redrawViews(){
+        findViewById(R.id.opponents).invalidate();
+        findViewById(R.id.playerView).invalidate();
+        findViewById(R.id.resourceView).invalidate();
+    }
+  
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_road:
+                playerView.buildRoad();
+                break;
+            case R.id.btn_settlement:
+                playerView.buildSettlement();
+                break;
+            case R.id.btn_city:
+                playerView.buildCity();
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.quit_lobby_title)
+                .setMessage(R.string.quit_lobby_confirmation)
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    if (client != null){
+                        new Thread(client::disconnect).start();
+                    }
+                    finish();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void showCurrentPlayer(){
+        Game game = Game.getInstance();
+        int currentPlayerId = game.getCurrentPlayerId();
+        String currentPlayerName = game.getPlayerById(currentPlayerId).getName();
+
+        unselectPlayer();
+
+        if (opponent1.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent1.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }else if (opponent2.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent2.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }else if (opponent3.getPlayerName().equals(currentPlayerName)){
+            FrameLayout border = opponent3.findViewById(R.id.layout_selected_border);
+            border.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void unselectPlayer(){
+        FrameLayout border = opponent1.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+
+        border = opponent2.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+
+        border = opponent3.findViewById(R.id.layout_selected_border);
+        border.setVisibility(View.INVISIBLE);
+    }
+
+    public void updateOpponentView(String username, int rolled){
+
+        if (opponent1.getPlayerName().equals(username)){
+            opponent1.updateDice(rolled);
+            opponent1.invalidate();
+        }else if (Game.getInstance().getPlayers().size() > 2 && opponent2.getPlayerName().equals(username)){
+            opponent2.updateDice(rolled);
+            opponent2.invalidate();
+        }else if (Game.getInstance().getPlayers().size() > 3 && opponent3.getPlayerName().equals(username)){
+            opponent3.updateDice(rolled);
+            opponent3.invalidate();
+        }
+
+    }
+}

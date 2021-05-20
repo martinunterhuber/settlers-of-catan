@@ -1,3 +1,48 @@
 <resources>
     <string name="app_name">Settlers of Catan</string>
+    <string name="img_description_city">Build City</string>
+    <string name="img_description_settlement">Build Settlement</string>
+    <string name="img_description_road">Build Road</string>
+    <string name="join_server">Join Server</string>
+    <string name="create_server">Create Server</string>
+    <string name="username">Username</string>
+    <string name="server_ip_address">Server IP Address</string>
+    <string name="player">Player</string>
+    <string name="start_game">Start Game</string>
+    <string name="wait_for_host">Waiting for the host to start the game…</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="could_not_connect">Could not connect to %1$s</string>
+    <string name="quit_lobby_title">Leave Lobby?</string>
+    <string name="quit_lobby_confirmation">Do you really want to leave the lobby?</string>
+    <string name="development_knights">Knights</string>
+    <string name="knights_description">Move the robbers.
+        Steal 1 resource from the owner of a settlement
+        or city adjacent to the robber\'s new hex.</string>
+    <string name="development_victory_points">Victory Point Cards</string>
+    <string name="victory_point_description">1 additional victory point.</string>
+    <string name="development_monopoly">Monopoly</string>
+    <string name="monopoly_description">When you play this card, announce 1 type of resource.
+        All other players must give you all of their resources of that type.</string>
+    <string name="development_year_of_plenty">Year of Plenty</string>
+    <string name="year_of_plenty_description">Take any 2 resources of the bank.
+        Add them to your hand. They can be 2 of the same
+        resource or 2 different resources.</string>
+    <string name="development_road_building">Road building</string>
+    <string name="road_building_description">When you play this card,
+        you can immediately place 2 roads free of charge.</string>
+    <string name="win">WIN</string>
+    <string name="lose">LOSE</string>
+    <string name="end_game">End Game</string>
+    <string name="first">1. %1$s </string>
+    <string name="second">2. %1$s </string>
+    <string name="third">3. %1$s </string>
+    <string name="fourth">4. %1$s </string>
+    <string name="title_activity_trade">TradeActivity</string>
+    <string name="trade_title">Trade Overview</string>
+    <string name="move_robber">Move Robber</string>
+    <string name="end_turn">End Turn</string>
+    <string name="trade">Trade</string>
+    <string name="points">Points:</string>
+    <string name="player_name">Player name</string>
+    <string name="development">Development</string>
 </resources>
