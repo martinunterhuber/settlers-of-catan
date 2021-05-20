@@ -1,15 +1,11 @@
 package com.example.settlersofcatan;
 
 import android.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.app.AlertDialog;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,17 +15,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -42,20 +35,29 @@ public class GameActivity extends AppCompatActivity {
     private Button endTurnButton;
     private Button moveRobberButton;
     private ImageView dice;
+
+    private DevelopmentCardView knights;
+    private DevelopmentCardView victoryPoints;
+    private DevelopmentCardView monopoly;
+    private DevelopmentCardView roadBuilding;
+    private DevelopmentCardView yearOfPlenty;
+    private Button drawDevelopmentCard;
+
     private Button btnTrade;
 
     private GameClient client;
 
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
-            Color.parseColor("#FF9800"),
             Color.parseColor("#F44336"),
+            Color.parseColor("#FF9800"),
             Color.parseColor("#2196F3"), };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+      
         client = GameClient.getInstance();
 
         map=findViewById(R.id.mapView);
@@ -65,10 +67,14 @@ public class GameActivity extends AppCompatActivity {
         resources=findViewById(R.id.resourceView);
 
         opponent1=findViewById(R.id.opponent1);
-
         opponent2=findViewById(R.id.opponent2);
-
         opponent3=findViewById(R.id.opponent3);
+
+        knights=findViewById(R.id.view_knights);
+        victoryPoints=findViewById(R.id.view_victory_point_cards);
+        monopoly=findViewById(R.id.view_monopoly);
+        roadBuilding=findViewById(R.id.view_road_building);
+        yearOfPlenty=findViewById(R.id.view_year_of_plenty);
 
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
@@ -80,6 +86,25 @@ public class GameActivity extends AppCompatActivity {
         dice = findViewById(R.id.btn_dice);
         dice.setOnClickListener(this::rollDice);
 
+        drawDevelopmentCard=findViewById(R.id.btn_draw_development);
+        drawDevelopmentCard.setOnClickListener(
+                view -> {
+                    int type = Game.getInstance().drawDevelopmentCard(GameClient.getInstance().getId());
+
+                    if (type == 0){
+                        knights.updateView(type);
+                    }else if (type == 1){
+                        victoryPoints.updateView(type);
+                    }else if (type == 2){
+                        monopoly.updateView(type);
+                    }else if (type == 3){
+                        roadBuilding.updateView(type);
+                    }else if (type == 4){
+                        yearOfPlenty.updateView(type);
+                    }
+                }
+        );
+      
         btnTrade = findViewById(R.id.btn_trade);
         btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
         btnTrade.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +120,8 @@ public class GameActivity extends AppCompatActivity {
         setButtonToPlayerColor();
         showCurrentPlayer();
       
-        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()));
+        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()
+                                                                                    + Game.getInstance().getPlayerById(client.getId()).getHiddenVictoryPoints()));
     }
 
     @Override

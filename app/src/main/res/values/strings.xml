@@ -14,6 +14,22 @@
     <string name="could_not_connect">Could not connect to %1$s</string>
     <string name="quit_lobby_title">Leave Lobby?</string>
     <string name="quit_lobby_confirmation">Do you really want to leave the lobby?</string>
+    <string name="development_knights">Knights</string>
+    <string name="knights_description">Move the robbers.
+        Steal 1 resource from the owner of a settlement
+        or city adjacent to the robber\'s new hex.</string>
+    <string name="development_victory_points">Victory Point Cards</string>
+    <string name="victory_point_description">1 additional victory point.</string>
+    <string name="development_monopoly">Monopoly</string>
+    <string name="monopoly_description">When you play this card, announce 1 type of resource.
+        All other players must give you all of their resources of that type.</string>
+    <string name="development_year_of_plenty">Year of Plenty</string>
+    <string name="year_of_plenty_description">Take any 2 resources of the bank.
+        Add them to your hand. They can be 2 of the same
+        resource or 2 different resources.</string>
+    <string name="development_road_building">Road building</string>
+    <string name="road_building_description">When you play this card,
+        you can immediately place 2 roads free of charge.</string>
     <string name="win">WIN</string>
     <string name="lose">LOSE</string>
     <string name="end_game">End Game</string>
@@ -28,4 +44,5 @@
     <string name="trade">Trade</string>
     <string name="points">Points:</string>
     <string name="player_name">Player name</string>
+    <string name="development">Development</string>
 </resources>
