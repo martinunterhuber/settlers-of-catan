@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +19,10 @@ public class Player {
     private int id;
 
     private int victoryPoints;
+    // for victory point development cards, longest road, largest army
+    private int hiddenVictoryPoints;
+    // {Knights, victory point, monopoly, road building, year of plenty}
+    private int[] developmetCards = new int[]{0, 0, 0, 0, 0};
 
     private ResourceMap resources;
 
@@ -39,6 +45,7 @@ public class Player {
         this.name = name;
         this.resources = new ResourceMap();
         this.victoryPoints = 0;
+        this.hiddenVictoryPoints = 0;
     }
 
     public String getName() {
@@ -288,7 +295,29 @@ public class Player {
         resources.incrementResourceMap(tradeOffer.getGive());
     }
 
+    public void increaseDevelopmentCard(int index){
+        developmetCards[index]++;
+        Log.i("DEVELOPMENT","Player card count increased.");
+    }
+
+    public void decreaseDevelopmentCard(int index){
+        developmetCards[index]--;
+        Log.i("DEVELOPMENT","Player card count decreased.");
+    }
+
+    public int getDevelopmentCardCount(int index){
+        return developmetCards[index];
+    }
+
     void addVictoryPoints(int victoryPoints){
         this.victoryPoints += victoryPoints;
+    }
+
+    public void increaseHiddenVictoryPoints(){
+        hiddenVictoryPoints++;
+    }
+
+    public int getHiddenVictoryPoints() {
+        return hiddenVictoryPoints;
     }
 }

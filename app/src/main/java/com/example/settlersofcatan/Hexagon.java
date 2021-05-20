@@ -26,7 +26,7 @@ public class Hexagon extends HexagonPart {
         this.radius = (int) (width/Math.sqrt(3));
         this.width = width;
         this.halfWidth = width / 2;
-        this.center = hexToPixel(tile, this.radius, new Point(-halfWidth, width * 3));
+        this.center = hexToPixel(tile, this.radius, new Point(-halfWidth, (int)(radius * 1.5)));
         this.drawableResourceId = getResourceIdFromTileResource();
 
         b = (int) (Math.sqrt(Math.pow(radius, 2) - Math.pow(halfWidth, 2)));

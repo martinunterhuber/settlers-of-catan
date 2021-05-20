@@ -1,16 +1,13 @@
 package com.example.settlersofcatan.game;
 
-
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.server_client.GameServer;
-import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
-import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
-
-import android.util.Log;
-
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
+import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 
 import java.util.ArrayList;
@@ -34,6 +31,8 @@ public class Game {
     private int turnCounter;
 
     private boolean hasRolled;
+    private boolean hasPlayedCard;
+    private int freeRoads;
 
     // Variables for initial building phase
     private boolean hasBuiltSettlement;
@@ -50,6 +49,7 @@ public class Game {
         currentPlayerId = 0;
         turnCounter = 0;
         hasRolled = false;
+        hasPlayedCard = false;
     }
 
     public static Game getInstance() {
@@ -130,7 +130,7 @@ public class Game {
 
     public void endTurn(int playerId){
         if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
-            if(getPlayerById(playerId).getVictoryPoints() >= 10){
+            if(getPlayerById(playerId).getVictoryPoints() + getPlayerById(playerId).getHiddenVictoryPoints() >= 10){
                 Ranking ranking = Ranking.getInstance();
                 new Thread(() -> clientCallback.callback(new ClientWinMessage(ranking))).start();
                 return;
@@ -142,7 +142,9 @@ public class Game {
             turnCounter++;
             setCurrentPlayerId();
             // TODO: send messages for every action
-            new Thread(() -> clientCallback.callback(new GameStateMessage(this))).start();
+            new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
+                GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+            }).start();
         }
     }
 
@@ -220,10 +222,18 @@ public class Game {
                     player.placeRoad(edge);
                     hasBuiltRoad = true;
                 }
-            } else if (hasRolled && player.hasResources(Road.costs)){
+            } else if (hasRolled && player.hasResources(Road.costs) && !hasPlayedCard){
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
                 updateLongestRoadPlayer();
+            } else if (hasRolled && hasPlayedCard){
+                player.placeRoad(edge);
+                freeRoads--;
+                updateLongestRoadPlayer();
+
+                if (freeRoads == 0){
+                    hasPlayedCard = false;
+                }
             }
         }
     }
@@ -251,6 +261,53 @@ public class Game {
         }
     }
 
+    public int drawDevelopmentCard(int playerId){
+        if (playerId == currentPlayerId
+                && hasRolled
+                && DevelopmentCardDeck.getInstance().getNumberOfCards() > 0
+                && getPlayerById(playerId).getResourceCount(Resource.ORE) > 0
+                && getPlayerById(playerId).getResourceCount(Resource.SHEEP) > 0
+                && getPlayerById(playerId).getResourceCount(Resource.WHEAT )> 0){
+            DevelopmentCard card = DevelopmentCardDeck.getInstance().drawDevelopmentCard();
+            Player player=getPlayerById(playerId);
+
+            player.takeResource(Resource.ORE,1);
+            player.takeResource(Resource.SHEEP,1);
+            player.takeResource(Resource.WHEAT,1);
+            GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
+
+            if (card instanceof Knights){
+                player.increaseDevelopmentCard(0);
+                return 0;
+
+            }else if (card instanceof VictoryPoints){
+                player.increaseDevelopmentCard(1);
+                card.playCard();
+                return 1;
+
+            }else if (card instanceof Monopoly){
+                player.increaseDevelopmentCard(2);
+                return 2;
+
+            }else if (card instanceof RoadBuilding){
+                player.increaseDevelopmentCard(3);
+                return 3;
+
+            }else if (card instanceof YearOfPlenty){
+                player.increaseDevelopmentCard(4);
+                return 4;
+            }
+        }
+        return -1;
+    }
+
+    public void playDevelopmentCard(int playerId, int tag){
+        if (playerId == currentPlayerId && hasRolled ) {
+            DevelopmentCardDeck.getInstance().getDevelopmentCard(tag - 1).playCard();
+            getPlayerById(playerId).decreaseDevelopmentCard(tag-1);
+        }
+    }
+
     public boolean isBuildingPhase(){
         return (turnCounter / players.size()) < 2;
     }
@@ -273,5 +330,17 @@ public class Game {
 
     public int getCurrentPlayerId() {
         return currentPlayerId;
+    }
+
+    public void setCanMoveRobber(boolean canMoveRobber) {
+        this.canMoveRobber = canMoveRobber;
+    }
+
+    public void setHasPlayedCard(boolean hasPlayedCard) {
+        this.hasPlayedCard = hasPlayedCard;
+    }
+
+    public void setFreeRoads(int freeRoads) {
+        this.freeRoads = freeRoads;
     }
 }

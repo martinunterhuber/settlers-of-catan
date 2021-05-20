@@ -12,29 +12,38 @@ import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
+import com.example.settlersofcatan.game.DevelopmentCard;
+import com.example.settlersofcatan.game.DevelopmentCardDeck;
 import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Harbor;
+import com.example.settlersofcatan.game.Knights;
+import com.example.settlersofcatan.game.Monopoly;
 import com.example.settlersofcatan.game.Node;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Road;
+import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.VictoryPoints;
+import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
+import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,8 +111,20 @@ public class GameClient {
         client.registerClass(Resource.class);
         client.registerClass(HashMap.class);
         client.registerClass(ResourceMap.class);
+        client.registerClass(DevelopmentCardDeck.class);
+        client.registerClass(DevelopmentCard.class);
+        client.registerClass(DevelopmentCard[].class);
+        client.registerClass(Knights.class);
+        client.registerClass(VictoryPoints.class);
+        client.registerClass(Monopoly.class);
+        client.registerClass(RoadBuilding.class);
+        client.registerClass(YearOfPlenty.class);
+        client.registerClass(int[].class);
+        client.registerClass(SecureRandom.class);
         client.registerClass(ClientDiceMessage.class);
         client.registerClass(Robber.class);
+        client.registerClass(DevelopmentCardDeck.class);
+        client.registerClass(DevelopmentCardMessage.class);
     }
 
     private void gameCallback(BaseMessage message){
@@ -112,6 +133,7 @@ public class GameClient {
         } else if (message instanceof ClientWinMessage){
             sendMessage(message);
         }
+
     }
 
     private void callback(BaseMessage message){
@@ -148,6 +170,8 @@ public class GameClient {
                 );
 
             }
+        } else if (message instanceof DevelopmentCardMessage){
+            DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }
@@ -183,5 +207,9 @@ public class GameClient {
 
     public int getId() {
         return id;
+    }
+
+    public AppCompatActivity getGameActivity(){
+        return gameActivity;
     }
 }

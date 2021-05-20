@@ -2,23 +2,27 @@ package com.example.settlersofcatan.server_client;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.settlersofcatan.GameActivity;
-import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
-import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
-
-import java.io.IOException;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.GameActivity;
+import com.example.settlersofcatan.game.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
+import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
+import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
+
+import java.io.IOException;
 
 public class CreateServerFragment extends Fragment {
     EditText[] users = new EditText[4];
@@ -59,8 +63,10 @@ public class CreateServerFragment extends Fragment {
                     });
 
                     Game game = Game.getInstance();
+                    DevelopmentCardDeck deck = DevelopmentCardDeck.getInstance();
                     game.init(server.getClientUsernames());
                     server.broadcastMessage(new GameStateMessage(game));
+                    server.broadcastMessage(new DevelopmentCardMessage(deck));
                 }
         ).start();
     }
