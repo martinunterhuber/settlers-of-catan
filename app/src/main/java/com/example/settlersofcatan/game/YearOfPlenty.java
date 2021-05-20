@@ -2,6 +2,7 @@ package com.example.settlersofcatan.game;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.ResourceDialog;
 import com.example.settlersofcatan.server_client.GameClient;
 
@@ -24,6 +25,6 @@ public class YearOfPlenty extends DevelopmentCard{
     public void getResources(Resource resource){
         Game.getInstance().getPlayerById(GameClient.getInstance().getId()).giveSingleResource(resource);
         Log.i("DEVELOPMENT_YEAR","Resource added.");
-
+        GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
     }
 }

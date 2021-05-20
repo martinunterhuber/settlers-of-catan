@@ -1,5 +1,6 @@
 package com.example.settlersofcatan.game;
 
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -139,7 +140,7 @@ public class Game {
             setCurrentPlayerId();
             // TODO: send messages for every action
             new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
-                GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+                clientCallback.callback(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
             }).start();
         }
     }
@@ -262,6 +263,7 @@ public class Game {
             player.takeResource(Resource.ORE,1);
             player.takeResource(Resource.SHEEP,1);
             player.takeResource(Resource.WHEAT,1);
+            GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
 
             if (card instanceof Knights){
                 player.increaseDevelopmentCard(0);

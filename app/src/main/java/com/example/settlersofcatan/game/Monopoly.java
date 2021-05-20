@@ -2,6 +2,7 @@ package com.example.settlersofcatan.game;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.ResourceDialog;
 import com.example.settlersofcatan.server_client.GameClient;
 
@@ -35,6 +36,7 @@ public class Monopoly extends DevelopmentCard{
             Log.i("DEVELOPMENT_MONOPOLY","Resource added.");
             resourceCount--;
         }
+        GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
 
         String obtained = String.valueOf(Game.getInstance().getPlayerById(GameClient.getInstance().getId())
                                                             .getResourceCount(resource));
