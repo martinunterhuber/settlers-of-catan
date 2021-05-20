@@ -1,14 +1,19 @@
 package com.example.settlersofcatan.server_client;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.settlersofcatan.FragmentInfo;
+import com.example.settlersofcatan.GameActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -49,6 +54,10 @@ public class CreateServerFragment extends Fragment {
         String ip = NetworkServerKryo.getLocalIPAddress();
         ((TextView)getView().findViewById(R.id.serverIP)).setText(ip);
         getView().findViewById(R.id.createServerButton2).setOnClickListener(this::startGame);
+
+        ImageButton btn = getView().findViewById(R.id.imageButton);
+        btn.setOnClickListener((v)->showInfo());
+
     }
 
     private void startGame(View view){
@@ -75,5 +84,8 @@ public class CreateServerFragment extends Fragment {
         for (int i = 1; i < users.length; i++) {
             users[i].setText(server.getClientUsernameAt(i));
         }
+    }
+    private void showInfo(){
+       getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.infoframe,new FragmentInfo()).commit();
     }
 }

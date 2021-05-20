@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/backbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginRight="35dp"
+                app:srcCompat="@android:drawable/ic_menu_revert" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="346dp"
+                android:layout_height="74dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="79dp"
+                android:layout_marginRight="79dp"
+                android:text="Game Rules"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/button_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="VIDEO"
+                app:backgroundTint="@color/teal_700" />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="1. Resource production" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Before you do anything else on your turn, you must roll the two dice. The result applies to everyone and usually means you get to take a resource from the resource stacks depending on the number you’ve rolled and where your settlements are based. For example, Red rolls a 9, which means they receive a sheep this turn as their settlement sits on the corner of a hex with a 9 marker that produces sheep. White is on the other side of that same hex and will also receive a sheep. There is another 9 at the top of the board, too; Yellow sits on that hex and receives a wheat.  Every player needs to make sure they keep track of their own settlements and whether or not they receive a resource on any given roll.  Catan is a game of probability to a certain extent, as the resources that come up will be determined by the dice that get rolled. 7 is the most likely number to be rolled with two dice and is treated slightly differently..." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="How does the robber work in Catan?" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="If you roll a 7 on your turn in Catan, you activate the robber.  Any player that has more than seven resource cards in their hand must return half of them (rounded down) to the resource stacks. That includes the person who activated the robber.  You now get to move the robber onto one of the numbers on the board, covering up that number - stopping players from gaining resources from adjacent settlements if that number is rolled - until the robber is moved again.  As they are a robber, you also get to steal a resource at random from a player with a settlement next to the number you cover. If the robber affects more than one player, choose one to take a resource from." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="2. Trade" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="There are two types of trading in Catan: domestic and maritime.  Domestic trading is just a fancy way of saying you can trade with your fellow players. You can announce what you’re after and what you’d be willing to trade for it. Your fellow players can make counter offers and proposals to you (but not to each other!)  Maritime trading doesn’t involve the other players and can be incredibly useful when your opponents are being particularly stubborn about trading.  Maritime trading allows you to trade four of one good for one of another. You can perform this action this no matter what, but if you have a settlement or city on a harbour, you get a rebate of some kind based on the token - such as being able to trade at 3:1 or sometimes even 2:1 for a specific resource." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="3. Building" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The last part of each player’s turn is the building phase.  You can build any number of things on your turn as long as you have the resources available and the building materials in your pool." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="Roads" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Building roads costs one brick and one wood. Roads are placed on the edges of hexes and will allow you to build settlements further afield, giving you an opportunity to gain more resources.  The first player to build a road at least five sections long (in a single stretch - not including forks) receives the Longest Road card, which is worth two victory points at the end of the game.  If another player exceeds the length of that person’s road, they get to take that card from them - so the Longest Road card is never entirely safe in any one player’s possession." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="Settlements" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Building settlements requires a brick, a wood, a sheep and a wheat. Getting settlements on the board quickly can be quite an important strategy in the game, as each settlement is worth one victory point. You need 10 victory points to win the game.  You can only ever place a settlement somewhere that is connected by your roads and you need to be at least two spaces away from another settlement, including your own. That means no settlement can be adjacent to another settlement.  As well as giving you a precious victory point, each settlement rewards you with resources whenever one of the numbers next to it is rolled." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="Cities" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Building a city requires three ore and two wheat, plus an existing settlement. A city in Catan is like a hotel in Monopoly; it’s an upgrade.  You can only build a city if you have a settlement on the board that can be replaced with the new city. Cities will earn you double the resources and are worth two victory points each." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="Development cards" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Buying development cards is also part of the building phase and costs one sheep, one ore and one wheat. It’s a bit of a lucky dip as you are buying blindly from a stack of cards but they are all beneficial to you.  Development cards are kept hidden from your opponents until a certain point depending on the individual card. It’s important to note that you cannot play a development card on the same turn that you have bought it.  All instructions are written on the cards. There are three types of development cards: knights, progress cards and victory points cards.  Knights are similar to the Longest Road card in that the first player to play three knights in front of them will receive a two-point bonus for having the Largest Army. But, just like the Longest Road, this card can be stolen by another player if their army is larger than yours. Knights also activate the robber when played, in which case you behave as if you had just rolled a 7." />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Progress cards vary and what they do is laid out very clearly on each card. They usually give you resources or allow you to build without spending resources. Once played, the card is removed from the game.  Victory point cards are the juiciest of the development cards, as they speed up your road to victory and remain hidden until you have enough victory points to win the game on your turn. Victory points cards are the only development cards that can be played on the same turn they are purchased." />
+
+            <EditText
+                android:id="@+id/editTextTextMultiLine10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="Scoring and end of the game" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The aim of Catan is simple: the first player to 10 victory points on their turn wins.  Make sure to keep count of your victory points (and your opponents’!) throughout the game by keeping track of buildings and any Longest Road/Largest Army bonuses." />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
