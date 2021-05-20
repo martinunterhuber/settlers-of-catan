@@ -23,4 +23,12 @@
             android:layout_height="match_parent">
         </androidx.viewpager2.widget.ViewPager2>
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/infoframe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="20dp">
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
