@@ -343,4 +343,8 @@ public class Game {
     public void setFreeRoads(int freeRoads) {
         this.freeRoads = freeRoads;
     }
+
+    public Player getLongestRoadPlayer() {
+        return longestRoadPlayer;
+    }
 }

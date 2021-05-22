@@ -167,13 +167,80 @@ public class GameTest {
         int player = rollUntilRobber();
         game.endTurn(player);
         Assert.assertEquals(player, game.getCurrentPlayerId());
+        Assert.assertTrue(game.canMoveRobber());
     }
 
     @Test
     public void testRobberWithoutTakingResource() {
         skipBuildingPhase();
         int player = rollUntilRobber();
+
         game.moveRobber(tiles[3][3], null, player, -1);
+
         Assert.assertTrue(tiles[3][3].hasRobber());
+        Assert.assertFalse(game.canMoveRobber());
+    }
+
+    @Test
+    public void testRobberTakingResource() {
+        skipBuildingPhase();
+        int playerId = rollUntilRobber();
+        int otherPlayerId = (playerId + 1) % 4;
+        Player player = game.getPlayerById(playerId);
+        Player otherPlayer = game.getPlayerById(otherPlayerId);
+        int playerSheepBefore = player.getResourceCount(Resource.SHEEP);
+        int otherPlayerSheepBefore = otherPlayer.getResourceCount(Resource.SHEEP);
+
+        game.moveRobber(tiles[3][3], Resource.SHEEP, playerId, otherPlayerId);
+
+        Assert.assertEquals(playerSheepBefore + 1, player.getResourceCount(Resource.SHEEP));
+        Assert.assertEquals(otherPlayerSheepBefore - 1, otherPlayer.getResourceCount(Resource.SHEEP));
+        Assert.assertTrue(tiles[3][3].hasRobber());
+        Assert.assertFalse(game.canMoveRobber());
+    }
+
+    @Test
+    public void testGetPlayerByName(){
+        Assert.assertEquals(game.getPlayerById(0), game.getPlayerByName("Player1"));
+    }
+
+    @Test
+    public void testBuildSettlementAfterBuildingPhase(){
+        skipBuildingPhase();
+        game.rollDice(0);
+
+        game.buildRoad(tiles[3][3].getEastEdge(), 0);
+        game.buildSettlement(tiles[3][3].getSoutheastNode(), 0);
+
+        Assert.assertNotNull(tiles[3][3].getEastEdge().getRoad());
+        Assert.assertNotNull(tiles[3][3].getSoutheastNode().getBuilding());
+        Assert.assertTrue(tiles[3][3].getSoutheastNode().getBuilding() instanceof Settlement);
+        Assert.assertEquals(tiles[3][3].getSoutheastNode().getBuilding().getPlayer().getId(), 0);
+    }
+
+    @Test
+    public void testBuildCityAfterBuildingPhase(){
+        skipBuildingPhase();
+        game.rollDice(0);
+
+        game.buildCity(tiles[3][3].getNorthNode(), 0);
+
+        Assert.assertNotNull(tiles[3][3].getNorthNode().getBuilding());
+        Assert.assertTrue(tiles[3][3].getNorthNode().getBuilding() instanceof City);
+        Assert.assertEquals(tiles[3][3].getNorthNode().getBuilding().getPlayer().getId(), 0);
+    }
+
+    @Test
+    public void testUpdateLongestRoadPlayer(){
+        skipBuildingPhase();
+        game.rollDice(0);
+
+        game.buildRoad(tiles[3][3].getEastEdge(), 0);
+        game.buildRoad(tiles[3][3].getSoutheastEdge(), 0);
+        game.buildRoad(tiles[3][3].getSouthwestEdge(), 0);
+        game.buildRoad(tiles[3][3].getWestEdge(), 0);
+
+        Assert.assertEquals(game.getPlayerById(0), game.getLongestRoadPlayer());
+        Assert.assertEquals(game.getPlayerById(0).longestRoad(), 5);
     }
 }
