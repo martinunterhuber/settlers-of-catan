@@ -21,6 +21,7 @@ public class Player {
     private int victoryPoints;
     // for victory point development cards, longest road, largest army
     private int hiddenVictoryPoints;
+    private int playedKnights = 0;
     // {Knights, victory point, monopoly, road building, year of plenty}
     private int[] developmetCards = new int[]{0, 0, 0, 0, 0};
 
@@ -319,5 +320,13 @@ public class Player {
 
     public int getHiddenVictoryPoints() {
         return hiddenVictoryPoints;
+    }
+
+    public void incrementPlayedKnights(){
+        playedKnights++;
+    }
+
+    public int getPlayedKnights() {
+        return playedKnights;
     }
 }

@@ -18,6 +18,7 @@ public class Knights extends DevelopmentCard{
 
         Game.getInstance().setCanMoveRobber(true);
         GameClient.getInstance().getGameActivity().findViewById(R.id.moveRobber).setEnabled(true);
-
+        Game.getInstance().getPlayerById(GameClient.getInstance().getId()).incrementPlayedKnights();
+        Game.getInstance().updateLargestArmy();
     }
 }
