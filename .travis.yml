@@ -25,6 +25,7 @@ android:
     - android-30
     - build-tools-30.0.3
     - extra
+    - android-22
     - sys-img-armeabi-v7a-android-22
 
 before_script:
@@ -37,6 +38,7 @@ script:
   - jdk_switcher use oraclejdk8             # use java 8 which is the last that is supported by android
   - yes | sdkmanager "platforms;android-30" # accept licenses
   - yes | sdkmanager "build-tools;30.0.3"   # accept licenses
+  - yes | sdkmanager "platforms;android-22" # accept licenses
   - chmod +x gradlew                        # make executable 
   - ./gradlew connectedAndroidTest
   - ./gradlew test jacocoTestReport
