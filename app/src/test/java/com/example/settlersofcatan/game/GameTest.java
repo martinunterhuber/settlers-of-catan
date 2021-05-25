@@ -11,7 +11,7 @@ public class GameTest {
     private Tile[][] tiles;
 
     @Before
-    public void init() {
+    public void setUp() {
         Game.setInstance(null);
         game = Game.getInstance();
         game.setClientCallback((message) -> {});

@@ -11,7 +11,7 @@ public class BoardTest {
     private Tile[][] tiles;
 
     @Before
-    public void init(){
+    public void setUp() {
         Board board = new Board();
         board.init();
         tiles = board.getTiles();

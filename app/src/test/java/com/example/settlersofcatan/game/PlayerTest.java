@@ -8,7 +8,7 @@ public class PlayerTest {
     Player player;
 
     @Before
-    public void init() {
+    public void setUp() {
         player = new Player(0, "Test");
         player.setResources(new ResourceMap(new int[]{2,2,2,2,2}));
     }
