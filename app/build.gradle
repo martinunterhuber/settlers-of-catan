@@ -41,7 +41,7 @@ android {
     }
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'connectedAndroidTest']) {
 
     reports {
         xml.enabled = true
@@ -54,7 +54,10 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     sourceDirectories.from = files([mainSrc])
     classDirectories.from = files([debugTree])
-    executionData.from = files("${project.buildDir}/jacoco/testDebugUnitTest.exec")
+    executionData.from = files([
+            "${project.buildDir}/jacoco/testDebugUnitTest.exec",
+            "${project.buildDir}/outputs/code_coverage/debugAndroidTest/connected/*.ec"
+    ])
 }
 
 dependencies {
