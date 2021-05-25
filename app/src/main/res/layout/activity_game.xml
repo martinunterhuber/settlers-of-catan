@@ -177,7 +177,7 @@
             <Button
 
                 android:id="@+id/moveRobber"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
@@ -191,7 +191,7 @@
 
             <Button
                 android:id="@+id/endTurnButton"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -204,7 +204,7 @@
 
             <Button
                 android:id="@+id/btn_trade"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -217,7 +217,7 @@
 
             <Button
                 android:id="@+id/btn_draw_development"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
