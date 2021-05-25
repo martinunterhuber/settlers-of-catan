@@ -29,10 +29,19 @@ android:
     - sys-img-armeabi-v7a-android-22
 
 before_script:
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a --device 'Nexus 4'
+  - emulator -avd test -skin 1080x1920 -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
+  - sleep 1
+  - adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS
+  - sleep 3 
+  - adb shell input keyevent 22
+  - sleep 3 
+  - adb shell input keyevent 66
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
   
 script:
   - jdk_switcher use oraclejdk8             # use java 8 which is the last that is supported by android
@@ -40,7 +49,6 @@ script:
   - yes | sdkmanager "build-tools;30.0.3"   # accept licenses
   - yes | sdkmanager "platforms;android-22" # accept licenses
   - chmod +x gradlew                        # make executable 
-  - ./gradlew connectedAndroidTest
   - ./gradlew test jacocoTestReport
   - ./gradlew lint
 

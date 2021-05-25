@@ -78,8 +78,7 @@ public class Game {
     public int rollDice(int playerId) {
         if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
-            new Thread(() -> GameClient.getInstance()
-                                    .sendMessage(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled)))
+            new Thread(() -> clientCallback.callback(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled)))
                                     .start();
 
             if (numberRolled == 7){
@@ -143,7 +142,7 @@ public class Game {
             setCurrentPlayerId();
             // TODO: send messages for every action
             new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
-                GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+                clientCallback.callback(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
             }).start();
         }
     }
