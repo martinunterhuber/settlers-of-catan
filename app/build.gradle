@@ -68,6 +68,7 @@ sonarqube {
         property 'sonar.host.url', 'https://sonarcloud.io'
         property 'sonar.organization', 'martinunterhuber'
         property 'sonar.projectKey', 'settlers-of-catan'
-        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/coverage/debug/report.xml"
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property 'sonar.coverage.jacoco.xmlReportsPath', "${buildDir}/reports/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
     }
 }
