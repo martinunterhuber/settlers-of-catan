@@ -66,7 +66,7 @@ public class GameActivity extends AppCompatActivity {
 
             currentSensorValue = (int) Math.sqrt((x*x + y*y + z*z));
             if (previousSensorValue != currentSensorValue
-                    && currentSensorValue > 13
+                    && currentSensorValue > 17
                     && !Game.getInstance().isBuildingPhase()) {
                 previousSensorValue = currentSensorValue;
                 sensorManager.unregisterListener(sensorEventListener);
@@ -144,12 +144,9 @@ public class GameActivity extends AppCompatActivity {
       
         btnTrade = findViewById(R.id.btn_trade);
         btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
-        btnTrade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), TradeActivity.class);
-                startActivity(i);
-            }
+        btnTrade.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), TradeActivity.class);
+            startActivity(i);
         });
 
         client.registerActivity(this);
@@ -198,47 +195,7 @@ public class GameActivity extends AppCompatActivity {
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_robber, null);
-        dialogBuilder.setView(dialogView);
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.setCancelable(false);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, spinnerArray);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinner = dialogView.findViewById(R.id.spinner);
-        spinner.setAdapter(adapter);
-
-        Button confirm = dialogView.findViewById(R.id.confirm);
-        SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
-
-        confirm.setOnClickListener((view) -> {
-            String playerName = spinner.getSelectedItem().toString();
-            Player player = Game.getInstance().getPlayerByName(playerName);
-            Resource resource = resourceView.getSelectedResource();
-            moveRobber(resource, player.getId());
-            alertDialog.dismiss();
-        });
-
-        AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Player player = Game.getInstance().getPlayerByName(parent.getItemAtPosition(position).toString());
-                resourceView.setResourceValuesOf(player);
-                resourceView.initListeners(() -> confirm.setEnabled(true));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                confirm.setEnabled(false);
-                resourceView.setEmptyResources();
-            }
-        };
-        spinner.setOnItemSelectedListener(onItemSelectedListener);
-
-        alertDialog.show();
+        showAlertDialog(spinnerArray, "ROBBERS");
     }
 
     // for cheat function
@@ -251,6 +208,10 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
+        showAlertDialog(spinnerArray, "CHEAT");
+    }
+
+    public void showAlertDialog(List<String> spinnerArray, String tag){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_robber, null);
@@ -268,12 +229,20 @@ public class GameActivity extends AppCompatActivity {
         SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
 
         confirm.setOnClickListener((view) -> {
-            String playerName = spinner.getSelectedItem().toString();
-            Player victim = Game.getInstance().getPlayerByName(playerName);
-            Resource resource = resourceView.getSelectedResource();
-            Game.getInstance().robResource(victim.getId(), GameClient.getInstance().getId(), resource);
-            alertDialog.dismiss();
-            sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            if (tag.equals("CHEAT")) {
+                String playerName = spinner.getSelectedItem().toString();
+                Player victim = Game.getInstance().getPlayerByName(playerName);
+                Resource resource = resourceView.getSelectedResource();
+                Game.getInstance().robResource(victim.getId(), GameClient.getInstance().getId(), resource);
+                alertDialog.dismiss();
+                sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }else if (tag.equals("ROBBERS")){
+                String playerName = spinner.getSelectedItem().toString();
+                Player player = Game.getInstance().getPlayerByName(playerName);
+                Resource resource = resourceView.getSelectedResource();
+                moveRobber(resource, player.getId());
+                alertDialog.dismiss();
+            }
         });
 
         AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {

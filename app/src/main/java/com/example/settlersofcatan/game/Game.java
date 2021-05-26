@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
 import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
@@ -13,6 +15,7 @@ import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -45,6 +48,8 @@ public class Game {
 
     private boolean canMoveRobber;
 
+    private HashMap<Integer, ArrayList<Integer>> cheated;
+
     private Game(){
         players = new ArrayList<>();
         board = new Board();
@@ -52,6 +57,7 @@ public class Game {
         turnCounter = 0;
         hasRolled = false;
         hasPlayedCard = false;
+        cheated = new HashMap<>();
     }
 
     public static Game getInstance() {
@@ -89,7 +95,6 @@ public class Game {
                 canMoveRobber = true;
             } else {
                 board.distributeResources(numberRolled);
-                new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
             }
             hasRolled = true;
             return numberRolled;
@@ -110,8 +115,6 @@ public class Game {
                 if (playerFrom.getResourceCount(resource) > 0){
                     playerFrom.takeResource(resource, 1);
                     playerTo.giveSingleResource(resource);
-
-                    new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
                 }
             }
             canMoveRobber = false;
@@ -128,7 +131,6 @@ public class Game {
                 int resourceCount = player.getResourceCount(resource);
                 if (resourceCount >= 7){
                     player.takeResource(resource, resourceCount / 2);
-                    new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
                 }
             }
         }
@@ -203,8 +205,6 @@ public class Game {
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
                 updateLongestRoadPlayer();
-
-                new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
             }
         }
     }
@@ -217,10 +217,10 @@ public class Game {
                 && !isBuildingPhase()
                 && isPlayersTurn(playerId)
                 && player.canPlaceCityOn(node)) {
+
             player.placeCity(node);
             player.takeResources(City.costs);
 
-            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
         }
     }
 
@@ -238,7 +238,6 @@ public class Game {
                 player.placeRoad(edge);
                 updateLongestRoadPlayer();
 
-                new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
             } else if (hasRolled && hasPlayedCard){
                 player.placeRoad(edge);
                 freeRoads--;
@@ -288,7 +287,6 @@ public class Game {
             player.takeResource(Resource.SHEEP,1);
             player.takeResource(Resource.WHEAT,1);
             GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
-            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
 
             if (card instanceof Knights){
                 player.increaseDevelopmentCard(0);
@@ -332,7 +330,76 @@ public class Game {
             playerFrom.takeResource(resource, 1);
             playerTo.giveSingleResource(resource);
 
-            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
+            updateCheaters(playerToId);
+
+            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance(),
+                                                                                        playerToId))).start();
+        }
+
+    }
+
+    public void updateCheaters(int cheater){
+        ArrayList<Integer> cheaters;
+
+        if (cheated.get(turnCounter) != null){  //more than 1 cheater per round
+            cheaters = cheated.get(turnCounter);
+            cheaters.add(cheater);
+            cheated.put(turnCounter,cheaters);
+        }else {
+            cheaters = new ArrayList<>();
+            cheaters.add(cheater);
+            cheated.put(turnCounter, cheaters);
+        }
+
+        Log.i("CHEAT", "Player " + cheater + " cheated on turn " + turnCounter);
+    }
+
+    public boolean hasCheated(int cheaterId){
+        for (int i = turnCounter; i > turnCounter - players.size(); i--){
+            if (cheated.get(i) != null){
+                for (int cId : cheated.get(i)){
+                    if (cId == cheaterId){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void exposeCheater(int cheaterId){
+        Player cheater = getPlayerById(cheaterId);
+        Player player = getPlayerById(GameClient.getInstance().getId());
+
+        for (Resource resource : Resource.values()){
+            int resourceCount = cheater.getResourceCount(resource);
+
+            int count = resourceCount / 2;
+            cheater.takeResource(resource, count);
+            for (int i=0; i<count; i++){
+                player.giveSingleResource(resource);
+            }
+        }
+
+    }
+
+    public void penaltyForFalseCharge(int playerToId){
+        Player playerTo = getPlayerById(playerToId);
+        Player punishedPlayer = getPlayerById(GameClient.getInstance().getId());
+
+        for (Resource resource : Resource.values()){
+            int count;
+            int resourceCount = punishedPlayer.getResourceCount(resource);
+            if (resourceCount%2 == 0) {
+
+                count = resourceCount / 2;
+            } else {
+                count = resourceCount / 2 +1;
+            }
+            punishedPlayer.takeResource(resource, count);
+            for (int i=0; i<count; i++){
+                playerTo.giveSingleResource(resource);
+            }
         }
 
     }

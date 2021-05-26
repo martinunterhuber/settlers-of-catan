@@ -167,6 +167,11 @@ public class GameClient {
                 for (Player p : Game.getInstance().getPlayers()){
                     p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
                 }
+
+                if (((PlayerResourcesMessage) message).cheaterId != -1){
+                    Game.getInstance().updateCheaters(((PlayerResourcesMessage) message).cheaterId);
+                }
+
                 gameActivity.redrawViews();
             }
         }

@@ -59,7 +59,7 @@ public class Player {
     public void giveSingleResource(Resource resource) {
         resources.incrementResourceCount(resource, 1);
         PlayerResources.getInstance().setSinglePlayerResources(resources,id);
-        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance())));
+        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
     }
 
     public int getResourceCount(Resource resource) {
@@ -69,7 +69,7 @@ public class Player {
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
         PlayerResources.getInstance().setSinglePlayerResources(resources,id);
-        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance())));
+        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
     }
 
     public ResourceMap getResources() {
@@ -302,6 +302,7 @@ public class Player {
     public void acceptTradeOffer(TradeOffer tradeOffer) {
         resources.decrementResourceMap(tradeOffer.getReceive());
         resources.incrementResourceMap(tradeOffer.getGive());
+        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
     }
 
     public void increaseDevelopmentCard(int index){
