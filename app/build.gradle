@@ -62,3 +62,12 @@ dependencies {
 
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'martinunterhuber'
+        property 'sonar.projectKey', 'settlers-of-catan'
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/coverage/debug/report.xml"
+    }
+}
