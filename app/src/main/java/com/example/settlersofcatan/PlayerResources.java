@@ -1,7 +1,5 @@
 package com.example.settlersofcatan;
 
-import android.util.Log;
-
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.ResourceMap;
@@ -28,12 +26,12 @@ public class PlayerResources {
 
     public static void setInstance(PlayerResources instance){
         PlayerResources.instance = instance;
-        Log.i("PLAYER_RESOURCES","PlayerResource set");
+      //  Log.i("PLAYER_RESOURCES","PlayerResource set");
     }
 
     public void setSinglePlayerResources(ResourceMap resources, int playerId){
         playerResources.put(playerId,resources);
-        Log.i("PLAYER_RESOURCES","Player " + playerId + " resources updated.");
+     //   Log.i("PLAYER_RESOURCES","Player " + playerId + " resources updated.");
     }
 
     public ResourceMap getSinglePlayerResources(int id){
