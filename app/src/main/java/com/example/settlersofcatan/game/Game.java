@@ -40,6 +40,7 @@ public class Game {
     private Node lastBuiltNode;
 
     private Player longestRoadPlayer;
+    private Player largestArmyPlayer;
 
     private boolean canMoveRobber;
 
@@ -305,6 +306,20 @@ public class Game {
         if (playerId == currentPlayerId && hasRolled ) {
             DevelopmentCardDeck.getInstance().getDevelopmentCard(tag - 1).playCard();
             getPlayerById(playerId).decreaseDevelopmentCard(tag-1);
+        }
+    }
+
+    public void updateLargestArmy(){
+        if (largestArmyPlayer != null){
+            if (getPlayerById(getCurrentPlayerId()).getPlayedKnights() > largestArmyPlayer.getPlayedKnights()){
+                largestArmyPlayer.addVictoryPoints(-2);
+                largestArmyPlayer = getPlayerById(getCurrentPlayerId());
+                largestArmyPlayer.addVictoryPoints(2);
+            }
+
+        } else if (getPlayerById(getCurrentPlayerId()).getPlayedKnights() >= 3) {
+            largestArmyPlayer = getPlayerById(getCurrentPlayerId());
+            largestArmyPlayer.addVictoryPoints(2);
         }
     }
 
