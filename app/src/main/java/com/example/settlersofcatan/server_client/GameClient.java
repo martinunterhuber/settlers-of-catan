@@ -5,11 +5,8 @@ import android.util.Log;
 
 import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.GameEndActivity;
+import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.Ranking;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.settlersofcatan.GameActivity;
-import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.DevelopmentCard;
@@ -38,6 +35,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
@@ -47,8 +45,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class GameClient {
     private static GameClient instance;
@@ -125,15 +121,16 @@ public class GameClient {
         client.registerClass(Robber.class);
         client.registerClass(DevelopmentCardDeck.class);
         client.registerClass(DevelopmentCardMessage.class);
+        client.registerClass(PlayerResourcesMessage.class);
+        client.registerClass(PlayerResources.class);
     }
 
     private void gameCallback(BaseMessage message){
-        if (message instanceof GameStateMessage){
-            sendMessage(message);
-        } else if (message instanceof ClientWinMessage){
+        if (message instanceof GameStateMessage
+                || message instanceof ClientWinMessage
+                || message instanceof PlayerResourcesMessage){
             sendMessage(message);
         }
-
     }
 
     private void callback(BaseMessage message){
@@ -153,24 +150,35 @@ public class GameClient {
                 // gameActivity.redrawViews();
             }
         }
-        if (message instanceof ClientWinMessage){
+        if (message instanceof ClientWinMessage && gameActivity != null){
             if(gameActivity != null) {
                 Intent intent = new Intent(gameActivity, GameEndActivity.class);
                 gameActivity.startActivity(intent);
                 gameActivity.finish();
             }
         }
-        if (message instanceof ClientDiceMessage){
-            if(gameActivity != null) {
-
-                gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
-                        ((ClientDiceMessage) message).getUsername(),
-                        ((ClientDiceMessage) message).getRolled())
-
-                );
-
+        if (message instanceof PlayerResourcesMessage && gameActivity != null){
+            PlayerResources.setInstance(((PlayerResourcesMessage) message).playerResources);
+            for (Player p : Game.getInstance().getPlayers()){
+                p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
             }
-        } else if (message instanceof DevelopmentCardMessage){
+
+            if (((PlayerResourcesMessage) message).cheaterId != -1){
+                Game.getInstance().updateCheaters(((PlayerResourcesMessage) message).cheaterId);
+            }
+
+            gameActivity.redrawViews();
+
+        }
+        if (message instanceof ClientDiceMessage && gameActivity != null){
+            gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
+                    ((ClientDiceMessage) message).getUsername(),
+                    ((ClientDiceMessage) message).getRolled())
+
+            );
+
+        }
+        if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
         }
         Log.i(NetworkConstants.TAG, message.toString());
@@ -209,7 +217,7 @@ public class GameClient {
         return id;
     }
 
-    public AppCompatActivity getGameActivity(){
+    public GameActivity getGameActivity(){
         return gameActivity;
     }
 }

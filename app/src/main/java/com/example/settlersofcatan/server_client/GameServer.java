@@ -2,6 +2,7 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
@@ -31,6 +32,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
@@ -91,7 +93,9 @@ public class GameServer {
             broadcastMessage(message);
         }else if (message instanceof DevelopmentCardMessage) {
             broadcastMessage(message);
-        }else{
+        }else if (message instanceof PlayerResourcesMessage) {
+            broadcastMessage(message);
+        }else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }
@@ -140,6 +144,8 @@ public class GameServer {
         server.registerClass(Robber.class);
         server.registerClass(DevelopmentCardDeck.class);
         server.registerClass(DevelopmentCardMessage.class);
+        server.registerClass(PlayerResourcesMessage.class);
+        server.registerClass(PlayerResources.class);
     }
 
     private void startServer(){
