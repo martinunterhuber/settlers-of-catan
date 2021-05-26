@@ -28,7 +28,8 @@ android:
 #    - sys-img-armeabi-v7a-android-22
 
 ## uncomment android emulator if android integration tests are needed
-#before_script:
+before_script:
+  - export GRADLE_OPTS=-Dorg.gradle.daemon=false
 #  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
 #  - emulator -avd test -no-audio -no-window &
 #  - android-wait-for-emulator
