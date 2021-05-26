@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'jacoco'
+    id "org.sonarqube" version "3.2.0"
 }
 
 android {
@@ -60,4 +61,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
+}
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'martinunterhuber'
+        property 'sonar.projectKey', 'settlers-of-catan'
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property 'sonar.coverage.jacoco.xmlReportsPath', "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+    }
 }

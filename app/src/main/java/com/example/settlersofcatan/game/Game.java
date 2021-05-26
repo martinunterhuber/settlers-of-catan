@@ -45,6 +45,7 @@ public class Game {
     private Node lastBuiltNode;
 
     private Player longestRoadPlayer;
+    private Player largestArmyPlayer;
 
     private boolean canMoveRobber;
 
@@ -407,6 +408,18 @@ public class Game {
             }
         }
 
+    public void updateLargestArmy(){
+        if (largestArmyPlayer != null){
+            if (getPlayerById(getCurrentPlayerId()).getPlayedKnights() > largestArmyPlayer.getPlayedKnights()){
+                largestArmyPlayer.addVictoryPoints(-2);
+                largestArmyPlayer = getPlayerById(getCurrentPlayerId());
+                largestArmyPlayer.addVictoryPoints(2);
+            }
+
+        } else if (getPlayerById(getCurrentPlayerId()).getPlayedKnights() >= 3) {
+            largestArmyPlayer = getPlayerById(getCurrentPlayerId());
+            largestArmyPlayer.addVictoryPoints(2);
+        }
     }
 
     public boolean isBuildingPhase(){
