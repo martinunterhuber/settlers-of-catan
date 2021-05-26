@@ -389,24 +389,25 @@ public class Game {
 
     }
 
-    public void penaltyForFalseCharge(int playerToId){
+    public void penaltyForFalseCharge(int playerToId) {
         Player playerTo = getPlayerById(playerToId);
         Player punishedPlayer = getPlayerById(GameClient.getInstance().getId());
 
-        for (Resource resource : Resource.values()){
+        for (Resource resource : Resource.values()) {
             int count;
             int resourceCount = punishedPlayer.getResourceCount(resource);
-            if (resourceCount%2 == 0) {
+            if (resourceCount % 2 == 0) {
                 count = resourceCount / 2;
             } else {
-                count = resourceCount / 2 +1;
+                count = resourceCount / 2 + 1;
             }
 
             punishedPlayer.takeResource(resource, count);
-            for (int i=0; i<count; i++){
+            for (int i = 0; i < count; i++) {
                 playerTo.giveSingleResource(resource);
             }
         }
+    }
 
     public void updateLargestArmy(){
         if (largestArmyPlayer != null){
