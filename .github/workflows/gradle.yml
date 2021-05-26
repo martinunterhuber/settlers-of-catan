@@ -27,6 +27,8 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Build and analyze
         run: ./gradlew test jacocoTestReport sonarqube --info
         env:
