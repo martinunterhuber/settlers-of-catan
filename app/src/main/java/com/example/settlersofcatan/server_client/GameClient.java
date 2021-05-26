@@ -126,14 +126,11 @@ public class GameClient {
     }
 
     private void gameCallback(BaseMessage message){
-        if (message instanceof GameStateMessage){
-            sendMessage(message);
-        } else if (message instanceof ClientWinMessage){
-            sendMessage(message);
-        } else if (message instanceof PlayerResourcesMessage){
+        if (message instanceof GameStateMessage
+                || message instanceof ClientWinMessage
+                || message instanceof PlayerResourcesMessage){
             sendMessage(message);
         }
-
     }
 
     private void callback(BaseMessage message){
@@ -153,39 +150,35 @@ public class GameClient {
                 // gameActivity.redrawViews();
             }
         }
-        if (message instanceof ClientWinMessage){
+        if (message instanceof ClientWinMessage && gameActivity != null){
             if(gameActivity != null) {
                 Intent intent = new Intent(gameActivity, GameEndActivity.class);
                 gameActivity.startActivity(intent);
                 gameActivity.finish();
             }
         }
-        if (message instanceof PlayerResourcesMessage){
-            if (gameActivity != null){
-
-                PlayerResources.setInstance(((PlayerResourcesMessage) message).playerResources);
-                for (Player p : Game.getInstance().getPlayers()){
-                    p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
-                }
-
-                if (((PlayerResourcesMessage) message).cheaterId != -1){
-                    Game.getInstance().updateCheaters(((PlayerResourcesMessage) message).cheaterId);
-                }
-
-                gameActivity.redrawViews();
+        if (message instanceof PlayerResourcesMessage && gameActivity != null){
+            PlayerResources.setInstance(((PlayerResourcesMessage) message).playerResources);
+            for (Player p : Game.getInstance().getPlayers()){
+                p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
             }
+
+            if (((PlayerResourcesMessage) message).cheaterId != -1){
+                Game.getInstance().updateCheaters(((PlayerResourcesMessage) message).cheaterId);
+            }
+
+            gameActivity.redrawViews();
+
         }
-        if (message instanceof ClientDiceMessage){
-            if(gameActivity != null) {
+        if (message instanceof ClientDiceMessage && gameActivity != null){
+            gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
+                    ((ClientDiceMessage) message).getUsername(),
+                    ((ClientDiceMessage) message).getRolled())
 
-                gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
-                        ((ClientDiceMessage) message).getUsername(),
-                        ((ClientDiceMessage) message).getRolled())
+            );
 
-                );
-
-            }
-        } else if (message instanceof DevelopmentCardMessage){
+        }
+        if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
         }
         Log.i(NetworkConstants.TAG, message.toString());

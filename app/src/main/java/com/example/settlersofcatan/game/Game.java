@@ -373,8 +373,13 @@ public class Game {
 
         for (Resource resource : Resource.values()){
             int resourceCount = cheater.getResourceCount(resource);
+            int count;
+            if (resourceCount%2 == 0) {
+                count = resourceCount / 2;
+            } else {
+                count = resourceCount / 2 +1;
+            }
 
-            int count = resourceCount / 2;
             cheater.takeResource(resource, count);
             for (int i=0; i<count; i++){
                 player.giveSingleResource(resource);
@@ -391,11 +396,11 @@ public class Game {
             int count;
             int resourceCount = punishedPlayer.getResourceCount(resource);
             if (resourceCount%2 == 0) {
-
                 count = resourceCount / 2;
             } else {
                 count = resourceCount / 2 +1;
             }
+
             punishedPlayer.takeResource(resource, count);
             for (int i=0; i<count; i++){
                 playerTo.giveSingleResource(resource);

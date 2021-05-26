@@ -76,7 +76,21 @@ public class GameActivity extends AppCompatActivity {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int i) {
+            /**
+             *  method not needed
+              */
+        }
 
+        private void selectPlayerAndResource(){
+            Player currentPlayer = Game.getInstance().getPlayerById(client.getId());
+            List<String> spinnerArray = new ArrayList<>();
+            for (Player player : Game.getInstance().getPlayers()){
+                if (player.getId() != currentPlayer.getId()){
+                    spinnerArray.add(player.getName());
+                }
+            }
+
+            showAlertDialog(spinnerArray, "CHEAT");
         }
     };
 
@@ -196,19 +210,6 @@ public class GameActivity extends AppCompatActivity {
         }
 
         showAlertDialog(spinnerArray, "ROBBERS");
-    }
-
-    // for cheat function
-    private void selectPlayerAndResource(){
-        Player currentPlayer = Game.getInstance().getPlayerById(client.getId());
-        List<String> spinnerArray = new ArrayList<>();
-        for (Player player : Game.getInstance().getPlayers()){
-            if (player.getId() != currentPlayer.getId()){
-                spinnerArray.add(player.getName());
-            }
-        }
-
-        showAlertDialog(spinnerArray, "CHEAT");
     }
 
     public void showAlertDialog(List<String> spinnerArray, String tag){
