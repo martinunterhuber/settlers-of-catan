@@ -1,5 +1,6 @@
 package com.example.settlersofcatan.game;
 
+import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
@@ -9,6 +10,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -87,6 +89,7 @@ public class Game {
                 canMoveRobber = true;
             } else {
                 board.distributeResources(numberRolled);
+                new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
             }
             hasRolled = true;
             return numberRolled;
@@ -107,6 +110,8 @@ public class Game {
                 if (playerFrom.getResourceCount(resource) > 0){
                     playerFrom.takeResource(resource, 1);
                     playerTo.giveSingleResource(resource);
+
+                    new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
                 }
             }
             canMoveRobber = false;
@@ -123,6 +128,7 @@ public class Game {
                 int resourceCount = player.getResourceCount(resource);
                 if (resourceCount >= 7){
                     player.takeResource(resource, resourceCount / 2);
+                    new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
                 }
             }
         }
@@ -144,6 +150,7 @@ public class Game {
             // TODO: send messages for every action
             new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
                 GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+                clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance()));
             }).start();
         }
     }
@@ -196,6 +203,8 @@ public class Game {
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
                 updateLongestRoadPlayer();
+
+                new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
             }
         }
     }
@@ -210,6 +219,8 @@ public class Game {
                 && player.canPlaceCityOn(node)) {
             player.placeCity(node);
             player.takeResources(City.costs);
+
+            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
         }
     }
 
@@ -226,6 +237,8 @@ public class Game {
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
                 updateLongestRoadPlayer();
+
+                new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
             } else if (hasRolled && hasPlayedCard){
                 player.placeRoad(edge);
                 freeRoads--;
@@ -275,6 +288,7 @@ public class Game {
             player.takeResource(Resource.SHEEP,1);
             player.takeResource(Resource.WHEAT,1);
             GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
+            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance())));
 
             if (card instanceof Knights){
                 player.increaseDevelopmentCard(0);
@@ -306,6 +320,21 @@ public class Game {
             DevelopmentCardDeck.getInstance().getDevelopmentCard(tag - 1).playCard();
             getPlayerById(playerId).decreaseDevelopmentCard(tag-1);
         }
+    }
+
+    // rob 1 resource from another player
+    public void robResource(int playerFromId, int playerToId, Resource resource){
+
+        Player playerFrom = getPlayerById(playerFromId);
+        Player playerTo = getPlayerById(playerToId);
+
+        if (playerFrom.getResourceCount(resource) > 0){
+            playerFrom.takeResource(resource, 1);
+            playerTo.giveSingleResource(resource);
+
+            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
+        }
+
     }
 
     public boolean isBuildingPhase(){
