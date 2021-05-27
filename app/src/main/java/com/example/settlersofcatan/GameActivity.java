@@ -1,8 +1,13 @@
 package com.example.settlersofcatan;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +25,7 @@ import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +53,47 @@ public class GameActivity extends AppCompatActivity {
 
     private GameClient client;
 
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private int currentSensorValue = 0;
+    private int previousSensorValue = 0;
+    private SensorEventListener sensorEventListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            float x = sensorEvent.values[0];
+            float y = sensorEvent.values[1];
+            float z = sensorEvent.values[2];
+
+            currentSensorValue = (int) Math.sqrt((x*x + y*y + z*z));
+            if (previousSensorValue != currentSensorValue
+                    && currentSensorValue > 17
+                    && !Game.getInstance().isBuildingPhase()) {
+                previousSensorValue = currentSensorValue;
+                sensorManager.unregisterListener(sensorEventListener);
+                selectPlayerAndResource();
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+            /**
+             *  method not needed
+              */
+        }
+
+        private void selectPlayerAndResource(){
+            Player currentPlayer = Game.getInstance().getPlayerById(client.getId());
+            List<String> spinnerArray = new ArrayList<>();
+            for (Player player : Game.getInstance().getPlayers()){
+                if (player.getId() != currentPlayer.getId()){
+                    spinnerArray.add(player.getName());
+                }
+            }
+
+            showAlertDialog(spinnerArray, "CHEAT");
+        }
+    };
+
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
             Color.parseColor("#F44336"),
@@ -59,6 +106,10 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
       
         client = GameClient.getInstance();
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
 
         map=findViewById(R.id.mapView);
         playerView =findViewById(R.id.playerView);
@@ -107,12 +158,9 @@ public class GameActivity extends AppCompatActivity {
       
         btnTrade = findViewById(R.id.btn_trade);
         btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
-        btnTrade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), TradeActivity.class);
-                startActivity(i);
-            }
+        btnTrade.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), TradeActivity.class);
+            startActivity(i);
         });
 
         client.registerActivity(this);
@@ -128,6 +176,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         resources.invalidate();
+        sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private void moveRobber(View view){
@@ -160,6 +209,10 @@ public class GameActivity extends AppCompatActivity {
             return;
         }
 
+        showAlertDialog(spinnerArray, "ROBBERS");
+    }
+
+    public void showAlertDialog(List<String> spinnerArray, String tag){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_robber, null);
@@ -177,11 +230,20 @@ public class GameActivity extends AppCompatActivity {
         SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
 
         confirm.setOnClickListener((view) -> {
-            String playerName = spinner.getSelectedItem().toString();
-            Player player = Game.getInstance().getPlayerByName(playerName);
-            Resource resource = resourceView.getSelectedResource();
-            moveRobber(resource, player.getId());
-            alertDialog.dismiss();
+            if (tag.equals("CHEAT")) {
+                String playerName = spinner.getSelectedItem().toString();
+                Player victim = Game.getInstance().getPlayerByName(playerName);
+                Resource resource = resourceView.getSelectedResource();
+                Game.getInstance().robResource(victim.getId(), GameClient.getInstance().getId(), resource);
+                alertDialog.dismiss();
+                sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }else if (tag.equals("ROBBERS")){
+                String playerName = spinner.getSelectedItem().toString();
+                Player player = Game.getInstance().getPlayerByName(playerName);
+                Resource resource = resourceView.getSelectedResource();
+                moveRobber(resource, player.getId());
+                alertDialog.dismiss();
+            }
         });
 
         AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
