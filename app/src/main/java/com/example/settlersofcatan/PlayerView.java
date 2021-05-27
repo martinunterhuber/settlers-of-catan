@@ -280,6 +280,10 @@ public class PlayerView extends View {
 
 //--------- Getter and Setter -------------------------------------------------------------------------
 
+    public HexGrid getHexGrid() {
+        return hexGrid;
+    }
+
     public void setHexGrid(HexGrid grid){
         this.hexGrid=grid;
     }

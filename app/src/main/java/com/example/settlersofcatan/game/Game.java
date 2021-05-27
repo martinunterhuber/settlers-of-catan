@@ -1,5 +1,8 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
+import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
@@ -9,8 +12,10 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -40,8 +45,11 @@ public class Game {
     private Node lastBuiltNode;
 
     private Player longestRoadPlayer;
+    private Player largestArmyPlayer;
 
     private boolean canMoveRobber;
+
+    private HashMap<Integer, ArrayList<Integer>> cheated;
 
     private Game(){
         players = new ArrayList<>();
@@ -50,6 +58,7 @@ public class Game {
         turnCounter = 0;
         hasRolled = false;
         hasPlayedCard = false;
+        cheated = new HashMap<>();
     }
 
     public static Game getInstance() {
@@ -78,8 +87,7 @@ public class Game {
     public int rollDice(int playerId) {
         if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
-            new Thread(() -> GameClient.getInstance()
-                                    .sendMessage(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled)))
+            new Thread(() -> clientCallback.callback(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled)))
                                     .start();
 
             if (numberRolled == 7){
@@ -143,7 +151,8 @@ public class Game {
             setCurrentPlayerId();
             // TODO: send messages for every action
             new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
-                GameClient.getInstance().sendMessage(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+                clientCallback.callback(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+                clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance()));
             }).start();
         }
     }
@@ -208,8 +217,10 @@ public class Game {
                 && !isBuildingPhase()
                 && isPlayersTurn(playerId)
                 && player.canPlaceCityOn(node)) {
+
             player.placeCity(node);
             player.takeResources(City.costs);
+
         }
     }
 
@@ -226,6 +237,7 @@ public class Game {
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
                 updateLongestRoadPlayer();
+
             } else if (hasRolled && hasPlayedCard){
                 player.placeRoad(edge);
                 freeRoads--;
@@ -308,6 +320,108 @@ public class Game {
         }
     }
 
+    // rob 1 resource from another player
+    public void robResource(int playerFromId, int playerToId, Resource resource){
+
+        Player playerFrom = getPlayerById(playerFromId);
+        Player playerTo = getPlayerById(playerToId);
+
+        if (playerFrom.getResourceCount(resource) > 0){
+            playerFrom.takeResource(resource, 1);
+            playerTo.giveSingleResource(resource);
+
+            updateCheaters(playerToId);
+
+            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance(),
+                                                                                        playerToId))).start();
+        }
+
+    }
+
+    public void updateCheaters(int cheater){
+        ArrayList<Integer> cheaters;
+
+        if (cheated.get(turnCounter) != null){  //more than 1 cheater per round
+            cheaters = cheated.get(turnCounter);
+            cheaters.add(cheater);
+            cheated.put(turnCounter,cheaters);
+        }else {
+            cheaters = new ArrayList<>();
+            cheaters.add(cheater);
+            cheated.put(turnCounter, cheaters);
+        }
+
+        Log.i("CHEAT", "Player " + cheater + " cheated on turn " + turnCounter);
+    }
+
+    public boolean hasCheated(int cheaterId){
+        for (int i = turnCounter; i > turnCounter - players.size(); i--){
+            if (cheated.get(i) != null){
+                for (int cId : cheated.get(i)){
+                    if (cId == cheaterId){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void exposeCheater(int cheaterId){
+        Player cheater = getPlayerById(cheaterId);
+        Player player = getPlayerById(GameClient.getInstance().getId());
+
+        for (Resource resource : Resource.values()){
+            int resourceCount = cheater.getResourceCount(resource);
+            int count;
+            if (resourceCount%2 == 0) {
+                count = resourceCount / 2;
+            } else {
+                count = resourceCount / 2 +1;
+            }
+
+            cheater.takeResource(resource, count);
+            for (int i=0; i<count; i++){
+                player.giveSingleResource(resource);
+            }
+        }
+
+    }
+
+    public void penaltyForFalseCharge(int playerToId) {
+        Player playerTo = getPlayerById(playerToId);
+        Player punishedPlayer = getPlayerById(GameClient.getInstance().getId());
+
+        for (Resource resource : Resource.values()) {
+            int count;
+            int resourceCount = punishedPlayer.getResourceCount(resource);
+            if (resourceCount % 2 == 0) {
+                count = resourceCount / 2;
+            } else {
+                count = resourceCount / 2 + 1;
+            }
+
+            punishedPlayer.takeResource(resource, count);
+            for (int i = 0; i < count; i++) {
+                playerTo.giveSingleResource(resource);
+            }
+        }
+    }
+
+    public void updateLargestArmy(){
+        if (largestArmyPlayer != null){
+            if (getPlayerById(getCurrentPlayerId()).getPlayedKnights() > largestArmyPlayer.getPlayedKnights()){
+                largestArmyPlayer.addVictoryPoints(-2);
+                largestArmyPlayer = getPlayerById(getCurrentPlayerId());
+                largestArmyPlayer.addVictoryPoints(2);
+            }
+
+        } else if (getPlayerById(getCurrentPlayerId()).getPlayedKnights() >= 3) {
+            largestArmyPlayer = getPlayerById(getCurrentPlayerId());
+            largestArmyPlayer.addVictoryPoints(2);
+        }
+    }
+
     public boolean isBuildingPhase(){
         return (turnCounter / players.size()) < 2;
     }
@@ -342,5 +456,9 @@ public class Game {
 
     public void setFreeRoads(int freeRoads) {
         this.freeRoads = freeRoads;
+    }
+
+    public Player getLongestRoadPlayer() {
+        return longestRoadPlayer;
     }
 }
