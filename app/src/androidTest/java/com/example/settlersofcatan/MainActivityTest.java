@@ -22,7 +22,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isFocusable;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
@@ -52,7 +55,7 @@ public class MainActivityTest {
     @Test
     public void testClickConnectToServerStartsWaitForHostActivity() throws InterruptedException {
         onView(withId(R.id.view_pager)).perform(repeatedlyUntil(swipeLeft(), hasDescendant(withId(R.id.editTextServerIP)), 5));
-        onView(withId(R.id.editTextServerIP)).perform(typeText("localhost"), closeSoftKeyboard());
+        onView(withId(R.id.editTextServerIP)).perform(repeatedlyUntil(typeText("localhost"), hasFocus(), 5));
         onView(withId(R.id.editTextUsername)).perform(typeText("Test"), closeSoftKeyboard());
         onView(withId(R.id.joinServerButton)).perform(click());
 
@@ -62,7 +65,7 @@ public class MainActivityTest {
     @Test
     public void testClickConnectToServerFailsOnInvalidServerIp() throws InterruptedException {
         onView(withId(R.id.view_pager)).perform(repeatedlyUntil(swipeLeft(), hasDescendant(withId(R.id.editTextServerIP)), 5));
-        onView(withId(R.id.editTextServerIP)).perform(typeText("123.123.123.123"), closeSoftKeyboard());
+        onView(withId(R.id.editTextServerIP)).perform(repeatedlyUntil(typeText("123.123.123.123"), hasFocus(), 5));
         onView(withId(R.id.editTextUsername)).perform(typeText("Test"), closeSoftKeyboard());
         onView(withId(R.id.joinServerButton)).perform(click());
         Thread.sleep(6000);
