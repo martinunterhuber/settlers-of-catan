@@ -78,9 +78,11 @@ public class CreateServerFragment extends Fragment {
     }
 
     private void updateUsers(String username){
-        for (int i = 1; i < users.length; i++) {
-            users[i].setText(server.getClientUsernameAt(i));
-        }
+        getActivity().runOnUiThread(() -> {
+            for (int i = 1; i < users.length; i++) {
+                users[i].setText(server.getClientUsernameAt(i));
+            }
+        });
     }
     private void showInfo(){
        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.infoframe,new FragmentInfo()).commit();

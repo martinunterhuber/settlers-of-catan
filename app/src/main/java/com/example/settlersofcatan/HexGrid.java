@@ -10,8 +10,6 @@ public class HexGrid {
 
     private final ArrayList<Point> corners;
     private final ArrayList<Path> paths;
-    private final HashMap<Point, ArrayList<Point>> neighbouringCities;
-    private final HashMap<Point, ArrayList<Path>> neighbouringRoads;
     private final Hexagon[] tiles;
 
     private Path touchedPath;
@@ -21,8 +19,6 @@ public class HexGrid {
     public HexGrid(Hexagon[] tiles) {
         this.corners = new ArrayList<>();
         this.paths = new ArrayList<>();
-        this.neighbouringCities = new HashMap<>();
-        this.neighbouringRoads = new HashMap<>();
         this.tiles = tiles;
 
         for (Hexagon hex : tiles) {
@@ -33,12 +29,6 @@ public class HexGrid {
                 addPaths(p);
             }
         }
-
-        for (Point p : corners){
-            addNeighbouringRoads(p);
-            addNeighbouringCities(p);
-        }
-
     }
 
     private void addCorner(Point corner){
@@ -53,8 +43,6 @@ public class HexGrid {
 
         if (!dublicate){
             corners.add(corner);
-            neighbouringCities.put(corner, new ArrayList<>());
-            neighbouringRoads.put(corner, new ArrayList<>());
         }
     }
 
@@ -128,73 +116,6 @@ public class HexGrid {
         return false;
     }
 
-    private void addNeighbouringCities(Point corner){
-        ArrayList<Path> roads = neighbouringRoads.get(corner);
-        ArrayList<Point> cities = neighbouringCities.get(corner);
-        int max = 3;
-
-        for (Path p : roads){
-
-            /**
-             * If the point X1 of the road is near the city, then search for a neighbouring city near X2.
-             */
-            if (p.getX1().getX() > corner.getX() - 10 && p.getX1().getX() < corner.getX() + 10
-                    && p.getX1().getY() > corner.getY() - 10 && p.getX1().getY() < corner.getY() + 10){
-                for (Point c : corners){
-                    if (c.getX() >  p.getX2().getX() - 10 &&  c.getX() < p.getX2().getX() + 10
-                            && c.getY() >  p.getX2().getY() - 10 &&  c.getY() < p.getX2().getY() + 10){
-
-                        cities.add(c);
-                        neighbouringCities.put(corner, cities);
-                        max--;
-                        break;
-                    }
-
-                }
-            }else {     //Same as above, but X1 and X2 are swapped.
-                for (Point c : corners){
-                    if (c.getX() >  p.getX1().getX() - 10 &&  c.getX() < p.getX1().getX() + 10
-                            && c.getY() >  p.getX1().getY() - 10 &&  c.getY() < p.getX1().getY() + 10){
-
-                        cities.add(c);
-                        neighbouringCities.put(corner, cities);
-                        max--;
-                        break;
-                    }
-                }
-            }
-
-            if (max == 0){
-                break;
-            }
-
-        }
-
-
-    }
-
-    private void addNeighbouringRoads(Point corner){
-        ArrayList<Path> roads = neighbouringRoads.get(corner);
-        int max = 3;
-
-        for (Path road : paths){
-            if ((road.getX1().getX() > corner.getX() - 10 && road.getX1().getX() < corner.getX() + 10
-                    && road.getX1().getY() > corner.getY() - 10 && road.getX1().getY() < corner.getY() + 10)
-                    || (road.getX2().getX() > corner.getX() - 10 && road.getX2().getX() < corner.getX() + 10
-                    && road.getX2().getY() > corner.getY() - 10 && road.getX2().getY() < corner.getY() + 10)){
-                roads.add(road);
-                neighbouringRoads.put(corner, roads);
-                max--;
-            }
-
-            if (max == 0){
-                break;
-            }
-        }
-
-
-    }
-
 //----------- Getter and Setter -----------------------------------------------------------------
 
     public ArrayList<Point> getCorners() {
@@ -219,21 +140,5 @@ public class HexGrid {
 
     public Hexagon[] getTiles() {
         return tiles;
-    }
-
-    public HashMap<Point, ArrayList<Point>> getNeighbouringCities() {
-        return neighbouringCities;
-    }
-
-    public HashMap<Point, ArrayList<Path>> getNeighbouringRoads() {
-        return neighbouringRoads;
-    }
-
-    public ArrayList<Point> getNeighbouringCities (Point corner){
-        return  neighbouringCities.get(corner);
-    }
-
-    public ArrayList<Path> getNeighbouringRoads(Point corner) {
-        return neighbouringRoads.get(corner);
     }
 }
