@@ -50,7 +50,7 @@ public class MainActivityTest {
     @Test
     public void testClickConnectToServerStartsWaitForHostActivity() throws InterruptedException {
         onView(withId(R.id.view_pager)).perform(swipeLeft());
-        Thread.sleep(500);  // TODO: find a better way to wait for the animation
+        Thread.sleep(1000);  // TODO: find a better way to wait for the animation
         onView(withId(R.id.editTextServerIP)).perform(typeText("localhost"), closeSoftKeyboard());
         onView(withId(R.id.editTextUsername)).perform(typeText("Test"), closeSoftKeyboard());
         onView(withId(R.id.joinServerButton)).perform(click());
@@ -61,7 +61,7 @@ public class MainActivityTest {
     @Test
     public void testClickConnectToServerFailsOnInvalidServerIp() throws InterruptedException {
         onView(withId(R.id.view_pager)).perform(swipeLeft());
-        Thread.sleep(500);
+        Thread.sleep(1000);
         onView(withId(R.id.editTextServerIP)).perform(typeText("123.123.123.123"), closeSoftKeyboard());
         onView(withId(R.id.editTextUsername)).perform(typeText("Test"), closeSoftKeyboard());
         onView(withId(R.id.joinServerButton)).perform(click());
