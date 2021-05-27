@@ -42,9 +42,9 @@ public class MainActivityTest {
 
     @Test
     public void testClickCreateServerStartsGameActivity() throws InterruptedException {
-//        onView(withId(R.id.createServerButton2)).perform(click());
-//        Thread.sleep(1000);
-//        intended(hasComponent(GameActivity.class.getName()));
+        onView(withId(R.id.createServerButton2)).perform(click());
+        Thread.sleep(1000);
+        intended(hasComponent(GameActivity.class.getName()));
     }
 
     @Test

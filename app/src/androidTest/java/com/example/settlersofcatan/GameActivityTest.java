@@ -41,11 +41,11 @@ public class GameActivityTest {
 
     @Test
     public void testSelectTileOnPlayerView() {
-//        PlayerView playerView = ((PlayerView)activity.findViewById(R.id.playerView));
-//        Hexagon hexagon = playerView.getHexGrid().getTiles()[0];
-//        onView(withId(R.id.playerView)).perform(clickPoint(hexagon.getCenter()));
-//        Tile tile = playerView.getSelectedTile();
-//        Assert.assertNotNull(tile);
-//        Assert.assertEquals(hexagon.getTile(), tile);
+        PlayerView playerView = ((PlayerView)activity.findViewById(R.id.playerView));
+        Hexagon hexagon = playerView.getHexGrid().getTiles()[0];
+        onView(withId(R.id.playerView)).perform(clickPoint(hexagon.getCenter()));
+        Tile tile = playerView.getSelectedTile();
+        Assert.assertNotNull(tile);
+        Assert.assertEquals(hexagon.getTile(), tile);
     }
 }
