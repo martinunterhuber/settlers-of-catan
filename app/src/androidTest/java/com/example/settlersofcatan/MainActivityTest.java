@@ -15,11 +15,13 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.repeatedlyUntil;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
@@ -49,8 +51,7 @@ public class MainActivityTest {
 
     @Test
     public void testClickConnectToServerStartsWaitForHostActivity() throws InterruptedException {
-        onView(withId(R.id.view_pager)).perform(swipeLeft());
-        Thread.sleep(1000);  // TODO: find a better way to wait for the animation
+        onView(withId(R.id.view_pager)).perform(repeatedlyUntil(swipeLeft(), hasDescendant(withId(R.id.editTextServerIP)), 5));
         onView(withId(R.id.editTextServerIP)).perform(typeText("localhost"), closeSoftKeyboard());
         onView(withId(R.id.editTextUsername)).perform(typeText("Test"), closeSoftKeyboard());
         onView(withId(R.id.joinServerButton)).perform(click());
@@ -60,8 +61,7 @@ public class MainActivityTest {
 
     @Test
     public void testClickConnectToServerFailsOnInvalidServerIp() throws InterruptedException {
-        onView(withId(R.id.view_pager)).perform(swipeLeft());
-        Thread.sleep(1000);
+        onView(withId(R.id.view_pager)).perform(repeatedlyUntil(swipeLeft(), hasDescendant(withId(R.id.editTextServerIP)), 5));
         onView(withId(R.id.editTextServerIP)).perform(typeText("123.123.123.123"), closeSoftKeyboard());
         onView(withId(R.id.editTextUsername)).perform(typeText("Test"), closeSoftKeyboard());
         onView(withId(R.id.joinServerButton)).perform(click());
