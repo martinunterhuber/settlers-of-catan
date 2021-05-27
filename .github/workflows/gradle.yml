@@ -34,7 +34,7 @@ jobs:
         with:
           api-level: 29
           profile: Nexus 6
-          script: ./gradlew connectedAndroidTest --stracktrace
+          script: ./gradlew connectedAndroidTest --stacktrace
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -skin 1440x2560
       - name: Build and analyze
         run: ./gradlew test jacocoTestReport sonarqube --info
