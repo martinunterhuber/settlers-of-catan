@@ -36,8 +36,8 @@ public class Hexagon extends HexagonPart {
     }
 
     private Point hexToPixel(Tile tile, int scale, Point offset){
-        int x = (int)(scale * (Math.sqrt(3) * tile.getQ()  +  Math.sqrt(3)/2 * tile.getR())) + offset.getX();
-        int y = (int)(scale * (3./2 * (double)tile.getR())) + offset.getY();
+        int x = (int)(scale * tile.getX()) + offset.getX();
+        int y = (int)(scale * tile.getY()) + offset.getY();
         return new Point(x, y);
     }
 

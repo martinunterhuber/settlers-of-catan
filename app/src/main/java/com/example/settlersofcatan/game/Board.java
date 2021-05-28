@@ -69,7 +69,7 @@ public class Board {
                 if (inRange(i, j)){
                     if (isDesertTile(i, j)){
                         // For now we will use 'null' for the desert tile
-                        tiles[i][j] = new Tile(null, 7);
+                        tiles[i][j] = new Tile(new TileCoordinates(i, j), null, 7);
                         robber = new Robber(tiles[i][j]);
                     } else {
                         int resourceIndex;
@@ -77,11 +77,12 @@ public class Board {
                             resourceIndex = Game.random.nextInt(5);
                         } while(resourceDistribution[resourceIndex] <= 0);
                         resourceDistribution[resourceIndex]--;
-                        tiles[i][j] = new Tile(Resource.valueOf(resourceIndex), numbers.remove(0));
+                        tiles[i][j] = new Tile(
+                                new TileCoordinates(i, j),
+                                Resource.valueOf(resourceIndex),
+                                numbers.remove(0)
+                        );
                     }
-
-                    tiles[i][j].setQ(i);
-                    tiles[i][j].setR(j);
 
                     packedTiles[packedTileIndex++] = tiles[i][j];
                 }
