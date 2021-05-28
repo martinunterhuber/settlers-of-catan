@@ -283,6 +283,10 @@ public class Board {
         tile.setRobber(robber);
     }
 
+    public Tile getTileByCoordinates(TileCoordinates coordinates){
+        return tiles[coordinates.getQ()][coordinates.getR()];
+    }
+
     public Robber getRobber() {
         return robber;
     }

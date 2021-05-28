@@ -6,6 +6,7 @@ import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.networking.AsyncCallback;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
@@ -13,6 +14,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+import com.example.settlersofcatan.server_client.networking.dto.SettlementConstructionMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ public class Game {
     public static final Random random = new Random();
 
     // transient = "do not serialize this"
-    transient private Callback<BaseMessage> clientCallback;
+    transient private AsyncCallback<BaseMessage> clientCallback;
 
     private ArrayList<Player> players;
     private Board board;
@@ -80,15 +82,14 @@ public class Game {
         }
     }
 
-    public void setClientCallback(Callback<BaseMessage> callback){
+    public void setClientCallback(AsyncCallback<BaseMessage> callback){
         this.clientCallback = callback;
     }
 
     public int rollDice(int playerId) {
         if (isPlayersTurn(playerId) && !hasRolled && !isBuildingPhase()){
             int numberRolled = random.nextInt(6) + 1 + random.nextInt(6) + 1;
-            new Thread(() -> clientCallback.callback(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled)))
-                                    .start();
+            clientCallback.asyncCallback(new ClientDiceMessage(GameClient.getInstance().getUsername(),numberRolled));
 
             if (numberRolled == 7){
                 robPlayers();
@@ -140,7 +141,7 @@ public class Game {
         if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
             if(getPlayerById(playerId).getVictoryPoints() + getPlayerById(playerId).getHiddenVictoryPoints() >= 10){
                 Ranking ranking = Ranking.getInstance();
-                new Thread(() -> clientCallback.callback(new ClientWinMessage(ranking))).start();
+                clientCallback.asyncCallback(new ClientWinMessage(ranking));
                 return;
             }
             hasRolled = false;
@@ -150,10 +151,9 @@ public class Game {
             turnCounter++;
             setCurrentPlayerId();
             // TODO: send messages for every action
-            new Thread(() -> { clientCallback.callback(new GameStateMessage(this));
-                clientCallback.callback(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
-                clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance()));
-            }).start();
+            clientCallback.asyncCallback(new GameStateMessage(this));
+            clientCallback.asyncCallback(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
+            clientCallback.asyncCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
         }
     }
 
@@ -200,6 +200,14 @@ public class Game {
                     player.placeSettlement(node);
                     lastBuiltNode = node;
                     hasBuiltSettlement = true;
+                    Tile tile = node.getAdjacentTiles().iterator().next();
+                    clientCallback.asyncCallback(
+                            new SettlementConstructionMessage(
+                                    playerId,
+                                    tile.getCoordinates(),
+                                    tile.getDirectionOfNode(node)
+                            )
+                    );
                 }
             } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);
@@ -332,8 +340,7 @@ public class Game {
 
             updateCheaters(playerToId);
 
-            new Thread(() -> clientCallback.callback(new PlayerResourcesMessage(PlayerResources.getInstance(),
-                                                                                        playerToId))).start();
+            clientCallback.asyncCallback(new PlayerResourcesMessage(PlayerResources.getInstance(), playerToId));
         }
 
     }

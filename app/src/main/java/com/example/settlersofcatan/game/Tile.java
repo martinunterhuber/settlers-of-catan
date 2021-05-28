@@ -141,6 +141,19 @@ public class Tile {
         return edges;
     }
 
+    public Edge getEdgeByDirection(Direction direction){
+        return edgeDirectionMap.get(direction);
+    }
+
+    public Direction getDirectionOfEdge(Edge edge){
+        for (Map.Entry<Direction, Edge> entry : edgeDirectionMap.entrySet()){
+            if (edge == entry.getValue()){
+                return entry.getKey();
+            }
+        }
+        throw new IllegalArgumentException("Node does not belong to this Tile!");
+    }
+
     public Node getNorthNode() {
         return nodeDirectionMap.get(NORTH);
     }
@@ -193,6 +206,19 @@ public class Tile {
         return nodes;
     }
 
+    public Node getNodeByDirection(Direction direction){
+        return nodeDirectionMap.get(direction);
+    }
+
+    public Direction getDirectionOfNode(Node node){
+        for (Map.Entry<Direction, Node> entry : nodeDirectionMap.entrySet()){
+            if (node == entry.getValue()){
+                return entry.getKey();
+            }
+        }
+        throw new IllegalArgumentException("Node does not belong to this Tile!");
+    }
+
     public Resource getResource() {
         return resource;
     }
@@ -223,5 +249,9 @@ public class Tile {
 
     void setRobber(Robber robber) {
         this.robber = robber;
+    }
+
+    public TileCoordinates getCoordinates() {
+        return coordinates;
     }
 }

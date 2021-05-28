@@ -8,6 +8,7 @@ import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.DevelopmentCard;
 import com.example.settlersofcatan.game.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.Direction;
 import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Harbor;
@@ -22,6 +23,7 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -33,6 +35,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+import com.example.settlersofcatan.server_client.networking.dto.SettlementConstructionMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
@@ -95,6 +98,8 @@ public class GameServer {
             broadcastMessage(message);
         }else if (message instanceof PlayerResourcesMessage) {
             broadcastMessage(message);
+        } else if (message instanceof SettlementConstructionMessage) {
+            broadcastMessage(message);
         }else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
@@ -146,6 +151,9 @@ public class GameServer {
         server.registerClass(DevelopmentCardMessage.class);
         server.registerClass(PlayerResourcesMessage.class);
         server.registerClass(PlayerResources.class);
+        server.registerClass(TileCoordinates.class);
+        server.registerClass(Direction.class);
+        server.registerClass(SettlementConstructionMessage.class);
     }
 
     private void startServer(){

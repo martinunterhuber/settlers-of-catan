@@ -1,12 +1,16 @@
 package com.example.settlersofcatan.game;
 
 public class TileCoordinates {
-    private final int r;
-    private final int q;
+    private int q;
+    private int r;
 
-    public TileCoordinates(int r, int q){
-        this.r = r;
+    public TileCoordinates(){
+
+    }
+
+    public TileCoordinates(int q, int r){
         this.q = q;
+        this.r = r;
     }
 
     public int getR() {
