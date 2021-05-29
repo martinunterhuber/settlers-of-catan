@@ -1,5 +1,7 @@
 package com.example.settlersofcatan;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +13,8 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -176,6 +180,48 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
                                                                                     + game.getPlayerById(client.getId()).getHiddenVictoryPoints()));
     }
 
+    public void redrawViewsNewGameState(){
+        Game game = Game.getInstance();
+
+        endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
+
+        drawDevelopmentCard.setOnClickListener(
+                view -> {
+                    int type = game.drawDevelopmentCard(GameClient.getInstance().getId());
+
+                    if (type == 0){
+                        knights.updateView(type);
+                    }else if (type == 1){
+                        victoryPoints.updateView(type);
+                    }else if (type == 2){
+                        monopoly.updateView(type);
+                    }else if (type == 3){
+                        roadBuilding.updateView(type);
+                    }else if (type == 4){
+                        yearOfPlenty.updateView(type);
+                    }
+                }
+        );
+
+        setButtonToPlayerColor();
+        runOnUiThread(() -> {
+            drawDevelopmentCard.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
+            endTurnButton.setEnabled(game.getCurrentPlayerId() == client.getId() && game.isBuildingPhase());
+            btnTrade.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
+            showCurrentPlayer();
+            ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(game.getPlayerById(client.getId()).getVictoryPoints()
+                    + game.getPlayerById(client.getId()).getHiddenVictoryPoints()));
+        });
+
+        map.invalidate();
+        playerView.setHexGrid(map.getHexGrid());
+        playerView.invalidate();
+        findViewById(R.id.opponents).invalidate();
+        resources.invalidate();
+    }
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -279,10 +325,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
     public void redrawViews(){
         findViewById(R.id.opponents).invalidate();
-        findViewById(R.id.playerView).invalidate();
-        findViewById(R.id.resourceView).invalidate();
+        playerView.invalidate();
+        resources.invalidate();
     }
-  
+
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:

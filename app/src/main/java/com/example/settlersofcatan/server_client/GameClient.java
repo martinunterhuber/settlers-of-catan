@@ -155,9 +155,10 @@ public class GameClient {
             }
             if (startGameCallback != null){
                 startGameCallback.callback(message);
+                startGameCallback = null;
             }
             if (gameActivity != null) {
-                // gameActivity.redrawViews();
+                gameActivity.redrawViewsNewGameState();
             }
         } else if (message instanceof ClientWinMessage && gameActivity != null){
             Intent intent = new Intent(gameActivity, GameEndActivity.class);
