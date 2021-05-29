@@ -106,6 +106,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
       
         client = GameClient.getInstance();
+        Game game = Game.getInstance();
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -128,8 +129,8 @@ public class GameActivity extends AppCompatActivity {
         yearOfPlenty=findViewById(R.id.view_year_of_plenty);
 
         endTurnButton = findViewById(R.id.endTurnButton);
-        endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
-        endTurnButton.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
+        endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
+        endTurnButton.setEnabled(game.getCurrentPlayerId() == client.getId());
 
         moveRobberButton = findViewById(R.id.moveRobber);
         moveRobberButton.setOnClickListener(this::moveRobber);
@@ -138,9 +139,11 @@ public class GameActivity extends AppCompatActivity {
         dice.setOnClickListener(this::rollDice);
 
         drawDevelopmentCard=findViewById(R.id.btn_draw_development);
+
+        drawDevelopmentCard.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
         drawDevelopmentCard.setOnClickListener(
                 view -> {
-                    int type = Game.getInstance().drawDevelopmentCard(GameClient.getInstance().getId());
+                    int type = game.drawDevelopmentCard(GameClient.getInstance().getId());
 
                     if (type == 0){
                         knights.updateView(type);
@@ -157,7 +160,7 @@ public class GameActivity extends AppCompatActivity {
         );
       
         btnTrade = findViewById(R.id.btn_trade);
-        btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
+        btnTrade.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
         btnTrade.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), TradeActivity.class);
             startActivity(i);
@@ -168,8 +171,8 @@ public class GameActivity extends AppCompatActivity {
         setButtonToPlayerColor();
         showCurrentPlayer();
       
-        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()
-                                                                                    + Game.getInstance().getPlayerById(client.getId()).getHiddenVictoryPoints()));
+        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(game.getPlayerById(client.getId()).getVictoryPoints()
+                                                                                    + game.getPlayerById(client.getId()).getHiddenVictoryPoints()));
     }
 
     @Override
