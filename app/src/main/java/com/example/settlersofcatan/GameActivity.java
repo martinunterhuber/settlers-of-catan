@@ -1,7 +1,5 @@
 package com.example.settlersofcatan;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +11,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -134,8 +130,6 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         yearOfPlenty=findViewById(R.id.view_year_of_plenty);
 
         endTurnButton = findViewById(R.id.endTurnButton);
-        endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
-        endTurnButton.setEnabled(game.getCurrentPlayerId() == client.getId() && game.isBuildingPhase());
 
         moveRobberButton = findViewById(R.id.moveRobber);
         moveRobberButton.setOnClickListener(this::moveRobber);
@@ -145,27 +139,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
         drawDevelopmentCard=findViewById(R.id.btn_draw_development);
 
-        drawDevelopmentCard.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
-        drawDevelopmentCard.setOnClickListener(
-                view -> {
-                    int type = game.drawDevelopmentCard(GameClient.getInstance().getId());
-
-                    if (type == 0){
-                        knights.updateView(type);
-                    }else if (type == 1){
-                        victoryPoints.updateView(type);
-                    }else if (type == 2){
-                        monopoly.updateView(type);
-                    }else if (type == 3){
-                        roadBuilding.updateView(type);
-                    }else if (type == 4){
-                        yearOfPlenty.updateView(type);
-                    }
-                }
-        );
-      
         btnTrade = findViewById(R.id.btn_trade);
-        btnTrade.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
         btnTrade.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), TradeActivity.class);
             startActivity(i);
@@ -173,14 +147,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
         client.registerActivity(this);
 
-        setButtonToPlayerColor();
-        showCurrentPlayer();
-      
-        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(game.getPlayerById(client.getId()).getVictoryPoints()
-                                                                                    + game.getPlayerById(client.getId()).getHiddenVictoryPoints()));
+        initializeButtons();
     }
 
-    public void redrawViewsNewGameState(){
+    private void initializeButtons(){
         Game game = Game.getInstance();
 
         endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
@@ -212,15 +182,15 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(game.getPlayerById(client.getId()).getVictoryPoints()
                     + game.getPlayerById(client.getId()).getHiddenVictoryPoints()));
         });
+    }
+
+    public void redrawViewsNewGameState(){
+        initializeButtons();
 
         map.invalidate();
         playerView.setHexGrid(map.getHexGrid());
-        playerView.invalidate();
-        findViewById(R.id.opponents).invalidate();
-        resources.invalidate();
+        redrawViews();
     }
-
-
 
     @Override
     protected void onResume() {
