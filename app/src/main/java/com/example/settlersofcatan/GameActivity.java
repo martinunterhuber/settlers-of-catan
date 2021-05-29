@@ -130,7 +130,7 @@ public class GameActivity extends AppCompatActivity {
 
         endTurnButton = findViewById(R.id.endTurnButton);
         endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
-        endTurnButton.setEnabled(game.getCurrentPlayerId() == client.getId());
+        endTurnButton.setEnabled(game.getCurrentPlayerId() == client.getId() && game.isBuildingPhase());
 
         moveRobberButton = findViewById(R.id.moveRobber);
         moveRobberButton.setOnClickListener(this::moveRobber);
@@ -197,6 +197,7 @@ public class GameActivity extends AppCompatActivity {
         int result = Game.getInstance().rollDice(client.getId());
         if (result > 0){
             ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+            endTurnButton.setEnabled(true);
             resources.invalidate();
         }
         if (result == 7){
