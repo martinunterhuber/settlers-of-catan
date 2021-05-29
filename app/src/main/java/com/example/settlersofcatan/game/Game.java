@@ -7,14 +7,15 @@ import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.networking.AsyncCallback;
-import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
-import com.example.settlersofcatan.server_client.networking.dto.SettlementConstructionMessage;
+import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -193,27 +194,31 @@ public class Game {
 
     public void buildSettlement(Node node, int playerId){
         Player player = getPlayerById(playerId);
-
+        boolean built = false;
         if (node.hasNoAdjacentBuildings() && isPlayersTurn(playerId)){
             if (isBuildingPhase()){
                 if (!hasBuiltSettlement){
                     player.placeSettlement(node);
                     lastBuiltNode = node;
                     hasBuiltSettlement = true;
-                    Tile tile = node.getAdjacentTiles().iterator().next();
-                    clientCallback.asyncCallback(
-                            new SettlementConstructionMessage(
-                                    playerId,
-                                    tile.getCoordinates(),
-                                    tile.getDirectionOfNode(node)
-                            )
-                    );
+                    built = true;
                 }
             } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
                 updateLongestRoadPlayer();
+                built = true;
             }
+        }
+        if (built){
+            Tile tile = node.getAdjacentTiles().iterator().next();
+            clientCallback.asyncCallback(
+                    new SettlementBuildingMessage(
+                            playerId,
+                            tile.getCoordinates(),
+                            tile.getDirectionOfNode(node)
+                    )
+            );
         }
     }
 
@@ -229,32 +234,53 @@ public class Game {
             player.placeCity(node);
             player.takeResources(City.costs);
 
+            Tile tile = node.getAdjacentTiles().iterator().next();
+            clientCallback.asyncCallback(
+                    new CityBuildingMessage(
+                            playerId,
+                            tile.getCoordinates(),
+                            tile.getDirectionOfNode(node)
+                    )
+            );
         }
     }
 
     public void buildRoad(Edge edge, int playerId){
         Player player = getPlayerById(playerId);
-
+        boolean built = false;
         if (isPlayersTurn(playerId) && player.canPlaceRoadOn(edge)) {
             if (isBuildingPhase()){
                 if (!hasBuiltRoad && lastBuiltNode != null && lastBuiltNode.getOutgoingEdges().contains(edge)){
                     player.placeRoad(edge);
                     hasBuiltRoad = true;
+                    built = true;
                 }
             } else if (hasRolled && player.hasResources(Road.costs) && !hasPlayedCard){
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
                 updateLongestRoadPlayer();
+                built = true;
 
             } else if (hasRolled && hasPlayedCard){
                 player.placeRoad(edge);
                 freeRoads--;
                 updateLongestRoadPlayer();
+                built = true;
 
                 if (freeRoads == 0){
                     hasPlayedCard = false;
                 }
             }
+        }
+        if (built){
+            Tile tile = edge.getAdjacentTiles().iterator().next();
+            clientCallback.asyncCallback(
+                    new RoadBuildingMessage(
+                            playerId,
+                            tile.getCoordinates(),
+                            tile.getDirectionOfEdge(edge)
+                    )
+            );
         }
     }
 

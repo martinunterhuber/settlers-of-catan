@@ -3,17 +3,17 @@ package com.example.settlersofcatan.server_client.networking.dto;
 import com.example.settlersofcatan.game.Direction;
 import com.example.settlersofcatan.game.TileCoordinates;
 
-public class SettlementConstructionMessage extends BaseMessage {
+public abstract class BuildingMessage extends BaseMessage {
     public int playerId;
     public TileCoordinates tileCoordinates;
-    public Direction nodeDirection;
+    public Direction direction;
 
-    public SettlementConstructionMessage() {
+    public BuildingMessage() {
     }
 
-    public SettlementConstructionMessage(int playerId, TileCoordinates tileCoordinates, Direction nodeDirection) {
+    public BuildingMessage(int playerId, TileCoordinates tileCoordinates, Direction direction) {
         this.playerId = playerId;
         this.tileCoordinates = tileCoordinates;
-        this.nodeDirection = nodeDirection;
+        this.direction = direction;
     }
 }

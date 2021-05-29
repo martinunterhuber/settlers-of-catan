@@ -31,6 +31,8 @@ import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.BuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
@@ -38,7 +40,8 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
-import com.example.settlersofcatan.server_client.networking.dto.SettlementConstructionMessage;
+import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
@@ -128,7 +131,10 @@ public class GameClient {
         client.registerClass(PlayerResources.class);
         client.registerClass(TileCoordinates.class);
         client.registerClass(Direction.class);
-        client.registerClass(SettlementConstructionMessage.class);
+        client.registerClass(SettlementBuildingMessage.class);
+        client.registerClass(CityBuildingMessage.class);
+        client.registerClass(RoadBuildingMessage.class);
+        client.registerClass(BuildingMessage.class);
     }
 
     private void gameAsyncCallback(BaseMessage message){
@@ -175,13 +181,19 @@ public class GameClient {
             );
         } else if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
-        } else if (message instanceof SettlementConstructionMessage){
-            SettlementConstructionMessage buildMessage = (SettlementConstructionMessage)message;
+        } else if (message instanceof BuildingMessage && gameActivity != null) {
+            BuildingMessage buildMessage = (BuildingMessage) message;
             Game game = Game.getInstance();
             if (buildMessage.playerId != id) {
-                game.getPlayerById(buildMessage.playerId).placeSettlement(
-                        game.getBoard().getTileByCoordinates(buildMessage.tileCoordinates).getNodeByDirection(buildMessage.nodeDirection)
-                );
+                Tile tile = game.getBoard().getTileByCoordinates(buildMessage.tileCoordinates);
+                Player player = game.getPlayerById(buildMessage.playerId);
+                if (message instanceof CityBuildingMessage) {
+                    player.placeCity(tile.getNodeByDirection(buildMessage.direction));
+                } else if (message instanceof RoadBuildingMessage) {
+                    player.placeRoad(tile.getEdgeByDirection(buildMessage.direction));
+                } else {
+                    player.placeSettlement(tile.getNodeByDirection(buildMessage.direction));
+                }
                 gameActivity.redrawViews();
             }
         }
