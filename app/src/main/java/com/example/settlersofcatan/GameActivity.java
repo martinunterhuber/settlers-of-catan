@@ -24,13 +24,14 @@ import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.util.OnPostDrawListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 
     private MapView map;
     private PlayerView playerView;
@@ -354,5 +355,11 @@ public class GameActivity extends AppCompatActivity {
             opponent3.invalidate();
         }
 
+    }
+
+    @Override
+    public void onPostDraw() {
+        playerView.setHexGrid(map.getHexGrid());
+        playerView.invalidate();
     }
 }

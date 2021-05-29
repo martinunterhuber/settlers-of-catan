@@ -21,12 +21,12 @@ public class Hexagon extends HexagonPart {
     private Point[] points=new Point[6];
     private Path[] paths=new Path[6];
 
-    public Hexagon(Tile tile, int width){
+    public Hexagon(Tile tile, int width, int offsetX){
         this.tile = tile;
         this.radius = (int) (width/Math.sqrt(3));
         this.width = width;
         this.halfWidth = width / 2;
-        this.center = hexToPixel(tile, this.radius, new Point(-halfWidth, (int)(radius * 1.5)));
+        this.center = hexToPixel(tile, this.radius, new Point(-halfWidth + offsetX, (int)(radius * 1.5)));
         this.drawableResourceId = getResourceIdFromTileResource();
 
         b = (int) (Math.sqrt(Math.pow(radius, 2) - Math.pow(halfWidth, 2)));
