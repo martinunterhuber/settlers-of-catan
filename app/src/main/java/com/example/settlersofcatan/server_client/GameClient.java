@@ -39,6 +39,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
@@ -135,6 +136,7 @@ public class GameClient {
         client.registerClass(CityBuildingMessage.class);
         client.registerClass(RoadBuildingMessage.class);
         client.registerClass(BuildingMessage.class);
+        client.registerClass(MovedRobberMessage.class);
     }
 
     private void gameAsyncCallback(BaseMessage message){
@@ -196,6 +198,11 @@ public class GameClient {
                 }
                 gameActivity.redrawViews();
             }
+        } else if (message instanceof MovedRobberMessage && gameActivity != null) {
+            MovedRobberMessage robberMessage = (MovedRobberMessage)message;
+            Board board = Game.getInstance().getBoard();
+            board.moveRobberTo(board.getTileByCoordinates(robberMessage.coordinates));
+            gameActivity.redrawViews();
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }

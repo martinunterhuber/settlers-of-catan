@@ -36,6 +36,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
@@ -103,6 +104,8 @@ public class GameServer {
             broadcastMessage(message);
         } else if (message instanceof BuildingMessage) {
             broadcastMessage(message);
+        } else if (message instanceof MovedRobberMessage){
+            broadcastMessage(message);
         } else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
@@ -160,6 +163,7 @@ public class GameServer {
         server.registerClass(CityBuildingMessage.class);
         server.registerClass(RoadBuildingMessage.class);
         server.registerClass(BuildingMessage.class);
+        server.registerClass(MovedRobberMessage.class);
     }
 
     private void startServer(){

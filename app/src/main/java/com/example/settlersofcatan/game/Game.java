@@ -13,6 +13,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
@@ -120,6 +121,8 @@ public class Game {
                 }
             }
             canMoveRobber = false;
+
+            clientCallback.asyncCallback(new MovedRobberMessage(tile.getCoordinates()));
         }
     }
 
