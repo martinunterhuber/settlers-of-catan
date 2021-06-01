@@ -41,13 +41,12 @@ public class Hexagon extends HexagonPart {
         return new Point(x, y);
     }
 
-    private int getResourceIdFromTileResource(){
+    public static int getResourceIdFromResource(Resource resource){
         int drawable;
-        Resource resource = tile.getResource();
         if (resource == null){
             drawable = R.drawable.deserthex;
         } else {
-            switch (tile.getResource()){
+            switch (resource){
                 case SHEEP:
                     drawable = R.drawable.sheephex;
                     break;
@@ -68,6 +67,10 @@ public class Hexagon extends HexagonPart {
             }
         }
         return drawable;
+    }
+
+    private int getResourceIdFromTileResource(){
+       return getResourceIdFromResource(tile.getResource());
     }
 
     /**

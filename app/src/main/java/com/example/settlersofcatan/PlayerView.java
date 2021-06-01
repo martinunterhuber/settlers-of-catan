@@ -203,32 +203,43 @@ public class PlayerView extends View {
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [AB]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-                offsetY = -1;
+                offsetY = -0.75f;
+                offsetX = +0.55f;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [CD]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-                offsetY = +1;
+                offsetY = +0.75f;
+                offsetX = +0.55f;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [DE]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-                offsetY = +1;
+                offsetY = +0.75f;
+                offsetX = -0.55f;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX2().getY()-10,null);
 
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [FA]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-                offsetY = -1;
+                offsetY = -0.75f;
+                offsetX = -0.55f;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX2().getY()-10,null);
             }
-
             if (p.getEdge().getHarbor() != null){
+                if (p.getEdge().getHarbor().getResource() != null) {
+                    Bitmap resource = getBitmap(Hexagon.getResourceIdFromResource(p.getEdge().getHarbor().getResource()));
+                    resource = Bitmap.createScaledBitmap(resource, 100, 115, false);
+                    canvas.drawBitmap(resource,
+                            p.getX2().getX() + (-p.getX2().getX() + p.getX1().getX()) / 2f - 50f + offsetX * 60f,
+                            p.getX2().getY() + (-p.getX2().getY() + p.getX1().getY()) / 2f - 60f + offsetY * 60f,
+                            null);
+                }
                 canvas.drawBitmap(ship,
-                        p.getX2().getX() + (- p.getX2().getX() + p.getX1().getX()) / 2f - 50f + offsetX * 50f,
-                        p.getX2().getY() + (- p.getX2().getY() + p.getX1().getY()) / 2f - 50f + offsetY * 50f,
+                        p.getX2().getX() + (- p.getX2().getX() + p.getX1().getX()) / 2f - 50f + offsetX * 60f,
+                        p.getX2().getY() + (- p.getX2().getY() + p.getX1().getY()) / 2f - 60f + offsetY * 60f,
                         null);
             }
         }
