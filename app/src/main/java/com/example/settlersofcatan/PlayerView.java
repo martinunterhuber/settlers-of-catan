@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.NodePlaceable;
+import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
@@ -180,12 +181,11 @@ public class PlayerView extends View {
      */
 
     private void drawRoads(Canvas canvas){
-        Bitmap ship = getBitmap(R.drawable.ship);
-        ship = Bitmap.createScaledBitmap(ship, 100,100, false);
         for (Path p : hexGrid.getPaths()){
+            int offsetX = 0;
+            int offsetY = 0;
+
             Bitmap bitmap = getBitmap(p.getResID());
-            float offsetX = 0f;
-            float offsetY = 0f;
             bitmap = Bitmap.createScaledBitmap(bitmap, p.getLength(),20, false);
 
             //vertical lines [BC] and [EF]
@@ -193,55 +193,65 @@ public class PlayerView extends View {
                 bitmap = rotateBitmap(bitmap, 90);
 
                 if (p.getX1().getY()<p.getX2().getY()) {
-                    offsetX = +1;
+                    offsetX = +60;
                     canvas.drawBitmap(bitmap, p.getX1().getX()-10, p.getX1().getY(), null);
                 }else {
-                    offsetX = -1;
+                    offsetX = -60;
                     canvas.drawBitmap(bitmap, p.getX2().getX()-10, p.getX2().getY(), null);
                 }
 
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [AB]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-                offsetY = -0.75f;
-                offsetX = +0.55f;
+                offsetY = -47;
+                offsetX = 30;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [CD]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-                offsetY = +0.75f;
-                offsetX = +0.55f;
+                offsetY = 47;
+                offsetX = 30;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [DE]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-                offsetY = +0.75f;
-                offsetX = -0.55f;
+                offsetY = 47;
+                offsetX = -30;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX2().getY()-10,null);
 
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [FA]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-                offsetY = -0.75f;
-                offsetX = -0.55f;
+                offsetY = -47;
+                offsetX = -30;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX2().getY()-10,null);
             }
-            if (p.getEdge().getHarbor() != null){
-                if (p.getEdge().getHarbor().getResource() != null) {
-                    Bitmap resource = getBitmap(Hexagon.getResourceIdFromResource(p.getEdge().getHarbor().getResource()));
-                    resource = Bitmap.createScaledBitmap(resource, 100, 115, false);
-                    canvas.drawBitmap(resource,
-                            p.getX2().getX() + (-p.getX2().getX() + p.getX1().getX()) / 2f - 50f + offsetX * 60f,
-                            p.getX2().getY() + (-p.getX2().getY() + p.getX1().getY()) / 2f - 60f + offsetY * 60f,
-                            null);
-                }
-                canvas.drawBitmap(ship,
-                        p.getX2().getX() + (- p.getX2().getX() + p.getX1().getX()) / 2f - 50f + offsetX * 60f,
-                        p.getX2().getY() + (- p.getX2().getY() + p.getX1().getY()) / 2f - 60f + offsetY * 60f,
-                        null);
+            drawHarbor(p, canvas, new Point(offsetX, offsetY));
+        }
+    }
+
+    private void drawHarbor(Path path, Canvas canvas, Point offset){
+        int bitmapWidth = 100;
+        int halfWidth = bitmapWidth / 2;
+        int shipHeight = 100;
+        int resourceHeight = 115;
+        float positionLeft = path.getX2().getX() + path.getLengthX() / 2f - (float) halfWidth + (float) offset.getX();
+        float positionTop = path.getX2().getY() + path.getLengthY() / 2f - (float) halfWidth - 10f + (float) offset.getY();
+
+        if (path.getEdge().getHarbor() != null){
+            Resource resource = path.getEdge().getHarbor().getResource();
+
+            if (resource != null) {
+                Bitmap resourceBitmap = getBitmap(Hexagon.getResourceIdFromResource(path.getEdge().getHarbor().getResource()));
+                resourceBitmap = Bitmap.createScaledBitmap(resourceBitmap, bitmapWidth, resourceHeight, false);
+                canvas.drawBitmap(resourceBitmap, positionLeft, positionTop, null);
             }
+
+            Bitmap ship = getBitmap(R.drawable.ship);
+            ship = Bitmap.createScaledBitmap(ship, bitmapWidth, shipHeight, false);
+            canvas.drawBitmap(ship, positionLeft, positionTop, null);
         }
     }
 
