@@ -240,15 +240,15 @@ public class PlayerView extends View {
                 Bitmap resourceBitmap = getBitmap(Hexagon.getResourceIdFromResource(path.getEdge().getHarbor().getResource()));
                 if (resourceBitmap != null) {
                     resourceBitmap = Bitmap.createScaledBitmap(resourceBitmap, bitmapWidth, resourceHeight, false);
+                    canvas.drawBitmap(resourceBitmap, positionLeft, positionTop, null);
                 }
-                canvas.drawBitmap(resourceBitmap, positionLeft, positionTop, null);
             }
 
             Bitmap ship = getBitmap(R.drawable.ship);
             if (ship != null) {
                 ship = Bitmap.createScaledBitmap(ship, bitmapWidth, shipHeight, false);
+                canvas.drawBitmap(ship, positionLeft, positionTop, null);
             }
-            canvas.drawBitmap(ship, positionLeft, positionTop, null);
         }
     }
 
