@@ -40,8 +40,8 @@ public class Point extends HexagonPart {
         Source: http://paulbourke.net/geometry/pointlineplane/
      */
     public double getDistanceToLineSegmentBoundedBy(Point p1, Point p2){
-        double dx = p2.x - p1.x;
-        double dy = p2.y - p1.y;
+        double dx = (double) p2.x - p1.x;
+        double dy = (double) p2.y - p1.y;
 
         double u = ((this.x - p1.x) * dx + (this.y - p1.y) * dy) / (dx * dx + dy * dy);
 

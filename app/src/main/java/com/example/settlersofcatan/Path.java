@@ -45,12 +45,12 @@ public class Path extends HexagonPart {
         return edge;
     }
 
-    public int getLengthX(){
-        return (x1.getX() - x2.getX());
+    public int getDifferenceX(){
+        return x1.getX() - x2.getX();
     }
 
-    public int getLengthY(){
-        return (x1.getY() - x2.getY());
+    public int getDifferenceY(){
+        return x1.getY() - x2.getY();
     }
 
     @Override

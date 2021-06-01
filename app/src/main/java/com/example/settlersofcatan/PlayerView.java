@@ -3,12 +3,8 @@ package com.example.settlersofcatan;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -24,9 +20,6 @@ import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * View class on which the cities, settlements and roads of the players are placed.
@@ -237,20 +230,24 @@ public class PlayerView extends View {
         int halfWidth = bitmapWidth / 2;
         int shipHeight = 100;
         int resourceHeight = 115;
-        float positionLeft = path.getX2().getX() + path.getLengthX() / 2f - (float) halfWidth + (float) offset.getX();
-        float positionTop = path.getX2().getY() + path.getLengthY() / 2f - (float) halfWidth - 10f + (float) offset.getY();
+        float positionLeft = path.getX2().getX() + path.getDifferenceX() / 2f - (float) halfWidth + (float) offset.getX();
+        float positionTop = path.getX2().getY() + path.getDifferenceY() / 2f - (float) halfWidth - 10f + (float) offset.getY();
 
         if (path.getEdge().getHarbor() != null){
             Resource resource = path.getEdge().getHarbor().getResource();
 
             if (resource != null) {
                 Bitmap resourceBitmap = getBitmap(Hexagon.getResourceIdFromResource(path.getEdge().getHarbor().getResource()));
-                resourceBitmap = Bitmap.createScaledBitmap(resourceBitmap, bitmapWidth, resourceHeight, false);
+                if (resourceBitmap != null) {
+                    resourceBitmap = Bitmap.createScaledBitmap(resourceBitmap, bitmapWidth, resourceHeight, false);
+                }
                 canvas.drawBitmap(resourceBitmap, positionLeft, positionTop, null);
             }
 
             Bitmap ship = getBitmap(R.drawable.ship);
-            ship = Bitmap.createScaledBitmap(ship, bitmapWidth, shipHeight, false);
+            if (ship != null) {
+                ship = Bitmap.createScaledBitmap(ship, bitmapWidth, shipHeight, false);
+            }
             canvas.drawBitmap(ship, positionLeft, positionTop, null);
         }
     }
