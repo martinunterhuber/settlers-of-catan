@@ -45,4 +45,6 @@
     <string name="points">Points:</string>
     <string name="player_name">Player name</string>
     <string name="development">Development</string>
+    <string name="complete_trade">Complete Trade</string>
+    <string name="cancel">Cancel</string>
 </resources>

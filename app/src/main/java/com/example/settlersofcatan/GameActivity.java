@@ -3,6 +3,7 @@ package com.example.settlersofcatan;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,6 +30,7 @@ import com.example.settlersofcatan.util.OnPostDrawListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
@@ -107,7 +109,6 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         setContentView(R.layout.activity_game);
       
         client = GameClient.getInstance();
-        Game game = Game.getInstance();
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

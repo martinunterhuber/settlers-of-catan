@@ -57,7 +57,7 @@ public class ResourceView extends FrameLayout {
         setResourceValues();
     }
 
-    private void initView() {
+    protected void initView() {
         inflate(getContext(), R.layout.resource_view, this);
         setWillNotDraw(false);
     }
