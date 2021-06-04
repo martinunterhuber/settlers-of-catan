@@ -28,6 +28,7 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -39,6 +40,8 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 
@@ -172,6 +175,13 @@ public class GameClient {
             }
         } else if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
+        } else if (message instanceof TradeOfferMessage) {
+            TradeOffer tradeOffer = ((TradeOfferMessage) message).tradeOffer;
+            if (gameActivity != null) {
+                gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
+            }
+        } else if (message instanceof TradeReplyMessage) {
+
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }

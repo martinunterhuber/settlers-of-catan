@@ -35,7 +35,7 @@ public class TradeActivity extends AppCompatActivity {
         int height = dm.heightPixels;
 
         //How big the popup is in relation to game activity screen
-        getWindow().setLayout((int) (width * .8), (int) (height * .7));
+        getWindow().setLayout((int) (width * .8), (int) (height * .75));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;

@@ -32,6 +32,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
@@ -91,7 +92,10 @@ public class GameServer {
             broadcastMessage(message);
         }else if (message instanceof DevelopmentCardMessage) {
             broadcastMessage(message);
-        }else{
+        }else if (message instanceof TradeOfferMessage) {
+            broadcastMessage(message);
+        }
+        else{
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }

@@ -44,4 +44,12 @@ public class TradeOffer {
     public ResourceMap getGive() {
         return give;
     }
+
+    public void setGive(ResourceMap give) {
+        this.give = give;
+    }
+
+    public void setReceive(ResourceMap receive) {
+        this.receive = receive;
+    }
 }

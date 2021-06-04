@@ -18,6 +18,7 @@ import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
 
 import java.util.List;
@@ -288,5 +289,9 @@ public class GameActivity extends AppCompatActivity {
             opponent3.invalidate();
         }
 
+    }
+
+    public void displayTradeOffer(TradeOffer tradeOffer) {
+        
     }
 }
