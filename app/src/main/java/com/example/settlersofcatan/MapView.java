@@ -14,7 +14,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.util.OnPostDrawListener;
 
@@ -26,7 +28,7 @@ import com.example.settlersofcatan.util.OnPostDrawListener;
 public class MapView extends View {
 
     private final int WIDTH = Resources.getSystem().getDisplayMetrics().widthPixels;
-    private final int HEXAGON_WIDTH = WIDTH / 5;
+    private final int HEIGHT = Resources.getSystem().getDisplayMetrics().heightPixels;
 
     private Hexagon[] tiles= new Hexagon[19];
     private HexGrid hexGrid;
@@ -67,6 +69,8 @@ public class MapView extends View {
 
         hexGrid = new HexGrid(tiles);
 
+        drawHarbors(canvas);
+
         ((OnPostDrawListener) getContext()).onPostDraw();
 
         drawBitmaps(canvas);
@@ -74,15 +78,89 @@ public class MapView extends View {
     }
 
     private void generateTiles(){
-        int hexagonWidth = HEXAGON_WIDTH;
+        int hexagonWidth = WIDTH / 6;
+        int availableWidth = WIDTH;
+        int availableHeight = HEIGHT;
+        if (getWidth() != 0){
+            availableWidth = getWidth();
+            hexagonWidth = availableWidth / 6;
+        }
         if (getHeight() != 0){
-            if (hexagonWidth >= getHeight() / 6){
-                hexagonWidth = getHeight() / 6;
+            availableHeight = getHeight();
+            if (hexagonWidth >= availableHeight / 6){
+                hexagonWidth = availableHeight / 6;
             }
         }
         Tile[] packedTiles = Game.getInstance().getBoard().getPackedTiles();
         for (int i = 0; i < packedTiles.length; i++) {
-            tiles[i] = new Hexagon(packedTiles[i], hexagonWidth, (WIDTH - 5 * hexagonWidth) / 2);
+            tiles[i] = new Hexagon(packedTiles[i], hexagonWidth, (availableWidth - 5 * hexagonWidth) / 2, (availableHeight - 5 * hexagonWidth) / 2);
+        }
+    }
+
+    private void drawHarbors(Canvas canvas){
+        for (Path path : hexGrid.getPaths()){
+            if (path.getEdge().getHarbor() == null){
+                continue;
+            }
+
+            int offsetX = 0;
+            int offsetY = 0;
+            Edge edge = path.getEdge();
+            Tile tile = edge.getAdjacentTiles().iterator().next();
+            switch (tile.getDirectionOfEdge(edge)){
+                case NORTH_EAST:
+                    offsetY = -47;
+                    offsetX = 30;
+                    break;
+                case EAST:
+                    offsetX = 60;
+                    break;
+                case SOUTH_EAST:
+                    offsetY = 47;
+                    offsetX = 30;
+                    break;
+                case SOUTH_WEST:
+                    offsetY = 47;
+                    offsetX = -30;
+                    break;
+                case WEST:
+                    offsetX = -60;
+                    break;
+                case NORTH_WEST:
+                    offsetY = -47;
+                    offsetX = -30;
+                    break;
+                default:
+                    break;
+            }
+            drawHarbor(path, canvas, new Point(offsetX, offsetY));
+        }
+    }
+
+    private void drawHarbor(Path path, Canvas canvas, Point offset){
+        int bitmapWidth = 100;
+        int halfWidth = bitmapWidth / 2;
+        int shipHeight = 100;
+        int resourceHeight = 115;
+        float positionLeft = path.getX2().getX() + path.getDifferenceX() / 2f - (float) halfWidth + (float) offset.getX();
+        float positionTop = path.getX2().getY() + path.getDifferenceY() / 2f - (float) halfWidth - 10f + (float) offset.getY();
+
+        if (path.getEdge().getHarbor() != null){
+            Resource resource = path.getEdge().getHarbor().getResource();
+
+            if (resource != null) {
+                Bitmap resourceBitmap = getBitmap(Hexagon.getResourceIdFromResource(path.getEdge().getHarbor().getResource()));
+                if (resourceBitmap != null) {
+                    resourceBitmap = Bitmap.createScaledBitmap(resourceBitmap, bitmapWidth, resourceHeight, false);
+                    canvas.drawBitmap(resourceBitmap, positionLeft, positionTop, null);
+                }
+            }
+
+            Bitmap ship = getBitmap(R.drawable.ship);
+            if (ship != null) {
+                ship = Bitmap.createScaledBitmap(ship, bitmapWidth, shipHeight, false);
+                canvas.drawBitmap(ship, positionLeft, positionTop, null);
+            }
         }
     }
 
