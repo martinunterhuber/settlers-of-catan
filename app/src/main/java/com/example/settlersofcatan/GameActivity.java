@@ -9,6 +9,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
@@ -107,7 +110,6 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         setContentView(R.layout.activity_game);
       
         client = GameClient.getInstance();
-        Game game = Game.getInstance();
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -185,16 +187,19 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     }
 
     public void redrawViewsNewGameState(){
-        initializeButtons();
-
         map.invalidate();
         playerView.setHexGrid(map.getHexGrid());
-        redrawViews();
+        redrawViewsTurnEnd();
     }
 
     public void redrawViewsTurnEnd(){
         initializeButtons();
         redrawViews();
+        if (Game.getInstance().getCurrentPlayerId() == client.getId()){
+            runOnUiThread(() -> {
+                Toast.makeText(this, R.string.turn_message, Toast.LENGTH_LONG).show();
+            });
+        }
     }
 
     @Override
