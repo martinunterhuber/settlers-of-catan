@@ -27,6 +27,7 @@ import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.ArmySizeIncreaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.BuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMessage;
@@ -109,6 +110,8 @@ public class GameServer {
             broadcastMessage(message);
         } else if (message instanceof EndTurnMessage) {
             broadcastMessage(message);
+        } else if (message instanceof ArmySizeIncreaseMessage) {
+            broadcastMessage(message);
         } else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
@@ -168,6 +171,7 @@ public class GameServer {
         server.registerClass(BuildingMessage.class);
         server.registerClass(MovedRobberMessage.class);
         server.registerClass(EndTurnMessage.class);
+        server.registerClass(ArmySizeIncreaseMessage.class);
     }
 
     private void startServer(){

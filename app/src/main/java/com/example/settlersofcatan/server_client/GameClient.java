@@ -30,6 +30,7 @@ import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.ArmySizeIncreaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.BuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMessage;
@@ -139,6 +140,7 @@ public class GameClient {
         client.registerClass(BuildingMessage.class);
         client.registerClass(MovedRobberMessage.class);
         client.registerClass(EndTurnMessage.class);
+        client.registerClass(ArmySizeIncreaseMessage.class);
     }
 
     private void gameAsyncCallback(BaseMessage message){
@@ -213,6 +215,11 @@ public class GameClient {
             if (gameActivity != null) {
                 gameActivity.redrawViewsNewGameState();
             }
+        } else if (message instanceof ArmySizeIncreaseMessage){
+            int playerId = ((ArmySizeIncreaseMessage) message).playerId;
+            Game game = Game.getInstance();
+            game.getPlayerById(playerId).incrementPlayedKnights();
+            game.updateLargestArmy();
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }

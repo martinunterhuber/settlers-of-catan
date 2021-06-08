@@ -471,6 +471,10 @@ public class Game {
         }
     }
 
+    public void doAsyncClientCallback(BaseMessage message){
+        clientCallback.asyncCallback(message);
+    }
+
     public boolean isBuildingPhase(){
         return (turnCounter / players.size()) < 2;
     }
