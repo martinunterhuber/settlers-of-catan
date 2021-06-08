@@ -45,4 +45,5 @@
     <string name="points">Points:</string>
     <string name="player_name">Player name</string>
     <string name="development">Development</string>
+    <string name="turn_message">Your turn!</string>
 </resources>

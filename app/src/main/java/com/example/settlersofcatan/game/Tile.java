@@ -1,7 +1,11 @@
 package com.example.settlersofcatan.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.example.settlersofcatan.game.Direction.*;
 
 /**
  * Class to represent a tile on the board, has hexagonal shape and as  such 6 nodes and 6 edges.
@@ -9,53 +13,47 @@ import java.util.List;
  */
 public class Tile {
 
-    private Edge eastEdge;
-    private Edge northeastEdge;
-    private Edge northwestEdge;
-    private Edge southeastEdge;
-    private Edge westEdge;
-    private Edge southwestEdge;
+    private final Map<Direction, Edge> edgeDirectionMap = new HashMap<>();
+    private final Edge[] edges = new Edge[6];
 
-    private Edge[] edges;
+    private final Map<Direction, Node> nodeDirectionMap = new HashMap<>();
+    private final Node[] nodes = new Node[6];
 
-    private Node northNode;
-    private Node northeastNode;
-    private Node southeastNode;
-    private Node southNode;
-    private Node southwestNode;
-    private Node northwestNode;
+    private final Resource resource;
 
-    private Node[] nodes;
+    private final TileCoordinates coordinates;
 
-    private Resource resource;
-
-    private int q;
-    private int r;
-
-    private int number;
+    private final int number;
 
     private Robber robber;
 
     private Tile() {
-        this(null, -1);
+        this(null, null, -1);
     }
 
-    public Tile(Resource resource, int number) {
+    public Tile(TileCoordinates coordinates, Resource resource, int number) {
+        this.coordinates = coordinates;
         this.resource = resource;
         this.number = number;
     }
 
     public void initNodes(){
-        nodes = new Node[]{northNode, northeastNode, southeastNode, southNode, southwestNode, northwestNode};
+        Direction[] nodeDirections = Direction.nodeValues();
+        for (int i = 0; i < nodes.length; i++) {
+            nodes[i] = nodeDirectionMap.get(nodeDirections[i]);
+        }
     }
 
     public void initEdges(){
-        edges = new Edge[]{northeastEdge, eastEdge, southeastEdge, southwestEdge, westEdge, northwestEdge};
+        Direction[] edgeDirections = Direction.edgeValues();
+        for (int i = 0; i < edges.length; i++) {
+            edges[i] = edgeDirectionMap.get(edgeDirections[i]);
+        }
     }
 
     /**
      * Activates the giveResource method for all buildings adjacent to this tile,
-     * used by the maps dice rolled method. todo implement robber functionality.
+     * used by the maps dice rolled method. implement robber functionality.
      */
     public void giveResource() {
         // Case for the desert tile
@@ -91,112 +89,134 @@ public class Tile {
         return number;
     }
 
-    public String getPosition(){
-        return "q=" + q + " r=" + r;
-    }
-
     public Edge getEastEdge() {
-        return eastEdge;
+        return edgeDirectionMap.get(EAST);
     }
 
     void setEastEdge(Edge eastEdge) {
-        this.eastEdge = eastEdge;
+        this.edgeDirectionMap.put(EAST, eastEdge);
     }
 
     public Edge getNortheastEdge() {
-        return northeastEdge;
+        return edgeDirectionMap.get(NORTH_EAST);
     }
 
     void setNortheastEdge(Edge northeastEdge) {
-        this.northeastEdge = northeastEdge;
+        this.edgeDirectionMap.put(NORTH_EAST, northeastEdge);
     }
 
     public Edge getNorthwestEdge() {
-        return northwestEdge;
+        return edgeDirectionMap.get(NORTH_WEST);
     }
 
     void setNorthwestEdge(Edge northwestEdge) {
-        this.northwestEdge = northwestEdge;
+        this.edgeDirectionMap.put(NORTH_WEST, northwestEdge);
     }
 
     public Edge getSoutheastEdge() {
-        return southeastEdge;
+        return edgeDirectionMap.get(SOUTH_EAST);
     }
 
     void setSoutheastEdge(Edge southeastEdge) {
-        this.southeastEdge = southeastEdge;
+        this.edgeDirectionMap.put(SOUTH_EAST, southeastEdge);
     }
 
     public Edge getWestEdge() {
-        return westEdge;
+        return edgeDirectionMap.get(WEST);
     }
 
     void setWestEdge(Edge westEdge) {
-        this.westEdge = westEdge;
+        this.edgeDirectionMap.put(WEST, westEdge);
     }
 
     public Edge getSouthwestEdge() {
-        return southwestEdge;
+        return edgeDirectionMap.get(SOUTH_WEST);
     }
 
     void setSouthwestEdge(Edge southwestEdge) {
-        this.southwestEdge = southwestEdge;
+        this.edgeDirectionMap.put(SOUTH_WEST, southwestEdge);
     }
 
     public Edge[] getEdges() {
         return edges;
     }
 
+    public Edge getEdgeByDirection(Direction direction){
+        return edgeDirectionMap.get(direction);
+    }
+
+    public Direction getDirectionOfEdge(Edge edge){
+        for (Map.Entry<Direction, Edge> entry : edgeDirectionMap.entrySet()){
+            if (edge == entry.getValue()){
+                return entry.getKey();
+            }
+        }
+        throw new IllegalArgumentException("Node does not belong to this Tile!");
+    }
+
     public Node getNorthNode() {
-        return northNode;
+        return nodeDirectionMap.get(NORTH);
     }
 
     void setNorthNode(Node northNode) {
-        this.northNode = northNode;
+        this.nodeDirectionMap.put(NORTH, northNode);
     }
 
     public Node getNortheastNode() {
-        return northeastNode;
+        return nodeDirectionMap.get(NORTH_EAST);
     }
 
     void setNortheastNode(Node northeastNode) {
-        this.northeastNode = northeastNode;
+        this.nodeDirectionMap.put(NORTH_EAST, northeastNode);
     }
 
     public Node getSoutheastNode() {
-        return southeastNode;
+        return nodeDirectionMap.get(SOUTH_EAST);
     }
 
     void setSoutheastNode(Node southeastNode) {
-        this.southeastNode = southeastNode;
+        this.nodeDirectionMap.put(SOUTH_EAST, southeastNode);
     }
 
     public Node getSouthNode() {
-        return southNode;
+        return nodeDirectionMap.get(SOUTH);
     }
 
     void setSouthNode(Node southNode) {
-        this.southNode = southNode;
+        this.nodeDirectionMap.put(SOUTH, southNode);
     }
 
     public Node getSouthwestNode() {
-        return southwestNode;
+        return nodeDirectionMap.get(SOUTH_WEST);
     }
 
     void setSouthwestNode(Node southwestNode) {
-        this.southwestNode = southwestNode;
+        this.nodeDirectionMap.put(SOUTH_WEST, southwestNode);
     }
 
     public Node getNorthwestNode() {
-        return northwestNode;
+        return nodeDirectionMap.get(NORTH_WEST);
     }
 
     void setNorthwestNode(Node northwestNode) {
-        this.northwestNode = northwestNode;
+        this.nodeDirectionMap.put(NORTH_WEST, northwestNode);
     }
 
     public Node[] getNodes() {
         return nodes;
+    }
+
+    public Node getNodeByDirection(Direction direction){
+        return nodeDirectionMap.get(direction);
+    }
+
+    public Direction getDirectionOfNode(Node node){
+        for (Map.Entry<Direction, Node> entry : nodeDirectionMap.entrySet()){
+            if (node == entry.getValue()){
+                return entry.getKey();
+            }
+        }
+        throw new IllegalArgumentException("Node does not belong to this Tile!");
     }
 
     public Resource getResource() {
@@ -204,19 +224,19 @@ public class Tile {
     }
 
     public int getQ() {
-        return q;
-    }
-
-    void setQ(int q) {
-        this.q = q;
+        return coordinates.getQ();
     }
 
     public int getR() {
-        return r;
+        return coordinates.getR();
     }
 
-    void setR(int r) {
-        this.r = r;
+    public double getX(){
+        return coordinates.getX();
+    }
+
+    public double getY(){
+        return coordinates.getY();
     }
 
     public boolean hasRobber(){
@@ -229,5 +249,9 @@ public class Tile {
 
     void setRobber(Robber robber) {
         this.robber = robber;
+    }
+
+    public TileCoordinates getCoordinates() {
+        return coordinates;
     }
 }

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.util.OnPostDrawListener;
 
 
 /**
@@ -51,6 +52,12 @@ public class MapView extends View {
         hexGrid = new HexGrid(tiles);
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        invalidate();
+    }
+
     @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
@@ -60,14 +67,22 @@ public class MapView extends View {
 
         hexGrid = new HexGrid(tiles);
 
+        ((OnPostDrawListener) getContext()).onPostDraw();
+
         drawBitmaps(canvas);
         drawNumberTokens(canvas);
     }
 
     private void generateTiles(){
+        int hexagonWidth = HEXAGON_WIDTH;
+        if (getHeight() != 0){
+            if (hexagonWidth >= getHeight() / 6){
+                hexagonWidth = getHeight() / 6;
+            }
+        }
         Tile[] packedTiles = Game.getInstance().getBoard().getPackedTiles();
         for (int i = 0; i < packedTiles.length; i++) {
-            tiles[i] = new Hexagon(packedTiles[i], HEXAGON_WIDTH);
+            tiles[i] = new Hexagon(packedTiles[i], hexagonWidth, (WIDTH - 5 * hexagonWidth) / 2);
         }
     }
 
