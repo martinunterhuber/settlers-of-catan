@@ -3,7 +3,6 @@ package com.example.settlersofcatan.game;
 import android.util.Log;
 
 import com.example.settlersofcatan.PlayerResources;
-import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 
 import java.util.HashSet;
@@ -59,8 +58,12 @@ public class Player {
 
     public void giveSingleResource(Resource resource) {
         resources.incrementResourceCount(resource, 1);
-        PlayerResources.getInstance().setSinglePlayerResources(resources,id);
-        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
+    }
+
+    public void giveResources(Resource resource, int count) {
+        resources.incrementResourceCount(resource, count);
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
     public int getResourceCount(Resource resource) {
@@ -69,8 +72,7 @@ public class Player {
 
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
-        PlayerResources.getInstance().setSinglePlayerResources(resources,id);
-        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
     public ResourceMap getResources() {
@@ -194,7 +196,6 @@ public class Player {
         for (Resource resource : Resource.values()){
             takeResource(resource, costs.getResourceCount(resource));
         }
-        PlayerResources.getInstance().setSinglePlayerResources(resources,id);
     }
 
     public int longestRoad(){
@@ -303,7 +304,7 @@ public class Player {
     public void acceptTradeOffer(TradeOffer tradeOffer) {
         resources.decrementResourceMap(tradeOffer.getReceive());
         resources.incrementResourceMap(tradeOffer.getGive());
-        new Thread(() -> GameClient.getInstance().sendMessage(new PlayerResourcesMessage(PlayerResources.getInstance()))).start();
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
     public void increaseDevelopmentCard(int index){
