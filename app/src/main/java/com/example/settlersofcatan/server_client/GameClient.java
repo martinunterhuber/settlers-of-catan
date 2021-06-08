@@ -38,6 +38,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMess
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
+import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
@@ -137,6 +138,7 @@ public class GameClient {
         client.registerClass(RoadBuildingMessage.class);
         client.registerClass(BuildingMessage.class);
         client.registerClass(MovedRobberMessage.class);
+        client.registerClass(EndTurnMessage.class);
     }
 
     private void gameAsyncCallback(BaseMessage message){
@@ -204,6 +206,13 @@ public class GameClient {
             Board board = Game.getInstance().getBoard();
             board.moveRobberTo(board.getTileByCoordinates(robberMessage.coordinates));
             gameActivity.redrawViews();
+        } else if (message instanceof EndTurnMessage){
+            EndTurnMessage turnMessage = (EndTurnMessage) message;
+            Game game = Game.getInstance();
+            game.initializeNextTurn(turnMessage.nextPlayerId, turnMessage.turnCount);
+            if (gameActivity != null) {
+                gameActivity.redrawViewsNewGameState();
+            }
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }

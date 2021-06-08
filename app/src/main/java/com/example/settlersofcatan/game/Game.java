@@ -12,6 +12,7 @@ import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMess
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
+import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
@@ -149,17 +150,25 @@ public class Game {
                 clientCallback.asyncCallback(new ClientWinMessage(ranking));
                 return;
             }
-            hasRolled = false;
-            hasBuiltRoad = false;
-            hasBuiltSettlement = false;
-            lastBuiltNode = null;
+
             turnCounter++;
             setCurrentPlayerId();
-            // TODO: send messages for every action
-            clientCallback.asyncCallback(new GameStateMessage(this));
+
+            clientCallback.asyncCallback(new EndTurnMessage(turnCounter, currentPlayerId));
             clientCallback.asyncCallback(new DevelopmentCardMessage(DevelopmentCardDeck.getInstance()));
             clientCallback.asyncCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
         }
+    }
+
+    public void initializeNextTurn(int nextPlayerId, int turnCounter){
+        updateLongestRoadPlayer();
+        updateLargestArmy();
+        hasRolled = false;
+        hasBuiltRoad = false;
+        hasBuiltSettlement = false;
+        lastBuiltNode = null;
+        currentPlayerId = nextPlayerId;
+        this.turnCounter = turnCounter;
     }
 
     private boolean canEndTurn(){
