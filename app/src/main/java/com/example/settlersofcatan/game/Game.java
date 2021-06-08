@@ -20,6 +20,7 @@ import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildi
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -391,11 +392,14 @@ public class Game {
     }
 
     public boolean hasCheated(int cheaterId){
-        for (int i = turnCounter; i > turnCounter - players.size(); i--){
+        for (int i = turnCounter; i > turnCounter - players.size() && i >= 0; i--){
             if (cheated.get(i) != null){
-                for (int cId : cheated.get(i)){
-                    if (cId == cheaterId){
-                        return true;
+                List<Integer> cheater = cheated.get(i);
+                if (cheater != null){
+                    for (int cId : cheater){
+                        if (cId == cheaterId){
+                            return true;
+                        }
                     }
                 }
             }
