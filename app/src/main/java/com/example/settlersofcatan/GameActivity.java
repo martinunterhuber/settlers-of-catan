@@ -192,6 +192,11 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         redrawViews();
     }
 
+    public void redrawViewsTurnEnd(){
+        initializeButtons();
+        redrawViews();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

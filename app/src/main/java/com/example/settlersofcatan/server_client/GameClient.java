@@ -213,13 +213,16 @@ public class GameClient {
             Game game = Game.getInstance();
             game.initializeNextTurn(turnMessage.nextPlayerId, turnMessage.turnCount);
             if (gameActivity != null) {
-                gameActivity.redrawViewsNewGameState();
+                gameActivity.redrawViewsTurnEnd();
             }
         } else if (message instanceof ArmySizeIncreaseMessage){
             int playerId = ((ArmySizeIncreaseMessage) message).playerId;
             Game game = Game.getInstance();
             game.getPlayerById(playerId).incrementPlayedKnights();
             game.updateLargestArmy();
+            if (gameActivity != null) {
+                gameActivity.redrawViews();
+            }
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }
