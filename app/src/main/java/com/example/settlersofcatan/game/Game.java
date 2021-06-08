@@ -151,6 +151,10 @@ public class Game {
                 return;
             }
 
+            hasRolled = false;
+            hasBuiltRoad = false;
+            hasBuiltSettlement = false;
+            lastBuiltNode = null;
             turnCounter++;
             setCurrentPlayerId();
 
