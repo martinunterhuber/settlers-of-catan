@@ -455,9 +455,7 @@ public class Game {
             }
 
             punishedPlayer.takeResource(resource, count);
-            for (int i = 0; i < count; i++) {
-                playerTo.giveSingleResource(resource);
-            }
+            playerTo.giveResources(resource, count);
         }
     }
 

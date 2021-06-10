@@ -308,6 +308,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     public void redrawViews(){
         findViewById(R.id.opponents).invalidate();
         playerView.invalidate();
+        redrawResourceView();
+    }
+
+    public void redrawResourceView(){
         resources.invalidate();
     }
 

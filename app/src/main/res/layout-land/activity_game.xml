@@ -119,17 +119,17 @@
             app:layout_constraintStart_toEndOf="@id/icon_trophy"
             app:srcCompat="@drawable/road_white" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btn_dice"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/img_description_road"
             android:onClick="onClick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_layout"
             app:layout_constraintStart_toEndOf="@+id/btn_city"
-            app:srcCompat="@drawable/dice1" />
+            app:srcCompat="@drawable/ic_baseline_casino_24"
+            tools:ignore="VectorDrawableCompat" />
 
         <TextView
             android:id="@+id/victory_points"
@@ -164,7 +164,7 @@
 
         <GridLayout
             android:id="@+id/button_layout"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="0dp"
             android:columnCount="1"
             android:rowCount="4"

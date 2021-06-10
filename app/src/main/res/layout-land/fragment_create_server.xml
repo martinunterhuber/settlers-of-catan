@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:text="Player 1" />
+                android:text="@string/player_1" />
 
             <EditText
                 android:id="@+id/editTextPlayer"
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:text="Player 2"
+                android:text="@string/player_2"
                 app:layout_constraintBaseline_toBaselineOf="@id/editTextPlayer1" />
 
             <EditText
@@ -99,6 +99,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
+                android:enabled="false"
                 android:ems="10"
                 android:inputType="textPersonName" />
         </LinearLayout>
@@ -114,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:text="Player 3"
+                android:text="@string/player_3"
                 app:layout_constraintBaseline_toBaselineOf="@id/editTextPlayer2" />
 
             <EditText
@@ -125,6 +126,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
+                android:enabled="false"
                 android:ems="10"
                 android:inputType="textPersonName" />
         </LinearLayout>
@@ -141,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:text="Player 4" />
+                android:text="@string/player_4" />
 
             <EditText
                 android:id="@+id/editTextPlayer3"
@@ -151,6 +153,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
+                android:enabled="false"
                 android:ems="10"
                 android:inputType="textPersonName" />
         </LinearLayout>
