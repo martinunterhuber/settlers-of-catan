@@ -6,14 +6,6 @@ import com.example.settlersofcatan.game.TradeOffer;
 
 public class ReceiveTradeFragment extends ExchangeFragment {
 
-    @Override
-    protected void initBaseVariables() {
-        super.initBaseVariables();
-        resourceExchangeRates = currentPlayer.getResourceExchangeRates();
-    }
-
-
-
     public void setResourceViews(TradeOffer tradeOffer) {
         currentInventoryView.getContent().decrementResourceMap(tradeOffer.getReceive());
         currentInventoryView.getContent().incrementResourceMap(tradeOffer.getGive());
@@ -24,8 +16,5 @@ public class ReceiveTradeFragment extends ExchangeFragment {
         currentInventoryView.updateResourceValues();
     }
 
-    public boolean wasChanged() {
-        return giveCounter != 0 || receiveCounter != 0;
-    }
 
 }

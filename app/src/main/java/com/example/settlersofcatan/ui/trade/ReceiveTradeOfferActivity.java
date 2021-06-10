@@ -6,13 +6,16 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.TradeActivity;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
@@ -24,6 +27,8 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
     private ReceiveTradeFragment receiveTradeFragment;
     private Button denyBtn;
     private Button acceptBtn;
+    private Button counterOfferBtn;
+    private TextView offerFromTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +50,19 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
         params.y = -20;
         getWindow().setAttributes(params);
 
+
+
         receiveTradeFragment = (ReceiveTradeFragment) getSupportFragmentManager().findFragmentById(R.id.receiveTradeView);
         denyBtn = findViewById(R.id.denyBtn);
         acceptBtn = findViewById(R.id.acceptBtn);
-
+        counterOfferBtn = findViewById(R.id.counterOfferBtn);
+        offerFromTxt = findViewById(R.id.offerFromTxt);
 
         Intent i = getIntent();
         tradeOffer = (TradeOffer) i.getParcelableExtra("tradeoffer");
+
+        String text = "Trade offer from " + tradeOffer.getFrom().getName();
+        offerFromTxt.setText(text);
 
         if (!Game.getInstance().getPlayerById(GameClient.getInstance().getId()).isEligibleForTradeOffer(tradeOffer)) {
             acceptBtn.setVisibility(View.GONE);
@@ -63,11 +74,26 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
             finish();
                 }
         );
+
         denyBtn.setOnClickListener(v -> {
             Game.getInstance().sendTradeOfferReply(false);
             finish();
                 }
         );
+
+        counterOfferBtn.setOnClickListener(v -> {
+            TradeOffer t = new TradeOffer(tradeOffer.getTo(), tradeOffer.getFrom());
+            t.setGive(receiveTradeFragment.getGiveInventoryView().getContent());
+            t.setReceive(receiveTradeFragment.getReceiveInventoryView().getContent());
+            Game.getInstance().sendTradeOffer(t);
+            Intent intent = new Intent(getApplicationContext(), WaitForReplyActivity.class);
+            intent.putExtra("tradeoffer",(Parcelable) t);
+            startActivity(intent);
+            finish();
+                }
+        );
+
+
 
 
     }

@@ -182,13 +182,17 @@ public class GameClient {
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
         } else if (message instanceof TradeOfferMessage) {
             TradeOffer tradeOffer = ((TradeOfferMessage) message).tradeOffer;
-            Log.i("GameClient", "REACHED HERE");
+            if (waitForReplyActivity != null && tradeOffer.getTo().getId() == id) {
+                waitForReplyActivity.getCounterOffer();
+                waitForReplyActivity = null;
+            }
             if (gameActivity != null && tradeOffer.getTo().getId() == id) {
                 gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
             }
         } else if (message instanceof TradeReplyMessage) {
             if (waitForReplyActivity != null) {
                 waitForReplyActivity.getReply(((TradeReplyMessage) message).acceptedTrade);
+                waitForReplyActivity = null;
             }
         }
         Log.i(NetworkConstants.TAG, message.toString());

@@ -39,7 +39,6 @@ public class TradeFragment extends Fragment {
     Button toFirstBtn;
     Button toSecondBtn;
     Button toThirdBtn;
-    Button toAllBtn;
     ArrayList<Player> otherPlayers;
     Player currentPlayer;
 
@@ -63,7 +62,6 @@ public class TradeFragment extends Fragment {
         toFirstBtn = getView().findViewById(R.id.toFirstBtn);
         toSecondBtn = getView().findViewById(R.id.toSecondBtn);
         toThirdBtn = getView().findViewById(R.id.toThirdBtn);
-        toAllBtn = getView().findViewById(R.id.toAllBtn);
         toFirstBtn.setVisibility(View.GONE);
         toSecondBtn.setVisibility(View.GONE);
         toThirdBtn.setVisibility(View.GONE);

@@ -30,4 +30,8 @@ public class WaitForReplyActivity extends AppCompatActivity {
         }
         finish();
     }
+
+    public void getCounterOffer() {
+        finish();
+    }
 }

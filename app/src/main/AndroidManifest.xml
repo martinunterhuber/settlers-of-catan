@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SettlersOfCatan">
-        <activity android:name=".ui.trade.ReceiveTradeOfferActivity"></activity>
+        <activity
+            android:name=".ui.trade.ReceiveTradeOfferActivity"
+            android:theme="@style/Theme.SettlersOfCatan.Receive">
+        </activity>
         <activity android:name=".ui.trade.WaitForReplyActivity" />
         <activity
             android:name=".GameEndActivity"
