@@ -3,6 +3,8 @@ package com.example.settlersofcatan.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.settlersofcatan.server_client.GameClient;
+
 public class TradeOffer implements Parcelable {
     private Player from;
     private Player to;
@@ -20,6 +22,8 @@ public class TradeOffer implements Parcelable {
     protected TradeOffer(Parcel in) {
         receive = new ResourceMap(in.createIntArray());
         give = new ResourceMap(in.createIntArray());
+        to = Game.getInstance().getPlayerById(in.readInt());
+        from = Game.getInstance().getPlayerById(in.readInt());
     }
 
     public static final Creator<TradeOffer> CREATOR = new Creator<TradeOffer>() {
@@ -84,6 +88,8 @@ public class TradeOffer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeIntArray(receive.toArray());
         dest.writeIntArray(give.toArray());
+        dest.writeInt(to.getId());
+        dest.writeInt(from.getId());
     }
 
 }

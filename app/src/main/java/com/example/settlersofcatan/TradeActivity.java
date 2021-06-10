@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
+import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -56,9 +58,11 @@ public class TradeActivity extends AppCompatActivity {
     }
 
 
-    public void waitForReply() {
+    public void waitForReply(TradeOffer tradeOffer) {
         Intent i = new Intent(getApplicationContext(), WaitForReplyActivity.class);
+        i.putExtra("tradeoffer",(Parcelable) tradeOffer);
         startActivity(i);
+        finish();
     }
 
 

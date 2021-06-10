@@ -94,7 +94,7 @@ public class TradeFragment extends Fragment {
         tradeOffer.setGive(exchangeFragment.getGiveInventoryView().getContent());
         tradeOffer.setReceive(exchangeFragment.getReceiveInventoryView().getContent());
         Game.getInstance().sendTradeOffer(tradeOffer);
-        ((TradeActivity) getActivity()).waitForReply();
+        ((TradeActivity) getActivity()).waitForReply(tradeOffer);
     }
 
 }

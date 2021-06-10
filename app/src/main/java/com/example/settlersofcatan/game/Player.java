@@ -295,6 +295,11 @@ public class Player {
         resources.incrementResourceMap(tradeOffer.getGive());
     }
 
+    public void tradeOfferWasAccepted(TradeOffer tradeOffer) {
+        resources.incrementResourceMap(tradeOffer.getReceive());
+        resources.decrementResourceMap(tradeOffer.getGive());
+    }
+
     public void increaseDevelopmentCard(int index){
         developmetCards[index]++;
         Log.i("DEVELOPMENT","Player card count increased.");

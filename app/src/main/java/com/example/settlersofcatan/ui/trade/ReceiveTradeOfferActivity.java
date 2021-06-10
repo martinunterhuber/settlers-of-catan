@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -48,11 +49,17 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
         denyBtn = findViewById(R.id.denyBtn);
         acceptBtn = findViewById(R.id.acceptBtn);
 
+
         Intent i = getIntent();
         tradeOffer = (TradeOffer) i.getParcelableExtra("tradeoffer");
 
+        if (!Game.getInstance().getPlayerById(GameClient.getInstance().getId()).isEligibleForTradeOffer(tradeOffer)) {
+            acceptBtn.setVisibility(View.GONE);
+        }
+
         acceptBtn.setOnClickListener(v -> {
             Game.getInstance().sendTradeOfferReply(true);
+            Game.getInstance().getPlayerById(GameClient.getInstance().getId()).acceptTradeOffer(tradeOffer);
             finish();
                 }
         );

@@ -44,6 +44,7 @@ import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessag
 import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
+import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -60,6 +61,7 @@ public class GameClient {
     private int id;
     private Callback<BaseMessage> startGameCallback;
     private GameActivity gameActivity;
+    private WaitForReplyActivity waitForReplyActivity;
 
     private GameClient(){
 
@@ -185,7 +187,9 @@ public class GameClient {
                 gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
             }
         } else if (message instanceof TradeReplyMessage) {
-
+            if (waitForReplyActivity != null) {
+                waitForReplyActivity.getReply(((TradeReplyMessage) message).acceptedTrade);
+            }
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }
@@ -225,5 +229,9 @@ public class GameClient {
 
     public AppCompatActivity getGameActivity(){
         return gameActivity;
+    }
+
+    public void registerWaitForReplyActivity(WaitForReplyActivity activity) {
+        waitForReplyActivity = activity;
     }
 }
