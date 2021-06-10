@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,9 +18,12 @@ import android.widget.TextView;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
+import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.ui.trade.ReceiveTradeOfferActivity;
+import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
 
 import java.util.List;
 
@@ -292,6 +296,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void displayTradeOffer(TradeOffer tradeOffer) {
-        
+        Intent i = new Intent(getApplicationContext(), ReceiveTradeOfferActivity.class);
+        i.putExtra("tradeoffer", (Parcelable) tradeOffer);
+        startActivity(i);
     }
+
 }

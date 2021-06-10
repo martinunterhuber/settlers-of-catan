@@ -2,6 +2,7 @@ package com.example.settlersofcatan.ui.trade;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SearchView;
 
+import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.TradeActivity;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.TradeOffer;
@@ -91,6 +94,7 @@ public class TradeFragment extends Fragment {
         tradeOffer.setGive(exchangeFragment.getGiveInventoryView().getContent());
         tradeOffer.setReceive(exchangeFragment.getReceiveInventoryView().getContent());
         Game.getInstance().sendTradeOffer(tradeOffer);
+        ((TradeActivity) getActivity()).waitForReply();
     }
 
 }

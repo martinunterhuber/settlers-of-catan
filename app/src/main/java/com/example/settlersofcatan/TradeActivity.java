@@ -1,9 +1,11 @@
 package com.example.settlersofcatan;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 
+import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
@@ -51,6 +53,12 @@ public class TradeActivity extends AppCompatActivity {
 
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+    }
+
+
+    public void waitForReply() {
+        Intent i = new Intent(getApplicationContext(), WaitForReplyActivity.class);
+        startActivity(i);
     }
 
 

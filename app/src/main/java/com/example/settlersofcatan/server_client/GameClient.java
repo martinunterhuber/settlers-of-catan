@@ -128,6 +128,9 @@ public class GameClient {
         client.registerClass(Robber.class);
         client.registerClass(DevelopmentCardDeck.class);
         client.registerClass(DevelopmentCardMessage.class);
+        client.registerClass(TradeOfferMessage.class);
+        client.registerClass(TradeOffer.class);
+        client.registerClass(TradeReplyMessage.class);
     }
 
     private void gameCallback(BaseMessage message){
@@ -177,7 +180,8 @@ public class GameClient {
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
         } else if (message instanceof TradeOfferMessage) {
             TradeOffer tradeOffer = ((TradeOfferMessage) message).tradeOffer;
-            if (gameActivity != null) {
+            Log.i("GameClient", "REACHED HERE");
+            if (gameActivity != null && tradeOffer.getTo().getId() == id) {
                 gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
             }
         } else if (message instanceof TradeReplyMessage) {

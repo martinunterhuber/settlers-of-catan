@@ -21,6 +21,7 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
@@ -33,6 +34,7 @@ import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardM
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
@@ -94,6 +96,8 @@ public class GameServer {
             broadcastMessage(message);
         }else if (message instanceof TradeOfferMessage) {
             broadcastMessage(message);
+        }else if (message instanceof  TradeReplyMessage) {
+            broadcastMessage(message);
         }
         else{
             Log.e(NetworkConstants.TAG,"Unknown message type!");
@@ -144,6 +148,9 @@ public class GameServer {
         server.registerClass(Robber.class);
         server.registerClass(DevelopmentCardDeck.class);
         server.registerClass(DevelopmentCardMessage.class);
+        server.registerClass(TradeOfferMessage.class);
+        server.registerClass(TradeOffer.class);
+        server.registerClass(TradeReplyMessage.class);
     }
 
     private void startServer(){

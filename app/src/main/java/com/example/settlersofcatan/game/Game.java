@@ -1,5 +1,6 @@
 package com.example.settlersofcatan.game;
 
+import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.server_client.GameClient;
@@ -10,6 +11,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -312,6 +314,12 @@ public class Game {
     public void sendTradeOffer(TradeOffer tradeOffer) {
         new Thread(() -> GameClient.getInstance()
                 .sendMessage(new TradeOfferMessage(tradeOffer)))
+                .start();
+    }
+
+    public void sendTradeOfferReply(Boolean accepted) {
+        new Thread(() -> GameClient.getInstance()
+                .sendMessage(new TradeReplyMessage(accepted)))
                 .start();
     }
 
