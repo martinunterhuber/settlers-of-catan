@@ -58,6 +58,7 @@ public class MainActivityTest {
         onView(withId(R.id.editTextServerIP)).perform(repeatedlyUntil(typeText("localhost"), hasFocus(), 5));
         onView(withId(R.id.editTextUsername)).perform(typeText("Test"), closeSoftKeyboard());
         onView(withId(R.id.joinServerButton)).perform(click());
+        Thread.sleep(500);
 
         intended(hasComponent(WaitForHostActivity.class.getName()));
     }

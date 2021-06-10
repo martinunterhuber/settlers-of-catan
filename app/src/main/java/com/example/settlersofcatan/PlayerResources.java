@@ -13,7 +13,7 @@ public class PlayerResources {
     private PlayerResources() {
         playersResourceMaps = new HashMap<>();
         for (Player p : Game.getInstance().getPlayers()){
-            playersResourceMaps.put(p.getId(),new ResourceMap());
+            playersResourceMaps.put(p.getId(), p.getResources());
         }
     }
 
@@ -26,10 +26,6 @@ public class PlayerResources {
 
     public static void setInstance(PlayerResources instance){
         PlayerResources.instance = instance;
-    }
-
-    public void setSinglePlayerResources(ResourceMap resources, int playerId){
-        playersResourceMaps.put(playerId,resources);
     }
 
     public ResourceMap getSinglePlayerResources(int id){

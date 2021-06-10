@@ -3,12 +3,15 @@ package com.example.settlersofcatan;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,19 +21,22 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.util.OnPostDrawListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 
     private MapView map;
     private PlayerView playerView;
@@ -128,8 +134,6 @@ public class GameActivity extends AppCompatActivity {
         yearOfPlenty=findViewById(R.id.view_year_of_plenty);
 
         endTurnButton = findViewById(R.id.endTurnButton);
-        endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
-        endTurnButton.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
 
         moveRobberButton = findViewById(R.id.moveRobber);
         moveRobberButton.setOnClickListener(this::moveRobber);
@@ -138,9 +142,26 @@ public class GameActivity extends AppCompatActivity {
         dice.setOnClickListener(this::rollDice);
 
         drawDevelopmentCard=findViewById(R.id.btn_draw_development);
+
+        btnTrade = findViewById(R.id.btn_trade);
+        btnTrade.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), TradeActivity.class);
+            startActivity(i);
+        });
+
+        client.registerActivity(this);
+
+        initializeButtons();
+    }
+
+    private void initializeButtons(){
+        Game game = Game.getInstance();
+
+        endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
+
         drawDevelopmentCard.setOnClickListener(
                 view -> {
-                    int type = Game.getInstance().drawDevelopmentCard(GameClient.getInstance().getId());
+                    int type = game.drawDevelopmentCard(GameClient.getInstance().getId());
 
                     if (type == 0){
                         knights.updateView(type);
@@ -155,21 +176,32 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
         );
-      
-        btnTrade = findViewById(R.id.btn_trade);
-        btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
-        btnTrade.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), TradeActivity.class);
-            startActivity(i);
-        });
-
-        client.registerActivity(this);
 
         setButtonToPlayerColor();
-        showCurrentPlayer();
-      
-        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()
-                                                                                    + Game.getInstance().getPlayerById(client.getId()).getHiddenVictoryPoints()));
+        runOnUiThread(() -> {
+            drawDevelopmentCard.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
+            endTurnButton.setEnabled(game.getCurrentPlayerId() == client.getId() && game.isBuildingPhase());
+            btnTrade.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
+            showCurrentPlayer();
+            ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(game.getPlayerById(client.getId()).getVictoryPoints()
+                    + game.getPlayerById(client.getId()).getHiddenVictoryPoints()));
+        });
+    }
+
+    public void redrawViewsNewGameState(){
+        map.invalidate();
+        playerView.setHexGrid(map.getHexGrid());
+        redrawViewsTurnEnd();
+    }
+
+    public void redrawViewsTurnEnd(){
+        initializeButtons();
+        redrawViews();
+        if (Game.getInstance().getCurrentPlayerId() == client.getId()){
+            runOnUiThread(() -> {
+                Toast.makeText(this, R.string.turn_message, Toast.LENGTH_LONG).show();
+            });
+        }
     }
 
     @Override
@@ -194,6 +226,7 @@ public class GameActivity extends AppCompatActivity {
         int result = Game.getInstance().rollDice(client.getId());
         if (result > 0){
             ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+            endTurnButton.setEnabled(true);
             resources.invalidate();
         }
         if (result == 7){
@@ -274,10 +307,14 @@ public class GameActivity extends AppCompatActivity {
 
     public void redrawViews(){
         findViewById(R.id.opponents).invalidate();
-        findViewById(R.id.playerView).invalidate();
-        findViewById(R.id.resourceView).invalidate();
+        playerView.invalidate();
+        redrawResourceView();
     }
-  
+
+    public void redrawResourceView(){
+        resources.invalidate();
+    }
+
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:
@@ -350,5 +387,11 @@ public class GameActivity extends AppCompatActivity {
             opponent3.invalidate();
         }
 
+    }
+
+    @Override
+    public void onPostDraw() {
+        playerView.setHexGrid(map.getHexGrid());
+        playerView.invalidate();
     }
 }

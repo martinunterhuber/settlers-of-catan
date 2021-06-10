@@ -21,12 +21,12 @@ public class Hexagon extends HexagonPart {
     private Point[] points=new Point[6];
     private Path[] paths=new Path[6];
 
-    public Hexagon(Tile tile, int width){
+    public Hexagon(Tile tile, int width, int offsetX, int offsetY){
         this.tile = tile;
         this.radius = (int) (width/Math.sqrt(3));
         this.width = width;
         this.halfWidth = width / 2;
-        this.center = hexToPixel(tile, this.radius, new Point(-halfWidth, (int)(radius * 1.5)));
+        this.center = hexToPixel(tile, this.radius, new Point(-halfWidth + offsetX, radius + offsetY));
         this.drawableResourceId = getResourceIdFromTileResource();
 
         b = (int) (Math.sqrt(Math.pow(radius, 2) - Math.pow(halfWidth, 2)));
@@ -36,18 +36,17 @@ public class Hexagon extends HexagonPart {
     }
 
     private Point hexToPixel(Tile tile, int scale, Point offset){
-        int x = (int)(scale * (Math.sqrt(3) * tile.getQ()  +  Math.sqrt(3)/2 * tile.getR())) + offset.getX();
-        int y = (int)(scale * (3./2 * (double)tile.getR())) + offset.getY();
+        int x = (int)(scale * tile.getX()) + offset.getX();
+        int y = (int)(scale * tile.getY()) + offset.getY();
         return new Point(x, y);
     }
 
-    private int getResourceIdFromTileResource(){
+    public static int getResourceIdFromResource(Resource resource){
         int drawable;
-        Resource resource = tile.getResource();
         if (resource == null){
             drawable = R.drawable.deserthex;
         } else {
-            switch (tile.getResource()){
+            switch (resource){
                 case SHEEP:
                     drawable = R.drawable.sheephex;
                     break;
@@ -68,6 +67,10 @@ public class Hexagon extends HexagonPart {
             }
         }
         return drawable;
+    }
+
+    private int getResourceIdFromTileResource(){
+       return getResourceIdFromResource(tile.getResource());
     }
 
     /**

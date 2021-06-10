@@ -18,38 +18,37 @@
             android:id="@+id/mapView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/resourceView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_layout" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_layout"
+            app:layout_constraintStart_toEndOf="@id/opponents"
+            app:layout_constraintTop_toTopOf="@+id/button_layout" />
 
         <com.example.settlersofcatan.PlayerView
             android:id="@+id/playerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/mapView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_layout" />
-
-        <com.example.settlersofcatan.ResourceView
-            android:id="@+id/resourceView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_settlement" />
+            app:layout_constraintEnd_toStartOf="@id/button_layout"
+            app:layout_constraintStart_toEndOf="@id/opponents"
+            app:layout_constraintTop_toTopOf="@+id/button_layout" />
+
+        <com.example.settlersofcatan.VerticalResourceView
+            android:id="@+id/resourceView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/opponents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/resourceView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.example.settlersofcatan.OpponentView
@@ -57,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tag="1"
-                app:layout_constraintEnd_toStartOf="@+id/opponent2"
+                app:layout_constraintBottom_toTopOf="@id/opponent2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,28 +65,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tag="2"
-                app:layout_constraintEnd_toStartOf="@id/opponent3"
-                app:layout_constraintStart_toEndOf="@id/opponent1"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toTopOf="@id/opponent3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/opponent1" />
 
             <com.example.settlersofcatan.OpponentView
                 android:id="@+id/opponent3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tag="3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/opponent2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/opponent2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/btn_city"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/img_description_city"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
-            app:layout_constraintTop_toTopOf="@id/icon_trophy"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_dice"
             app:layout_constraintStart_toEndOf="@+id/btn_settlement"
             app:srcCompat="@drawable/city_white"
@@ -95,45 +94,42 @@
 
         <ImageView
             android:id="@+id/btn_settlement"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/img_description_settlement"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
-            app:layout_constraintTop_toTopOf="@id/icon_trophy"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_city"
+            app:layout_constraintHorizontal_bias="0.44"
             app:layout_constraintStart_toEndOf="@+id/btn_road"
             app:srcCompat="@drawable/settlement_white"
             tools:ignore="VectorDrawableCompat" />
 
         <ImageView
             android:id="@+id/btn_road"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/img_description_road"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
-            app:layout_constraintTop_toTopOf="@id/icon_trophy"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_settlement"
-            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/icon_trophy"
             app:srcCompat="@drawable/road_white" />
 
         <ImageButton
             android:id="@+id/btn_dice"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/img_description_road"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
-            app:layout_constraintTop_toTopOf="@id/icon_trophy"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_layout"
             app:layout_constraintStart_toEndOf="@+id/btn_city"
             app:srcCompat="@drawable/ic_baseline_casino_24"
-            tools:ignore="VectorDrawableCompat"
-            />
+            tools:ignore="VectorDrawableCompat" />
 
         <TextView
             android:id="@+id/victory_points"
@@ -147,14 +143,14 @@
 
         <ImageView
             android:id="@+id/icon_trophy"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_marginBottom="4dp"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
             android:onClick="onClick"
             android:src="@drawable/trophy"
-            app:layout_constraintBottom_toTopOf="@id/resourceView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_road"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/opponents" />
 
         <TextView
             android:id="@+id/rollResult"
@@ -168,20 +164,22 @@
 
         <GridLayout
             android:id="@+id/button_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="2"
+            android:layout_width="120dp"
+            android:layout_height="0dp"
+            android:columnCount="1"
+            android:rowCount="4"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/opponents">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <Button
+
                 android:id="@+id/moveRobber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
@@ -195,6 +193,7 @@
                 android:id="@+id/endTurnButton"
                 android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
@@ -208,6 +207,7 @@
                 android:id="@+id/btn_trade"
                 android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
@@ -221,6 +221,7 @@
                 android:id="@+id/btn_draw_development"
                 android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"

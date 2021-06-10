@@ -11,6 +11,7 @@ import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.DevelopmentCard;
 import com.example.settlersofcatan.game.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.Direction;
 import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Harbor;
@@ -25,17 +26,25 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.ArmySizeIncreaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.BuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
+import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
@@ -123,20 +132,25 @@ public class GameClient {
         client.registerClass(DevelopmentCardMessage.class);
         client.registerClass(PlayerResourcesMessage.class);
         client.registerClass(PlayerResources.class);
+        client.registerClass(TileCoordinates.class);
+        client.registerClass(Direction.class);
+        client.registerClass(SettlementBuildingMessage.class);
+        client.registerClass(CityBuildingMessage.class);
+        client.registerClass(RoadBuildingMessage.class);
+        client.registerClass(BuildingMessage.class);
+        client.registerClass(MovedRobberMessage.class);
+        client.registerClass(EndTurnMessage.class);
+        client.registerClass(ArmySizeIncreaseMessage.class);
     }
 
-    private void gameCallback(BaseMessage message){
-        if (message instanceof GameStateMessage
-                || message instanceof ClientWinMessage
-                || message instanceof PlayerResourcesMessage){
-            sendMessage(message);
-        }
+    private void gameAsyncCallback(BaseMessage message){
+        new Thread(() -> sendMessage(message)).start();
     }
 
     private void callback(BaseMessage message){
         if (message instanceof GameStateMessage){
             Game game = ((GameStateMessage) message).game;
-            game.setClientCallback(this::gameCallback);
+            game.setClientCallback(this::gameAsyncCallback);
             Game.setInstance(game);
             for (Player player : Game.getInstance().getPlayers()){
                 if (player.getName().equals(this.username)){
@@ -145,19 +159,16 @@ public class GameClient {
             }
             if (startGameCallback != null){
                 startGameCallback.callback(message);
+                startGameCallback = null;
             }
             if (gameActivity != null) {
-                // gameActivity.redrawViews();
+                gameActivity.redrawViewsNewGameState();
             }
-        }
-        if (message instanceof ClientWinMessage && gameActivity != null){
-            if(gameActivity != null) {
-                Intent intent = new Intent(gameActivity, GameEndActivity.class);
-                gameActivity.startActivity(intent);
-                gameActivity.finish();
-            }
-        }
-        if (message instanceof PlayerResourcesMessage && gameActivity != null){
+        } else if (message instanceof ClientWinMessage && gameActivity != null){
+            Intent intent = new Intent(gameActivity, GameEndActivity.class);
+            gameActivity.startActivity(intent);
+            gameActivity.finish();
+        } else if (message instanceof PlayerResourcesMessage && gameActivity != null){
             PlayerResources.setInstance(((PlayerResourcesMessage) message).playerResources);
             for (Player p : Game.getInstance().getPlayers()){
                 p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
@@ -169,17 +180,49 @@ public class GameClient {
 
             gameActivity.redrawViews();
 
-        }
-        if (message instanceof ClientDiceMessage && gameActivity != null){
+        } else if (message instanceof ClientDiceMessage && gameActivity != null){
             gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
                     ((ClientDiceMessage) message).getUsername(),
                     ((ClientDiceMessage) message).getRolled())
 
             );
-
-        }
-        if (message instanceof DevelopmentCardMessage){
+        } else if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
+        } else if (message instanceof BuildingMessage && gameActivity != null) {
+            BuildingMessage buildMessage = (BuildingMessage) message;
+            Game game = Game.getInstance();
+            if (buildMessage.playerId != id) {
+                Tile tile = game.getBoard().getTileByCoordinates(buildMessage.tileCoordinates);
+                Player player = game.getPlayerById(buildMessage.playerId);
+                if (message instanceof CityBuildingMessage) {
+                    player.placeCity(tile.getNodeByDirection(buildMessage.direction));
+                } else if (message instanceof RoadBuildingMessage) {
+                    player.placeRoad(tile.getEdgeByDirection(buildMessage.direction));
+                } else {
+                    player.placeSettlement(tile.getNodeByDirection(buildMessage.direction));
+                }
+                gameActivity.redrawViews();
+            }
+        } else if (message instanceof MovedRobberMessage && gameActivity != null) {
+            MovedRobberMessage robberMessage = (MovedRobberMessage)message;
+            Board board = Game.getInstance().getBoard();
+            board.moveRobberTo(board.getTileByCoordinates(robberMessage.coordinates));
+            gameActivity.redrawViews();
+        } else if (message instanceof EndTurnMessage){
+            EndTurnMessage turnMessage = (EndTurnMessage) message;
+            Game game = Game.getInstance();
+            game.initializeNextTurn(turnMessage.nextPlayerId, turnMessage.turnCount);
+            if (gameActivity != null) {
+                gameActivity.redrawViewsTurnEnd();
+            }
+        } else if (message instanceof ArmySizeIncreaseMessage){
+            int playerId = ((ArmySizeIncreaseMessage) message).playerId;
+            Game game = Game.getInstance();
+            game.getPlayerById(playerId).incrementPlayedKnights();
+            game.updateLargestArmy();
+            if (gameActivity != null) {
+                gameActivity.redrawViews();
+            }
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }

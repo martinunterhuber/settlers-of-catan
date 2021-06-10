@@ -3,12 +3,8 @@ package com.example.settlersofcatan;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -19,13 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.NodePlaceable;
+import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Road;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * View class on which the cities, settlements and roads of the players are placed.
@@ -180,12 +174,8 @@ public class PlayerView extends View {
      */
 
     private void drawRoads(Canvas canvas){
-        Bitmap ship = getBitmap(R.drawable.ship);
-        ship = Bitmap.createScaledBitmap(ship, 100,100, false);
         for (Path p : hexGrid.getPaths()){
             Bitmap bitmap = getBitmap(p.getResID());
-            float offsetX = 0f;
-            float offsetY = 0f;
             bitmap = Bitmap.createScaledBitmap(bitmap, p.getLength(),20, false);
 
             //vertical lines [BC] and [EF]
@@ -193,43 +183,30 @@ public class PlayerView extends View {
                 bitmap = rotateBitmap(bitmap, 90);
 
                 if (p.getX1().getY()<p.getX2().getY()) {
-                    offsetX = +1;
                     canvas.drawBitmap(bitmap, p.getX1().getX()-10, p.getX1().getY(), null);
                 }else {
-                    offsetX = -1;
                     canvas.drawBitmap(bitmap, p.getX2().getX()-10, p.getX2().getY(), null);
                 }
 
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [AB]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-                offsetY = -1;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [CD]
                     && p.getX1().getY() < p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-                offsetY = +1;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX1().getY()-10,null);
 
             }else if (p.getX1().getX() > p.getX2().getX()       // distance [DE]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 30);
-                offsetY = +1;
                 canvas.drawBitmap(bitmap, p.getX2().getX(), p.getX2().getY()-10,null);
 
             }else if (p.getX1().getX() < p.getX2().getX()       // distance [FA]
                     && p.getX1().getY() > p.getX2().getY()){
                 bitmap = rotateBitmap(bitmap, 150);
-                offsetY = -1;
                 canvas.drawBitmap(bitmap, p.getX1().getX(), p.getX2().getY()-10,null);
-            }
-
-            if (p.getEdge().getHarbor() != null){
-                canvas.drawBitmap(ship,
-                        p.getX2().getX() + (- p.getX2().getX() + p.getX1().getX()) / 2f - 50f + offsetX * 50f,
-                        p.getX2().getY() + (- p.getX2().getY() + p.getX1().getY()) / 2f - 50f + offsetY * 50f,
-                        null);
             }
         }
     }

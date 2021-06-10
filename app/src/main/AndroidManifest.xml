@@ -19,7 +19,7 @@
         <activity
             android:name=".TradeActivity"
             android:label="@string/title_activity_trade"
-            android:theme="@style/Theme.SettlersOfCatan.Trade"/>
+            android:theme="@style/GameTheme"/>
 
         <activity android:name=".GameActivity"
             android:theme="@style/GameTheme"

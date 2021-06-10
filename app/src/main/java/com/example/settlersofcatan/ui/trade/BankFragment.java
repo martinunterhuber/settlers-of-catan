@@ -44,6 +44,9 @@ public class BankFragment extends Fragment {
         completeTrade = getView().findViewById(R.id.completeTradeBtn);
 
         completeTrade.setOnClickListener(v -> executeTrade());
+
+        Button cancel = view.findViewById(R.id.cancel_trade_button);
+        cancel.setOnClickListener(v -> getActivity().finish());
     }
 
     private void executeTrade() {
