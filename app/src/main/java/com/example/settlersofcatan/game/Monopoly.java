@@ -2,9 +2,11 @@ package com.example.settlersofcatan.game;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.ResourceDialog;
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 
 public class Monopoly extends DevelopmentCard{
 
@@ -31,11 +33,9 @@ public class Monopoly extends DevelopmentCard{
             }
         }
 
-        while (resourceCount > 0) {
-            Game.getInstance().getPlayerById(GameClient.getInstance().getId()).giveSingleResource(resource);
-            Log.i("DEVELOPMENT_MONOPOLY","Resource added.");
-            resourceCount--;
-        }
+        Game.getInstance().getPlayerById(GameClient.getInstance().getId()).giveResources(resource, resourceCount);
+        Log.i("DEVELOPMENT_MONOPOLY","Resource added.");
+
         GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
 
         String obtained = String.valueOf(Game.getInstance().getPlayerById(GameClient.getInstance().getId())

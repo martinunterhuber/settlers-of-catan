@@ -82,12 +82,12 @@
 
         <ImageView
             android:id="@+id/btn_city"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/img_description_city"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
+            app:layout_constraintTop_toTopOf="@id/icon_trophy"
             app:layout_constraintEnd_toStartOf="@+id/btn_dice"
             app:layout_constraintStart_toEndOf="@+id/btn_settlement"
             app:srcCompat="@drawable/city_white"
@@ -95,42 +95,45 @@
 
         <ImageView
             android:id="@+id/btn_settlement"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/img_description_settlement"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
+            app:layout_constraintTop_toTopOf="@id/icon_trophy"
             app:layout_constraintEnd_toStartOf="@+id/btn_city"
-            app:layout_constraintHorizontal_bias="0.44"
             app:layout_constraintStart_toEndOf="@+id/btn_road"
             app:srcCompat="@drawable/settlement_white"
             tools:ignore="VectorDrawableCompat" />
 
         <ImageView
             android:id="@+id/btn_road"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
             android:contentDescription="@string/img_description_road"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
+            app:layout_constraintTop_toTopOf="@id/icon_trophy"
             app:layout_constraintEnd_toStartOf="@+id/btn_settlement"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@id/icon_trophy"
             app:srcCompat="@drawable/road_white" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btn_dice"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/img_description_road"
             android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/icon_trophy"
+            app:layout_constraintTop_toTopOf="@id/icon_trophy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_city"
-            app:srcCompat="@drawable/dice1" />
+            app:srcCompat="@drawable/ic_baseline_casino_24"
+            tools:ignore="VectorDrawableCompat"
+            />
 
         <TextView
             android:id="@+id/victory_points"
@@ -144,12 +147,12 @@
 
         <ImageView
             android:id="@+id/icon_trophy"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="60dp"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="4dp"
             android:onClick="onClick"
             android:src="@drawable/trophy"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/resourceView"
             app:layout_constraintEnd_toStartOf="@id/btn_road"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -175,9 +178,8 @@
             app:layout_constraintTop_toBottomOf="@+id/opponents">
 
             <Button
-
                 android:id="@+id/moveRobber"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
@@ -191,7 +193,7 @@
 
             <Button
                 android:id="@+id/endTurnButton"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -204,7 +206,7 @@
 
             <Button
                 android:id="@+id/btn_trade"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
@@ -217,7 +219,7 @@
 
             <Button
                 android:id="@+id/btn_draw_development"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"

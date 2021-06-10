@@ -35,25 +35,16 @@ public class DevelopmentCardDeck {
     }
 
     public DevelopmentCard drawDevelopmentCard(){
-        SecureRandom rand = new SecureRandom();
-        int random = rand.nextInt(5);
-        numberOfCards--;
-
-        if (deck[random].getCount() > 0) {
-            deck[random].getCard();
-            Log.i("DEVELOPMENT","Card was drawn.");
-            return deck[random];
-
-        }else {
-            for (int i = 0; i < 5; i++){
-                if (deck[i].getCount() > 0) {
-                    deck[i].getCard();
-                    Log.i("DEVELOPMENT","Card was drawn.");
-                    return deck[i];
+        int randomCard = Game.random.nextInt(numberOfCards--);
+        int current = 0;
+        for (DevelopmentCard card : deck){
+            for (int i = 0; i < card.getCount(); i++, current++){
+                if (current == randomCard){
+                    card.getCard();
+                    return card;
                 }
             }
         }
-
         return null;
     }
 

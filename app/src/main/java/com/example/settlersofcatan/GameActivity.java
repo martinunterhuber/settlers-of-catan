@@ -1,8 +1,13 @@
 package com.example.settlersofcatan;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -14,22 +19,23 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
-import com.example.settlersofcatan.game.ResourceMap;
 import com.example.settlersofcatan.game.Tile;
 import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.ui.trade.ReceiveTradeOfferActivity;
-import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
+import com.example.settlersofcatan.util.OnPostDrawListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 
     private MapView map;
     private PlayerView playerView;
@@ -52,6 +58,47 @@ public class GameActivity extends AppCompatActivity {
 
     private GameClient client;
 
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private int currentSensorValue = 0;
+    private int previousSensorValue = 0;
+    private SensorEventListener sensorEventListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            float x = sensorEvent.values[0];
+            float y = sensorEvent.values[1];
+            float z = sensorEvent.values[2];
+
+            currentSensorValue = (int) Math.sqrt((x*x + y*y + z*z));
+            if (previousSensorValue != currentSensorValue
+                    && currentSensorValue > 17
+                    && !Game.getInstance().isBuildingPhase()) {
+                previousSensorValue = currentSensorValue;
+                sensorManager.unregisterListener(sensorEventListener);
+                selectPlayerAndResource();
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+            /**
+             *  method not needed
+              */
+        }
+
+        private void selectPlayerAndResource(){
+            Player currentPlayer = Game.getInstance().getPlayerById(client.getId());
+            List<String> spinnerArray = new ArrayList<>();
+            for (Player player : Game.getInstance().getPlayers()){
+                if (player.getId() != currentPlayer.getId()){
+                    spinnerArray.add(player.getName());
+                }
+            }
+
+            showAlertDialog(spinnerArray, "CHEAT");
+        }
+    };
+
     static final int[] playerColors = new int[]{
             Color.parseColor("#05A505"),
             Color.parseColor("#F44336"),
@@ -64,6 +111,10 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
       
         client = GameClient.getInstance();
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
 
         map=findViewById(R.id.mapView);
         playerView =findViewById(R.id.playerView);
@@ -82,8 +133,6 @@ public class GameActivity extends AppCompatActivity {
         yearOfPlenty=findViewById(R.id.view_year_of_plenty);
 
         endTurnButton = findViewById(R.id.endTurnButton);
-        endTurnButton.setOnClickListener((v) -> Game.getInstance().endTurn(client.getId()));
-        endTurnButton.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
 
         moveRobberButton = findViewById(R.id.moveRobber);
         moveRobberButton.setOnClickListener(this::moveRobber);
@@ -92,9 +141,26 @@ public class GameActivity extends AppCompatActivity {
         dice.setOnClickListener(this::rollDice);
 
         drawDevelopmentCard=findViewById(R.id.btn_draw_development);
+
+        btnTrade = findViewById(R.id.btn_trade);
+        btnTrade.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), TradeActivity.class);
+            startActivity(i);
+        });
+
+        client.registerActivity(this);
+
+        initializeButtons();
+    }
+
+    private void initializeButtons(){
+        Game game = Game.getInstance();
+
+        endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
+
         drawDevelopmentCard.setOnClickListener(
                 view -> {
-                    int type = Game.getInstance().drawDevelopmentCard(GameClient.getInstance().getId());
+                    int type = game.drawDevelopmentCard(GameClient.getInstance().getId());
 
                     if (type == 0){
                         knights.updateView(type);
@@ -109,30 +175,39 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
         );
-      
-        btnTrade = findViewById(R.id.btn_trade);
-        btnTrade.setEnabled(Game.getInstance().getCurrentPlayerId() == client.getId());
-        btnTrade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), TradeActivity.class);
-                startActivity(i);
-            }
-        });
-
-        client.registerActivity(this);
 
         setButtonToPlayerColor();
-        showCurrentPlayer();
-      
-        ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(Game.getInstance().getPlayerById(client.getId()).getVictoryPoints()
-                                                                                    + Game.getInstance().getPlayerById(client.getId()).getHiddenVictoryPoints()));
+        runOnUiThread(() -> {
+            drawDevelopmentCard.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
+            endTurnButton.setEnabled(game.getCurrentPlayerId() == client.getId() && game.isBuildingPhase());
+            btnTrade.setEnabled(game.getCurrentPlayerId() == client.getId() && !game.isBuildingPhase());
+            showCurrentPlayer();
+            ((TextView) findViewById(R.id.victory_points)).setText(String.valueOf(game.getPlayerById(client.getId()).getVictoryPoints()
+                    + game.getPlayerById(client.getId()).getHiddenVictoryPoints()));
+        });
+    }
+
+    public void redrawViewsNewGameState(){
+        map.invalidate();
+        playerView.setHexGrid(map.getHexGrid());
+        redrawViewsTurnEnd();
+    }
+
+    public void redrawViewsTurnEnd(){
+        initializeButtons();
+        redrawViews();
+        if (Game.getInstance().getCurrentPlayerId() == client.getId()){
+            runOnUiThread(() -> {
+                Toast.makeText(this, R.string.turn_message, Toast.LENGTH_LONG).show();
+            });
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         resources.invalidate();
+        sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private void moveRobber(View view){
@@ -150,6 +225,7 @@ public class GameActivity extends AppCompatActivity {
         int result = Game.getInstance().rollDice(client.getId());
         if (result > 0){
             ((TextView) findViewById(R.id.rollResult)).setText(String.valueOf(result));
+            endTurnButton.setEnabled(true);
             resources.invalidate();
         }
         if (result == 7){
@@ -165,6 +241,10 @@ public class GameActivity extends AppCompatActivity {
             return;
         }
 
+        showAlertDialog(spinnerArray, "ROBBERS");
+    }
+
+    public void showAlertDialog(List<String> spinnerArray, String tag){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_robber, null);
@@ -182,11 +262,20 @@ public class GameActivity extends AppCompatActivity {
         SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
 
         confirm.setOnClickListener((view) -> {
-            String playerName = spinner.getSelectedItem().toString();
-            Player player = Game.getInstance().getPlayerByName(playerName);
-            Resource resource = resourceView.getSelectedResource();
-            moveRobber(resource, player.getId());
-            alertDialog.dismiss();
+            if (tag.equals("CHEAT")) {
+                String playerName = spinner.getSelectedItem().toString();
+                Player victim = Game.getInstance().getPlayerByName(playerName);
+                Resource resource = resourceView.getSelectedResource();
+                Game.getInstance().robResource(victim.getId(), GameClient.getInstance().getId(), resource);
+                alertDialog.dismiss();
+                sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }else if (tag.equals("ROBBERS")){
+                String playerName = spinner.getSelectedItem().toString();
+                Player player = Game.getInstance().getPlayerByName(playerName);
+                Resource resource = resourceView.getSelectedResource();
+                moveRobber(resource, player.getId());
+                alertDialog.dismiss();
+            }
         });
 
         AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
@@ -217,10 +306,14 @@ public class GameActivity extends AppCompatActivity {
 
     public void redrawViews(){
         findViewById(R.id.opponents).invalidate();
-        findViewById(R.id.playerView).invalidate();
-        findViewById(R.id.resourceView).invalidate();
+        playerView.invalidate();
+        redrawResourceView();
     }
-  
+
+    public void redrawResourceView(){
+        resources.invalidate();
+    }
+
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_road:
@@ -301,4 +394,9 @@ public class GameActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    @Override
+    public void onPostDraw() {
+        playerView.setHexGrid(map.getHexGrid());
+        playerView.invalidate();
+    }
 }

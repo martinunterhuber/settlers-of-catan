@@ -11,21 +11,25 @@
         android:id="@+id/txt_countpoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:text="0"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/img_dice"
         app:layout_constraintStart_toEndOf="@+id/txt_points"
         app:layout_constraintTop_toBottomOf="@+id/txt_name" />
 
     <TextView
         android:id="@+id/txt_name"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/player_name"
@@ -33,52 +37,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <ImageView
         android:id="@+id/txt_points"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:text="@string/points"
+        app:srcCompat="@drawable/trophy"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_name" />
 
     <ImageView
         android:id="@+id/img_dice"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/sendMessageButton"
-        app:layout_constraintTop_toTopOf="@+id/sendMessageButton"
-        app:srcCompat="@drawable/dice1" />
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toEndOf="@+id/txt_countpoints"
+        app:layout_constraintTop_toTopOf="@+id/txt_points"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_points"
+        app:srcCompat="@drawable/ic_baseline_casino_24"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageButton
         android:id="@+id/sendMessageButton"
-        android:layout_width="44dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/report_cheater_button"
         app:layout_constraintTop_toBottomOf="@+id/txt_points"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_baseline_chat_24"
+        tools:ignore="VectorDrawableCompat" />
+
+    <ImageButton
+        android:id="@+id/report_cheater_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toEndOf="@+id/sendMessageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sendMessageButton"
+        app:srcCompat="@drawable/ic_baseline_flag_24"
         tools:ignore="VectorDrawableCompat" />
 
     <TextView
         android:id="@+id/txt_dice"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_dice"
-        app:layout_constraintTop_toTopOf="@+id/img_dice" />
+        app:layout_constraintTop_toTopOf="@+id/img_dice"
+        app:layout_constraintBottom_toBottomOf="@+id/img_dice"/>
 
     <FrameLayout
         android:id="@+id/layout_selected_border"
