@@ -35,6 +35,9 @@ public class DevelopmentCardDeck {
     }
 
     public DevelopmentCard drawDevelopmentCard(){
+        if (numberOfCards == 0){
+            return null;
+        }
         int randomCard = Game.random.nextInt(numberOfCards--);
         int current = 0;
         for (DevelopmentCard card : deck){
