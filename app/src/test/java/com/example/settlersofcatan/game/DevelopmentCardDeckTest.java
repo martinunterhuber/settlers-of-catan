@@ -14,10 +14,9 @@ public class DevelopmentCardDeckTest {
     }
 
     @Test
-    public void testReturns25DevelopmentCards(){
-        for (int i = 0; i < 25; i++) {
-            Assert.assertNotNull(deck.drawDevelopmentCard());
-        }
+    public void testReturnsValidDevelopmentCard(){
+        Assert.assertEquals(25, deck.getNumberOfCards());
+        Assert.assertNotNull(deck.drawDevelopmentCard());
     }
 
     @Test
