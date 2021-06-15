@@ -325,19 +325,14 @@ public class Game {
     }
 
     public int drawDevelopmentCard(int playerId){
+        Player player = getPlayerById(playerId);
         if (playerId == currentPlayerId
                 && hasRolled
                 && DevelopmentCardDeck.getInstance().getNumberOfCards() > 0
-                && getPlayerById(playerId).getResourceCount(Resource.ORE) > 0
-                && getPlayerById(playerId).getResourceCount(Resource.SHEEP) > 0
-                && getPlayerById(playerId).getResourceCount(Resource.WHEAT )> 0){
+                && player.getResources().containsResourceMap(DevelopmentCard.costs)){
             DevelopmentCard card = DevelopmentCardDeck.getInstance().drawDevelopmentCard();
-            Player player=getPlayerById(playerId);
 
-            player.takeResource(Resource.ORE,1);
-            player.takeResource(Resource.SHEEP,1);
-            player.takeResource(Resource.WHEAT,1);
-            GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
+            player.takeResources(DevelopmentCard.costs);
 
             if (card instanceof Knights){
                 player.increaseDevelopmentCard(0);
@@ -400,8 +395,6 @@ public class Game {
             cheaters.add(cheater);
             cheated.put(turnCounter, cheaters);
         }
-
-        Log.i("CHEAT", "Player " + cheater + " cheated on turn " + turnCounter);
     }
 
     public boolean hasCheated(int cheaterId){
