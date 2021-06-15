@@ -309,12 +309,10 @@ public class Player {
 
     public void increaseDevelopmentCard(int index){
         developmetCards[index]++;
-        Log.i("DEVELOPMENT","Player card count increased.");
     }
 
     public void decreaseDevelopmentCard(int index){
         developmetCards[index]--;
-        Log.i("DEVELOPMENT","Player card count decreased.");
     }
 
     public int getDevelopmentCardCount(int index){
