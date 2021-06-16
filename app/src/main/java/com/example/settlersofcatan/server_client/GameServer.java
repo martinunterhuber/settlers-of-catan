@@ -23,6 +23,7 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
@@ -43,6 +44,8 @@ import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesM
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
@@ -102,7 +105,11 @@ public class GameServer {
             broadcastMessage(message);
         }else if (message instanceof DevelopmentCardMessage) {
             broadcastMessage(message);
-        }else if (message instanceof PlayerResourcesMessage) {
+        }else if (message instanceof TradeOfferMessage) {
+            broadcastMessage(message);
+        }else if (message instanceof  TradeReplyMessage) {
+            broadcastMessage(message);
+        } else if (message instanceof PlayerResourcesMessage) {
             broadcastMessage(message);
         } else if (message instanceof BuildingMessage) {
             broadcastMessage(message);
@@ -161,6 +168,9 @@ public class GameServer {
         server.registerClass(Robber.class);
         server.registerClass(DevelopmentCardDeck.class);
         server.registerClass(DevelopmentCardMessage.class);
+        server.registerClass(TradeOfferMessage.class);
+        server.registerClass(TradeOffer.class);
+        server.registerClass(TradeReplyMessage.class);
         server.registerClass(PlayerResourcesMessage.class);
         server.registerClass(PlayerResources.class);
         server.registerClass(TileCoordinates.class);

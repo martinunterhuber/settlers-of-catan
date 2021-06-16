@@ -26,6 +26,7 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
@@ -46,8 +47,11 @@ import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesM
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
+import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -62,6 +66,7 @@ public class GameClient {
     private int id;
     private Callback<BaseMessage> startGameCallback;
     private GameActivity gameActivity;
+    private WaitForReplyActivity waitForReplyActivity;
 
     private GameClient(){
 
@@ -130,6 +135,9 @@ public class GameClient {
         client.registerClass(Robber.class);
         client.registerClass(DevelopmentCardDeck.class);
         client.registerClass(DevelopmentCardMessage.class);
+        client.registerClass(TradeOfferMessage.class);
+        client.registerClass(TradeOffer.class);
+        client.registerClass(TradeReplyMessage.class);
         client.registerClass(PlayerResourcesMessage.class);
         client.registerClass(PlayerResources.class);
         client.registerClass(TileCoordinates.class);
@@ -188,6 +196,20 @@ public class GameClient {
             );
         } else if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
+        } else if (message instanceof TradeOfferMessage) {
+            TradeOffer tradeOffer = ((TradeOfferMessage) message).tradeOffer;
+            if (waitForReplyActivity != null && tradeOffer.getTo().getId() == id) {
+                waitForReplyActivity.getCounterOffer();
+                waitForReplyActivity = null;
+            }
+            if (gameActivity != null && tradeOffer.getTo().getId() == id) {
+                gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
+            }
+        } else if (message instanceof TradeReplyMessage) {
+            if (waitForReplyActivity != null) {
+                waitForReplyActivity.getReply(((TradeReplyMessage) message).acceptedTrade);
+                waitForReplyActivity = null;
+            }
         } else if (message instanceof BuildingMessage && gameActivity != null) {
             BuildingMessage buildMessage = (BuildingMessage) message;
             Game game = Game.getInstance();
@@ -262,5 +284,9 @@ public class GameClient {
 
     public GameActivity getGameActivity(){
         return gameActivity;
+    }
+
+    public void registerWaitForReplyActivity(WaitForReplyActivity activity) {
+        waitForReplyActivity = activity;
     }
 }
