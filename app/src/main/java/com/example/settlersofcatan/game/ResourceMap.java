@@ -62,6 +62,10 @@ public class ResourceMap {
         return true;
     }
 
+    public void setResourceCount(Resource resource, int count){
+        resources.put(resource, count);
+    }
+
     public static ResourceMap cloneResourceMap(ResourceMap resourceMapToCopy) {
         ResourceMap resourceMap = getEmptyResourceMap();
         for (Resource resource : Resource.values()) {

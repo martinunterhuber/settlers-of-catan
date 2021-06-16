@@ -80,7 +80,9 @@ public class Player {
     }
 
     public void setResources(ResourceMap resources) {
-        this.resources = resources;
+        for (Resource resource: Resource.values()){
+            this.resources.setResourceCount(resource, resources.getResourceCount(resource));
+        }
     }
 
     public int getId() {
