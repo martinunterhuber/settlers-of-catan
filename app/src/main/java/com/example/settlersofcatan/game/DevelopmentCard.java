@@ -6,7 +6,7 @@ import android.util.Log;
  * Class to represent a Development card, unimplemented
  */
 public class DevelopmentCard {
-
+    public static final ResourceMap costs = new ResourceMap(new int[]{1, 0, 1, 0, 1});
     private int count;
 
     public DevelopmentCard() {

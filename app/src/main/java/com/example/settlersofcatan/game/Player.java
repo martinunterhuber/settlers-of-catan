@@ -80,7 +80,9 @@ public class Player {
     }
 
     public void setResources(ResourceMap resources) {
-        this.resources = resources;
+        for (Resource resource: Resource.values()){
+            this.resources.setResourceCount(resource, resources.getResourceCount(resource));
+        }
     }
 
     public int getId() {
@@ -314,12 +316,10 @@ public class Player {
 
     public void increaseDevelopmentCard(int index){
         developmetCards[index]++;
-        Log.i("DEVELOPMENT","Player card count increased.");
     }
 
     public void decreaseDevelopmentCard(int index){
         developmetCards[index]--;
-        Log.i("DEVELOPMENT","Player card count decreased.");
     }
 
     public int getDevelopmentCardCount(int index){

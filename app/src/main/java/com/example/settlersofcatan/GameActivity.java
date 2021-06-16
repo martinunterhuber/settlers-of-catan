@@ -161,6 +161,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         drawDevelopmentCard.setOnClickListener(
                 view -> {
                     int type = game.drawDevelopmentCard(GameClient.getInstance().getId());
+                    GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
 
                     if (type == 0){
                         knights.updateView(type);

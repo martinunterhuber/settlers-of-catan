@@ -62,6 +62,10 @@ public class ResourceMap {
         return true;
     }
 
+    public void setResourceCount(Resource resource, int count){
+        resources.put(resource, count);
+    }
+  
     public int[] toArray() {
         int[] values = new int[5];
         for (Resource resource : Resource.values()) {

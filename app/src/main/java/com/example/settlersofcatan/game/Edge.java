@@ -66,19 +66,6 @@ public class Edge {
         return null;
     }
 
-    public boolean connectsPlayer(Player player){
-        for (Node node : endpointNodes){
-            for (Edge edge : node.getOutgoingEdgesExcept(this)){
-                if (edge.getRoad() != null
-                        && player == edge.getRoad().player
-                        && (node.getBuilding() == null || node.getBuilding().getPlayer() == player)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public boolean hasPlayersRoad(Player player){
         return road != null  && road.getPlayer() == player;
     }
