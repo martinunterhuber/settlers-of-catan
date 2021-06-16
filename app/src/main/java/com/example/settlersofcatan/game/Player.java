@@ -309,6 +309,11 @@ public class Player {
         Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
+    public void tradeOfferWasAccepted(TradeOffer tradeOffer) {
+        resources.incrementResourceMap(tradeOffer.getReceive());
+        resources.decrementResourceMap(tradeOffer.getGive());
+    }
+
     public void increaseDevelopmentCard(int index){
         developmetCards[index]++;
     }

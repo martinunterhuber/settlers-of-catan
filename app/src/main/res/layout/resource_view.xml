@@ -59,7 +59,6 @@
         android:layout_width="38dp"
         android:layout_height="29dp"
         android:ems="10"
-        android:inputType="number"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

@@ -13,7 +13,8 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
-import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
@@ -364,6 +365,18 @@ public class Game {
             DevelopmentCardDeck.getInstance().getDevelopmentCard(tag - 1).playCard();
             getPlayerById(playerId).decreaseDevelopmentCard(tag-1);
         }
+    }
+
+    public void sendTradeOffer(TradeOffer tradeOffer) {
+        new Thread(() -> GameClient.getInstance()
+                .sendMessage(new TradeOfferMessage(tradeOffer)))
+                .start();
+    }
+
+    public void sendTradeOfferReply(Boolean accepted) {
+        new Thread(() -> GameClient.getInstance()
+                .sendMessage(new TradeReplyMessage(accepted)))
+                .start();
     }
 
     // rob 1 resource from another player
