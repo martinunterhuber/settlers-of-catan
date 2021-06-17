@@ -1,4 +1,4 @@
-package com.example.settlersofcatan.util;
+package com.example.settlersofcatan;
 
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.ResourceView;

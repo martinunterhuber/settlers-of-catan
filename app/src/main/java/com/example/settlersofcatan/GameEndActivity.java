@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.util.Startscreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,7 +72,7 @@ public class GameEndActivity extends AppCompatActivity {
      resButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
-             startActivity(new Intent(GameEndActivity.this,activity_resources_ranking.class));
+             startActivity(new Intent(GameEndActivity.this, ResourceRankingActivity.class));
          }
      });
 

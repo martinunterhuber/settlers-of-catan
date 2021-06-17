@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/catan_background_basegame"
-    tools:context=".activity_resources_ranking">
+    tools:context=".ResourceRankingActivity">
 
     <TextView
         android:id="@+id/textView16"

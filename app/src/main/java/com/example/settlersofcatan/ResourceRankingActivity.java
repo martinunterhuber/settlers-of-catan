@@ -8,12 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.Player;
-import com.example.settlersofcatan.game.Resource;
-import com.example.settlersofcatan.util.Startscreen;
-
-public class activity_resources_ranking extends AppCompatActivity {
+public class ResourceRankingActivity extends AppCompatActivity {
 
     private TextView clayt;
     private TextView woodt;
@@ -31,7 +26,7 @@ public class activity_resources_ranking extends AppCompatActivity {
         sbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(activity_resources_ranking.this,GameEndActivity.class));
+                startActivity(new Intent(ResourceRankingActivity.this,GameEndActivity.class));
             }
         });
         //when the Button in GameEndActivity gets pressed, it will start counting the numbers

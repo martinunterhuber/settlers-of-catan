@@ -1,4 +1,4 @@
-package com.example.settlersofcatan.util;
+package com.example.settlersofcatan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.settlersofcatan.MainActivity;
-import com.example.settlersofcatan.R;
-
-public class Startscreen extends AppCompatActivity {
+public class StartScreenActivity extends AppCompatActivity {
 
 
 
@@ -22,7 +19,7 @@ public class Startscreen extends AppCompatActivity {
         sbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Startscreen.this,MainActivity.class));
+                startActivity(new Intent(StartScreenActivity.this,MainActivity.class));
             }
         });
 
