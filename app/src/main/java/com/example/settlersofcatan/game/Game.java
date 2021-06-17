@@ -43,6 +43,8 @@ public class Game {
 
     private boolean canMoveRobber;
 
+
+
     private Game(){
         players = new ArrayList<>();
         board = new Board();

@@ -24,4 +24,5 @@ public enum Resource {
         }
         throw new IllegalArgumentException("Resource does not exist!");
     }
+
 }

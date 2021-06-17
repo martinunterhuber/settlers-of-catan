@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/catan_background_basegame"
     android:layout_height="match_parent">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="@string/username"
+        android:textColor="#FFFFFF"
         app:layout_constraintBaseline_toBaselineOf="@id/editTextUsername"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -42,6 +44,7 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/joinServerButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/editTextUsername"
@@ -54,6 +57,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="@string/server_ip_address"
+        android:textColor="#FFFFFF"
         app:layout_constraintBaseline_toBaselineOf="@id/editTextServerIP"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -69,6 +73,7 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/editTextServerIP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"

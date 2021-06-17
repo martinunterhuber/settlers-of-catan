@@ -14,4 +14,11 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+    public void subtraction_isCorrect() { assertEquals(4, 8 - 4); }
+    public void mulitplication_isCorrect() {
+        assertEquals(4, 2 * 2);
+    }
+    public void division_isCorrect() {
+        assertEquals(4, 8 / 2);
+    }
 }

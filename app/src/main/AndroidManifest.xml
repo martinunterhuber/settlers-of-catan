@@ -12,30 +12,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SettlersOfCatan">
-      
-        <activity android:name=".GameEndActivity"
-            android:parentActivityName=".MainActivity"/>
-      
+        <activity android:name=".activity_resources_ranking"></activity>
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".GameEndActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".TradeActivity"
             android:label="@string/title_activity_trade"
-            android:theme="@style/Theme.SettlersOfCatan.Trade"/>
-
-        <activity android:name=".GameActivity"
-            android:theme="@style/GameTheme"
-            android:parentActivityName=".MainActivity"/>
-
-        <activity android:name=".MainActivity">
+            android:theme="@style/Theme.SettlersOfCatan.Trade" />
+        <activity
+            android:name=".GameActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/GameTheme" />
+        <activity android:name=".util.Startscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-      
         <activity
             android:name=".server_client.WaitForHostActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

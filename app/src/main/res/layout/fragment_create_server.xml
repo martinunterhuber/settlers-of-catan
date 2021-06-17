@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/catan_background_basegame"
     android:layout_height="match_parent">
 
     <Button
@@ -33,6 +34,7 @@
         android:ems="10"
         android:enabled="false"
         android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/createServerButton2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -46,6 +48,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Player 4"
+        android:textColor="#FFFFFF"
         app:layout_constraintBaseline_toBaselineOf="@id/editTextPlayer3"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -61,6 +64,7 @@
         android:ems="10"
         android:enabled="false"
         android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/editTextPlayer3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -74,6 +78,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Player 3"
+        android:textColor="#FFFFFF"
         app:layout_constraintBaseline_toBaselineOf="@id/editTextPlayer2"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -84,6 +89,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Player 2"
+        android:textColor="#FFFFFF"
         app:layout_constraintBaseline_toBaselineOf="@id/editTextPlayer1"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -98,6 +104,7 @@
         android:layout_marginRight="16dp"
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/editTextPlayer1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewPlayer"
@@ -110,6 +117,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="@string/server_ip_address"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/serverIP" />
 
@@ -119,6 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_marginTop="16dp"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/editTextPlayer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/serverIPLabel"
@@ -138,6 +147,7 @@
         android:ems="10"
         android:enabled="false"
         android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/editTextPlayer2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewPlayer1"
@@ -150,19 +160,22 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Player 1"
+        android:textColor="#FFFFFF"
         app:layout_constraintBaseline_toBaselineOf="@id/editTextPlayer"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="46dp"
+        android:layout_height="65dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
+        android:background="#00FFFFFF"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_help" />
+        app:srcCompat="@drawable/_13_9133866_rules_bot_rule_bot_discord" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
