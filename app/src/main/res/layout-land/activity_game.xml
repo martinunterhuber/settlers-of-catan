@@ -147,7 +147,7 @@
             android:layout_height="30dp"
             android:layout_marginBottom="8dp"
             android:onClick="onClick"
-            android:src="@drawable/trophy"
+            android:src="@drawable/trophynew"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_road"
             app:layout_constraintStart_toEndOf="@id/opponents" />
