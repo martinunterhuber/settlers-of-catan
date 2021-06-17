@@ -17,7 +17,6 @@ public class City extends NodePlaceable {
 
     @Override
     public void giveResource(Resource resource) {
-        player.giveSingleResource(resource);
-        player.giveSingleResource(resource);
+        player.giveResources(resource, 2);
     }
 }

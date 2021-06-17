@@ -60,7 +60,6 @@
         android:layout_height="29dp"
         android:layout_gravity="center_horizontal"
         android:ems="10"
-        android:inputType="number"
         android:text="0"
         android:textAlignment="center"
         android:textColor="#FFFFFF"

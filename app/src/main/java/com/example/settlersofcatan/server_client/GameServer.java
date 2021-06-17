@@ -2,11 +2,13 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.Ranking;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.DevelopmentCard;
 import com.example.settlersofcatan.game.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.Direction;
 import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Harbor;
@@ -21,17 +23,29 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
+import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.ArmySizeIncreaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.BuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
+import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 
@@ -91,7 +105,21 @@ public class GameServer {
             broadcastMessage(message);
         }else if (message instanceof DevelopmentCardMessage) {
             broadcastMessage(message);
-        }else{
+        }else if (message instanceof TradeOfferMessage) {
+            broadcastMessage(message);
+        }else if (message instanceof  TradeReplyMessage) {
+            broadcastMessage(message);
+        } else if (message instanceof PlayerResourcesMessage) {
+            broadcastMessage(message);
+        } else if (message instanceof BuildingMessage) {
+            broadcastMessage(message);
+        } else if (message instanceof MovedRobberMessage) {
+            broadcastMessage(message);
+        } else if (message instanceof EndTurnMessage) {
+            broadcastMessage(message);
+        } else if (message instanceof ArmySizeIncreaseMessage) {
+            broadcastMessage(message);
+        } else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }
@@ -140,6 +168,20 @@ public class GameServer {
         server.registerClass(Robber.class);
         server.registerClass(DevelopmentCardDeck.class);
         server.registerClass(DevelopmentCardMessage.class);
+        server.registerClass(TradeOfferMessage.class);
+        server.registerClass(TradeOffer.class);
+        server.registerClass(TradeReplyMessage.class);
+        server.registerClass(PlayerResourcesMessage.class);
+        server.registerClass(PlayerResources.class);
+        server.registerClass(TileCoordinates.class);
+        server.registerClass(Direction.class);
+        server.registerClass(SettlementBuildingMessage.class);
+        server.registerClass(CityBuildingMessage.class);
+        server.registerClass(RoadBuildingMessage.class);
+        server.registerClass(BuildingMessage.class);
+        server.registerClass(MovedRobberMessage.class);
+        server.registerClass(EndTurnMessage.class);
+        server.registerClass(ArmySizeIncreaseMessage.class);
     }
 
     private void startServer(){

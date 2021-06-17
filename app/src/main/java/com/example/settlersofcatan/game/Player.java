@@ -2,6 +2,9 @@ package com.example.settlersofcatan.game;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.PlayerResources;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +27,7 @@ public class Player {
     private int victoryPoints;
     // for victory point development cards, longest road, largest army
     private int hiddenVictoryPoints;
+    private int playedKnights = 0;
     // {Knights, victory point, monopoly, road building, year of plenty}
     private int[] developmetCards = new int[]{0, 0, 0, 0, 0};
 
@@ -57,6 +61,12 @@ public class Player {
 
     public void giveSingleResource(Resource resource) {
         resources.incrementResourceCount(resource, 1);
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
+    }
+
+    public void giveResources(Resource resource, int count) {
+        resources.incrementResourceCount(resource, count);
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
     public int getResourceCount(Resource resource) {
@@ -66,6 +76,7 @@ public class Player {
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
         resourcecounter++;
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
     public ResourceMap getResources() {
@@ -73,7 +84,9 @@ public class Player {
     }
 
     public void setResources(ResourceMap resources) {
-        this.resources = resources;
+        for (Resource resource: Resource.values()){
+            this.resources.setResourceCount(resource, resources.getResourceCount(resource));
+        }
     }
 
     public int getId() {
@@ -297,16 +310,20 @@ public class Player {
     public void acceptTradeOffer(TradeOffer tradeOffer) {
         resources.decrementResourceMap(tradeOffer.getReceive());
         resources.incrementResourceMap(tradeOffer.getGive());
+        Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
+    }
+
+    public void tradeOfferWasAccepted(TradeOffer tradeOffer) {
+        resources.incrementResourceMap(tradeOffer.getReceive());
+        resources.decrementResourceMap(tradeOffer.getGive());
     }
 
     public void increaseDevelopmentCard(int index){
         developmetCards[index]++;
-        Log.i("DEVELOPMENT","Player card count increased.");
     }
 
     public void decreaseDevelopmentCard(int index){
         developmetCards[index]--;
-        Log.i("DEVELOPMENT","Player card count decreased.");
     }
 
     public int getDevelopmentCardCount(int index){
@@ -323,5 +340,17 @@ public class Player {
 
     public int getHiddenVictoryPoints() {
         return hiddenVictoryPoints;
+    }
+
+    public void updateResources(ResourceMap resources){
+        this.resources = resources;
+    }
+
+    public void incrementPlayedKnights(){
+        playedKnights++;
+    }
+
+    public int getPlayedKnights() {
+        return playedKnights;
     }
 }

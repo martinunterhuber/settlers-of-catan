@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'jacoco'
+    id "org.sonarqube" version "3.2.0"
 }
 
 android {
@@ -22,10 +23,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            testCoverageEnabled = true
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        animationsDisabled = true
     }
 }
 
@@ -42,12 +55,16 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     sourceDirectories.from = files([mainSrc])
     classDirectories.from = files([debugTree])
-    executionData.from = files("${project.buildDir}/jacoco/testDebugUnitTest.exec")
+    executionData.from = files([
+            fileTree(dir: "${buildDir}", includes: [
+                    "jacoco/testDebugUnitTest.exec",
+                    "outputs/code_coverage/debugAndroidTest/connected/*-coverage.ec"
+            ])
+    ])
 }
 
 dependencies {
-
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
@@ -55,14 +72,27 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
+
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'androidx.test:core:1.3.0'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+}
 
-
-
-    implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'martinunterhuber'
+        property 'sonar.projectKey', 'settlers-of-catan'
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+        property 'sonar.coverage.jacoco.xmlReportsPath', "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+    }
 }

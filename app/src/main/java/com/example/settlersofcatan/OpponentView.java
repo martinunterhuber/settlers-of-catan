@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
@@ -22,6 +24,7 @@ public class OpponentView extends FrameLayout {
     private ConstraintLayout opponentLayout;
     private TextView dice;
     private int rolled;
+    private ImageButton exposeCheater;
 
     private Player opponent;
 
@@ -55,6 +58,7 @@ public class OpponentView extends FrameLayout {
         opponentLayout = findViewById(R.id.layout_opponent);
         dice = findViewById(R.id.txt_dice);
         rolled = 0;
+        exposeCheater = findViewById(R.id.report_cheater_button);
         initPlayer();
     }
 
@@ -64,6 +68,18 @@ public class OpponentView extends FrameLayout {
             textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
             opponentLayout.setBackgroundColor(GameActivity.playerColors[opponent.getId()]);
             dice.setText(String.valueOf(rolled));
+
+            exposeCheater.setOnClickListener(view -> {
+                Game game = Game.getInstance();
+
+                if (game.hasCheated(opponent.getId())){
+                    game.exposeCheater(opponent.getId());
+                    Toast.makeText(getContext(),opponent.getName() + " has cheated!", Toast.LENGTH_SHORT).show();
+                }else {
+                    game.penaltyForFalseCharge(opponent.getId());
+                    Toast.makeText(getContext(),opponent.getName() + " has NOT cheated!", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
             textName.setText("--------");
             textPointCount.setText("0");

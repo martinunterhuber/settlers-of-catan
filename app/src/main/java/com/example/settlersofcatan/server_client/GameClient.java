@@ -5,15 +5,13 @@ import android.util.Log;
 
 import com.example.settlersofcatan.GameActivity;
 import com.example.settlersofcatan.GameEndActivity;
+import com.example.settlersofcatan.PlayerResources;
 import com.example.settlersofcatan.Ranking;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.settlersofcatan.GameActivity;
-import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Board;
 import com.example.settlersofcatan.game.City;
 import com.example.settlersofcatan.game.DevelopmentCard;
 import com.example.settlersofcatan.game.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.Direction;
 import com.example.settlersofcatan.game.Edge;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Harbor;
@@ -28,27 +26,38 @@ import com.example.settlersofcatan.game.RoadBuilding;
 import com.example.settlersofcatan.game.Robber;
 import com.example.settlersofcatan.game.Settlement;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
+import com.example.settlersofcatan.game.TileCoordinates;
 import com.example.settlersofcatan.game.VictoryPoints;
 import com.example.settlersofcatan.game.YearOfPlenty;
 import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.dto.ArmySizeIncreaseMessage;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+import com.example.settlersofcatan.server_client.networking.dto.BuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.CityBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
+import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.TextMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkClientKryo;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkConstants;
+import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
 
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class GameClient {
     private static GameClient instance;
@@ -57,6 +66,7 @@ public class GameClient {
     private int id;
     private Callback<BaseMessage> startGameCallback;
     private GameActivity gameActivity;
+    private WaitForReplyActivity waitForReplyActivity;
 
     private GameClient(){
 
@@ -125,21 +135,30 @@ public class GameClient {
         client.registerClass(Robber.class);
         client.registerClass(DevelopmentCardDeck.class);
         client.registerClass(DevelopmentCardMessage.class);
+        client.registerClass(TradeOfferMessage.class);
+        client.registerClass(TradeOffer.class);
+        client.registerClass(TradeReplyMessage.class);
+        client.registerClass(PlayerResourcesMessage.class);
+        client.registerClass(PlayerResources.class);
+        client.registerClass(TileCoordinates.class);
+        client.registerClass(Direction.class);
+        client.registerClass(SettlementBuildingMessage.class);
+        client.registerClass(CityBuildingMessage.class);
+        client.registerClass(RoadBuildingMessage.class);
+        client.registerClass(BuildingMessage.class);
+        client.registerClass(MovedRobberMessage.class);
+        client.registerClass(EndTurnMessage.class);
+        client.registerClass(ArmySizeIncreaseMessage.class);
     }
 
-    private void gameCallback(BaseMessage message){
-        if (message instanceof GameStateMessage){
-            sendMessage(message);
-        } else if (message instanceof ClientWinMessage){
-            sendMessage(message);
-        }
-
+    private void gameAsyncCallback(BaseMessage message){
+        new Thread(() -> sendMessage(message)).start();
     }
 
     private void callback(BaseMessage message){
         if (message instanceof GameStateMessage){
             Game game = ((GameStateMessage) message).game;
-            game.setClientCallback(this::gameCallback);
+            game.setClientCallback(this::gameAsyncCallback);
             Game.setInstance(game);
             for (Player player : Game.getInstance().getPlayers()){
                 if (player.getName().equals(this.username)){
@@ -148,30 +167,84 @@ public class GameClient {
             }
             if (startGameCallback != null){
                 startGameCallback.callback(message);
+                startGameCallback = null;
             }
             if (gameActivity != null) {
-                // gameActivity.redrawViews();
+                gameActivity.redrawViewsNewGameState();
             }
-        }
-        if (message instanceof ClientWinMessage){
-            if(gameActivity != null) {
-                Intent intent = new Intent(gameActivity, GameEndActivity.class);
-                gameActivity.startActivity(intent);
-                gameActivity.finish();
+        } else if (message instanceof ClientWinMessage && gameActivity != null){
+            Intent intent = new Intent(gameActivity, GameEndActivity.class);
+            gameActivity.startActivity(intent);
+            gameActivity.finish();
+        } else if (message instanceof PlayerResourcesMessage && gameActivity != null){
+            PlayerResources.setInstance(((PlayerResourcesMessage) message).playerResources);
+            for (Player p : Game.getInstance().getPlayers()){
+                p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
             }
-        }
-        if (message instanceof ClientDiceMessage){
-            if(gameActivity != null) {
 
-                gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
-                        ((ClientDiceMessage) message).getUsername(),
-                        ((ClientDiceMessage) message).getRolled())
-
-                );
-
+            if (((PlayerResourcesMessage) message).cheaterId != -1){
+                Game.getInstance().updateCheaters(((PlayerResourcesMessage) message).cheaterId);
             }
+
+            gameActivity.redrawViews();
+
+        } else if (message instanceof ClientDiceMessage && gameActivity != null){
+            gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
+                    ((ClientDiceMessage) message).getUsername(),
+                    ((ClientDiceMessage) message).getRolled())
+
+            );
         } else if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
+        } else if (message instanceof TradeOfferMessage) {
+            TradeOffer tradeOffer = ((TradeOfferMessage) message).tradeOffer;
+            if (waitForReplyActivity != null && tradeOffer.getTo().getId() == id) {
+                waitForReplyActivity.getCounterOffer();
+                waitForReplyActivity = null;
+            }
+            if (gameActivity != null && tradeOffer.getTo().getId() == id) {
+                gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
+            }
+        } else if (message instanceof TradeReplyMessage) {
+            if (waitForReplyActivity != null) {
+                waitForReplyActivity.getReply(((TradeReplyMessage) message).acceptedTrade);
+                waitForReplyActivity = null;
+            }
+        } else if (message instanceof BuildingMessage && gameActivity != null) {
+            BuildingMessage buildMessage = (BuildingMessage) message;
+            Game game = Game.getInstance();
+            if (buildMessage.playerId != id) {
+                Tile tile = game.getBoard().getTileByCoordinates(buildMessage.tileCoordinates);
+                Player player = game.getPlayerById(buildMessage.playerId);
+                if (message instanceof CityBuildingMessage) {
+                    player.placeCity(tile.getNodeByDirection(buildMessage.direction));
+                } else if (message instanceof RoadBuildingMessage) {
+                    player.placeRoad(tile.getEdgeByDirection(buildMessage.direction));
+                } else {
+                    player.placeSettlement(tile.getNodeByDirection(buildMessage.direction));
+                }
+                gameActivity.redrawViews();
+            }
+        } else if (message instanceof MovedRobberMessage && gameActivity != null) {
+            MovedRobberMessage robberMessage = (MovedRobberMessage)message;
+            Board board = Game.getInstance().getBoard();
+            board.moveRobberTo(board.getTileByCoordinates(robberMessage.coordinates));
+            gameActivity.redrawViews();
+        } else if (message instanceof EndTurnMessage){
+            EndTurnMessage turnMessage = (EndTurnMessage) message;
+            Game game = Game.getInstance();
+            game.initializeNextTurn(turnMessage.nextPlayerId, turnMessage.turnCount);
+            if (gameActivity != null) {
+                gameActivity.redrawViewsTurnEnd();
+            }
+        } else if (message instanceof ArmySizeIncreaseMessage){
+            int playerId = ((ArmySizeIncreaseMessage) message).playerId;
+            Game game = Game.getInstance();
+            game.getPlayerById(playerId).incrementPlayedKnights();
+            game.updateLargestArmy();
+            if (gameActivity != null) {
+                gameActivity.redrawViews();
+            }
         }
         Log.i(NetworkConstants.TAG, message.toString());
     }
@@ -209,7 +282,11 @@ public class GameClient {
         return id;
     }
 
-    public AppCompatActivity getGameActivity(){
+    public GameActivity getGameActivity(){
         return gameActivity;
+    }
+
+    public void registerWaitForReplyActivity(WaitForReplyActivity activity) {
+        waitForReplyActivity = activity;
     }
 }
