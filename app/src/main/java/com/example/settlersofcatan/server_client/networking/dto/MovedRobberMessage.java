@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-import com.example.settlersofcatan.game.TileCoordinates;
+import com.example.settlersofcatan.game.board.TileCoordinates;
 
 public class MovedRobberMessage extends BaseMessage {
     public TileCoordinates coordinates;

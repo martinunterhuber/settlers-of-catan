@@ -2,20 +2,18 @@ package com.example.settlersofcatan.server_client.networking.kryonet;
 
 import android.util.Log;
 
-import com.esotericsoftware.kryo.ReferenceResolver;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.NetworkServer;
+import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
-
-import com.example.settlersofcatan.server_client.networking.Callback;
-import com.example.settlersofcatan.server_client.networking.NetworkServer;
-import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 
 public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
     private Server server;

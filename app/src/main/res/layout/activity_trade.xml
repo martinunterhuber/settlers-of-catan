@@ -7,7 +7,7 @@
     android:background="@drawable/border_black"
     android:padding="1dp"
     android:theme="@style/GameTheme"
-    tools:context=".TradeActivity">
+    tools:context=".ui.trade.TradeActivity">
 
     <LinearLayout android:orientation="vertical"
         android:layout_height="match_parent"

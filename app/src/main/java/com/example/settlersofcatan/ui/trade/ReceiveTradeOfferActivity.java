@@ -1,9 +1,5 @@
 package com.example.settlersofcatan.ui.trade;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -14,12 +10,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.TradeActivity;
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.TradeOffer;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
-import com.google.android.material.tabs.TabLayout;
 
 public class ReceiveTradeOfferActivity extends AppCompatActivity {
     private TradeOffer tradeOffer;

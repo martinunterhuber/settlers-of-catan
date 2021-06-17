@@ -1,8 +1,6 @@
 package com.example.settlersofcatan.ui.trade;
 
-import android.view.DragEvent;
-
-import com.example.settlersofcatan.game.TradeOffer;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 
 public class ReceiveTradeFragment extends ExchangeFragment {
 

@@ -1,31 +1,23 @@
 package com.example.settlersofcatan.ui.trade;
 
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SearchView;
 
-import com.example.settlersofcatan.GameActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.TradeActivity;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
-import com.example.settlersofcatan.game.TradeOffer;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

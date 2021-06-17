@@ -1,10 +1,22 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
-import com.example.settlersofcatan.PlayerResources;
-import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.Ranking;
+import com.example.settlersofcatan.game.board.Board;
+import com.example.settlersofcatan.game.board.Edge;
+import com.example.settlersofcatan.game.board.Node;
+import com.example.settlersofcatan.game.board.Tile;
+import com.example.settlersofcatan.game.buildings.City;
+import com.example.settlersofcatan.game.buildings.Road;
+import com.example.settlersofcatan.game.buildings.Settlement;
+import com.example.settlersofcatan.game.development_cards.DevelopmentCard;
+import com.example.settlersofcatan.game.development_cards.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.development_cards.Knights;
+import com.example.settlersofcatan.game.development_cards.Monopoly;
+import com.example.settlersofcatan.game.development_cards.RoadBuilding;
+import com.example.settlersofcatan.game.development_cards.VictoryPoints;
+import com.example.settlersofcatan.game.development_cards.YearOfPlenty;
+import com.example.settlersofcatan.game.resources.PlayerResources;
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.networking.AsyncCallback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
@@ -13,12 +25,13 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
-import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
-import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
+import com.example.settlersofcatan.ui.ranking.Ranking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +40,7 @@ import java.util.Random;
 
 /**
  * Class to represent a game as a whole, includes the map which the game is played on,
- * and the players who will play on it, todo as well as the rules which them game is played under.
+ * and the players who will play on it, as well as the rules which them game is played under.
  */
 public class Game {
     private static Game instance;

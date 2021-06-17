@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-import com.example.settlersofcatan.game.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.development_cards.DevelopmentCardDeck;
 
 public class DevelopmentCardMessage extends BaseMessage{
     public DevelopmentCardDeck deck;

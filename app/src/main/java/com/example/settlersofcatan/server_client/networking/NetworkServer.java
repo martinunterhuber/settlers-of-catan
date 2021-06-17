@@ -1,8 +1,8 @@
 package com.example.settlersofcatan.server_client.networking;
 
-import java.io.IOException;
-
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
+
+import java.io.IOException;
 
 public interface NetworkServer {
 

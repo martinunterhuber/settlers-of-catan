@@ -8,7 +8,7 @@ import androidx.test.espresso.action.GeneralClickAction;
 import androidx.test.espresso.action.Press;
 import androidx.test.espresso.action.Tap;
 
-import com.example.settlersofcatan.Point;
+import com.example.settlersofcatan.ui.board.Point;
 
 public class ViewActions {
     public static ViewAction clickXY(final int x, final int y){

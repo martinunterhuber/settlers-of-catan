@@ -1,8 +1,17 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
-import com.example.settlersofcatan.PlayerResources;
+import com.example.settlersofcatan.game.board.Edge;
+import com.example.settlersofcatan.game.board.Harbor;
+import com.example.settlersofcatan.game.board.Node;
+import com.example.settlersofcatan.game.buildings.City;
+import com.example.settlersofcatan.game.buildings.NodePlaceable;
+import com.example.settlersofcatan.game.buildings.Road;
+import com.example.settlersofcatan.game.buildings.Settlement;
+import com.example.settlersofcatan.game.development_cards.DevelopmentCard;
+import com.example.settlersofcatan.game.resources.PlayerResources;
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.resources.ResourceMap;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 
 import java.util.HashSet;
@@ -10,7 +19,7 @@ import java.util.Set;
 
 /**
  * Player of the game, has an inventory of resource cards, development cards, placed cities,
- * settlements and roads todo other player attributes like their colour etc. and maximum on available cities/settlements/roads
+ * settlements and roads other player attributes like their colour etc. and maximum on available cities/settlements/roads
  */
 public class Player {
 
