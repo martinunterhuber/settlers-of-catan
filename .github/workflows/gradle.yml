@@ -29,14 +29,15 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: run tests
+      - name: run instrumentation tests (only master)
+        if: github.ref == 'refs/heads/master'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           profile: Nexus 6
           script: ./gradlew connectedAndroidTest --stacktrace
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -skin 1440x2560
-      - name: Build and analyze
+      - name: run tests and analyze
         run: ./gradlew test jacocoTestReport sonarqube --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
