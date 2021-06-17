@@ -1,8 +1,8 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-import com.example.settlersofcatan.game.resources.PlayerResources;
-
 import androidx.annotation.NonNull;
+
+import com.example.settlersofcatan.game.resources.PlayerResources;
 
 public class PlayerResourcesMessage extends BaseMessage{
     public PlayerResources playerResources;

@@ -1,7 +1,5 @@
 package com.example.settlersofcatan.game.development_cards;
 
-import com.example.settlersofcatan.game.development_cards.DevelopmentCardDeck;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

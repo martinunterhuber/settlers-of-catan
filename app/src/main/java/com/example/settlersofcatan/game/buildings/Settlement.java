@@ -1,9 +1,9 @@
 package com.example.settlersofcatan.game.buildings;
 
 import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.board.Node;
 import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.game.resources.ResourceMap;
-import com.example.settlersofcatan.game.board.Node;
 
 /**
  * Class to represent a Settlement, extends NodePlaceable

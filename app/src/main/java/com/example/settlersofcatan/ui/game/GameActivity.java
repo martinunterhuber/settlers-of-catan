@@ -21,11 +21,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
-import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.game.board.Tile;
+import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.ui.resources.ResourceView;
@@ -36,8 +38,6 @@ import com.example.settlersofcatan.util.OnPostDrawListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 

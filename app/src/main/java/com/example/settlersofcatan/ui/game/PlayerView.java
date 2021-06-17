@@ -15,10 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.board.Tile;
 import com.example.settlersofcatan.game.buildings.NodePlaceable;
 import com.example.settlersofcatan.game.buildings.Road;
 import com.example.settlersofcatan.game.buildings.Settlement;
-import com.example.settlersofcatan.game.board.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.ui.board.HexGrid;
 import com.example.settlersofcatan.ui.board.Hexagon;

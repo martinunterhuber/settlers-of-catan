@@ -1,7 +1,5 @@
 package com.example.settlersofcatan.game;
 
-import com.example.settlersofcatan.game.resources.PlayerResources;
-import com.example.settlersofcatan.ui.ranking.Ranking;
 import com.example.settlersofcatan.game.board.Board;
 import com.example.settlersofcatan.game.board.Edge;
 import com.example.settlersofcatan.game.board.Node;
@@ -16,6 +14,7 @@ import com.example.settlersofcatan.game.development_cards.Monopoly;
 import com.example.settlersofcatan.game.development_cards.RoadBuilding;
 import com.example.settlersofcatan.game.development_cards.VictoryPoints;
 import com.example.settlersofcatan.game.development_cards.YearOfPlenty;
+import com.example.settlersofcatan.game.resources.PlayerResources;
 import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
@@ -26,12 +25,13 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
-import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
-import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
 import com.example.settlersofcatan.server_client.networking.dto.SettlementBuildingMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
+import com.example.settlersofcatan.ui.ranking.Ranking;
 
 import java.util.ArrayList;
 import java.util.HashMap;

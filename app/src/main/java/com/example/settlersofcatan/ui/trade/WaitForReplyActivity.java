@@ -1,9 +1,9 @@
 package com.example.settlersofcatan.ui.trade;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.trade.TradeOffer;

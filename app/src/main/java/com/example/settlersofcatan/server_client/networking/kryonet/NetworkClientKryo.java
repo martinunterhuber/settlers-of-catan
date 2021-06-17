@@ -1,14 +1,13 @@
 package com.example.settlersofcatan.server_client.networking.kryonet;
 
-import com.example.settlersofcatan.server_client.networking.Callback;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.example.settlersofcatan.server_client.networking.Callback;
+import com.example.settlersofcatan.server_client.networking.NetworkClient;
+import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
 
 import java.io.IOException;
-
-import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;
-import com.example.settlersofcatan.server_client.networking.NetworkClient;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;

@@ -6,9 +6,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.ui.server.WaitForHostActivity;
 import com.example.settlersofcatan.ui.game.GameActivity;
-import com.example.settlersofcatan.ui.server.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;

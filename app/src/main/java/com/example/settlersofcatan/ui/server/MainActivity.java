@@ -1,14 +1,13 @@
 package com.example.settlersofcatan.ui.server;
 
+import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Bundle;
-import android.widget.TextView;
-
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.ui.server.ServerFragmentStateAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 

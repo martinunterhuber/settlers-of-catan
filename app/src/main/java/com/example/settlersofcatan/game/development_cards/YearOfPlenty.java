@@ -3,10 +3,10 @@ package com.example.settlersofcatan.game.development_cards;
 import android.util.Log;
 
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.ui.resources.ResourceDialog;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.ui.resources.ResourceDialog;
 
 public class YearOfPlenty extends DevelopmentCard{
 

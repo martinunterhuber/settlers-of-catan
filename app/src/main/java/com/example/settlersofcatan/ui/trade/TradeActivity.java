@@ -3,19 +3,14 @@ package com.example.settlersofcatan.ui.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.trade.TradeOffer;
-import com.example.settlersofcatan.ui.trade.WaitForReplyActivity;
 import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Parcelable;
-
-import com.example.settlersofcatan.ui.trade.SectionsPagerAdapter;
 
 /**
  * Activity to facilitate trade with the bank/harbors and other players, opens as popup over the

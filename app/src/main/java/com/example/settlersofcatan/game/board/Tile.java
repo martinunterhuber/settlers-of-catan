@@ -8,7 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.settlersofcatan.game.board.Direction.*;
+import static com.example.settlersofcatan.game.board.Direction.EAST;
+import static com.example.settlersofcatan.game.board.Direction.NORTH;
+import static com.example.settlersofcatan.game.board.Direction.NORTH_EAST;
+import static com.example.settlersofcatan.game.board.Direction.NORTH_WEST;
+import static com.example.settlersofcatan.game.board.Direction.SOUTH;
+import static com.example.settlersofcatan.game.board.Direction.SOUTH_EAST;
+import static com.example.settlersofcatan.game.board.Direction.SOUTH_WEST;
+import static com.example.settlersofcatan.game.board.Direction.WEST;
 
 /**
  * Class to represent a tile on the board, has hexagonal shape and as  such 6 nodes and 6 edges.

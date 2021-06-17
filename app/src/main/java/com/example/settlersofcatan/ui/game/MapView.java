@@ -15,10 +15,10 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.game.board.Edge;
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.board.Edge;
 import com.example.settlersofcatan.game.board.Tile;
+import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.ui.board.HexGrid;
 import com.example.settlersofcatan.ui.board.Hexagon;
 import com.example.settlersofcatan.ui.board.Path;

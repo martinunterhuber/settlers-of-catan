@@ -7,12 +7,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
-
-import androidx.annotation.Nullable;
 
 /**
  * View that contains the title and description of a development card

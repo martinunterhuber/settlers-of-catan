@@ -7,9 +7,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.ui.game.GameActivity;
-import com.example.settlersofcatan.R;
 
 public class WaitForHostActivity extends AppCompatActivity {
     @Override

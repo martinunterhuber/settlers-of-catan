@@ -1,8 +1,8 @@
 package com.example.settlersofcatan.game.buildings;
 
 import com.example.settlersofcatan.game.Player;
-import com.example.settlersofcatan.game.resources.ResourceMap;
 import com.example.settlersofcatan.game.board.Edge;
+import com.example.settlersofcatan.game.resources.ResourceMap;
 
 /**
  * Class to represent a road. Always belongs to a player.

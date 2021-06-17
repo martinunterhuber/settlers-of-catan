@@ -1,7 +1,7 @@
 package com.example.settlersofcatan.game.board;
 
-import com.example.settlersofcatan.game.buildings.NodePlaceable;
 import com.example.settlersofcatan.game.Player;
+import com.example.settlersofcatan.game.buildings.NodePlaceable;
 import com.example.settlersofcatan.game.buildings.Settlement;
 
 import java.util.HashSet;

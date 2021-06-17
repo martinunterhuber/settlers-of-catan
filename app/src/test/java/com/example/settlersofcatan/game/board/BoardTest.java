@@ -1,6 +1,4 @@
 package com.example.settlersofcatan.game.board;
-import com.example.settlersofcatan.game.board.Board;
-import com.example.settlersofcatan.game.board.Tile;
 
 import org.junit.Assert;
 import org.junit.Before;

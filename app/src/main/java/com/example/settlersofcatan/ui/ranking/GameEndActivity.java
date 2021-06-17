@@ -6,11 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.GameClient;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class GameEndActivity extends AppCompatActivity {
     private TextView win;

@@ -8,8 +8,8 @@ import android.widget.Button;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.development_cards.DevelopmentCard;
 import com.example.settlersofcatan.game.development_cards.Monopoly;
-import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.game.development_cards.YearOfPlenty;
+import com.example.settlersofcatan.game.resources.Resource;
 
 public class ResourceDialog {
 

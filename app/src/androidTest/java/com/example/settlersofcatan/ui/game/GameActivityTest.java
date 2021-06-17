@@ -7,9 +7,7 @@ import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.board.Tile;
 import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.ui.game.GameActivity;
 import com.example.settlersofcatan.ui.board.Hexagon;
-import com.example.settlersofcatan.ui.game.PlayerView;
 
 import org.junit.After;
 import org.junit.Assert;

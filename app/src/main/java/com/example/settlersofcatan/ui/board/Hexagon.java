@@ -2,8 +2,8 @@ package com.example.settlersofcatan.ui.board;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.board.Node;
-import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.game.board.Tile;
+import com.example.settlersofcatan.game.resources.Resource;
 
 /**
  * The class calculates corner points and paths of a hexagon based on the center point.
