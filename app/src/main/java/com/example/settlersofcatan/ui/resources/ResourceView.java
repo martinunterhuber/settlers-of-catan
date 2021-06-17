@@ -27,7 +27,6 @@ public class ResourceView extends FrameLayout {
 
     private boolean showAnimation = false;
 
-    // TODO: change this animation
     private final Animation updateAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.blink);
 
     public ResourceView(@NonNull Context context) {

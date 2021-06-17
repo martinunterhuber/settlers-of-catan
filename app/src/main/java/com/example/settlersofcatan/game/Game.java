@@ -40,7 +40,7 @@ import java.util.Random;
 
 /**
  * Class to represent a game as a whole, includes the map which the game is played on,
- * and the players who will play on it, todo as well as the rules which them game is played under.
+ * and the players who will play on it, as well as the rules which them game is played under.
  */
 public class Game {
     private static Game instance;

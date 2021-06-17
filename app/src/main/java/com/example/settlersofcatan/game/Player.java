@@ -19,7 +19,7 @@ import java.util.Set;
 
 /**
  * Player of the game, has an inventory of resource cards, development cards, placed cities,
- * settlements and roads todo other player attributes like their colour etc. and maximum on available cities/settlements/roads
+ * settlements and roads other player attributes like their colour etc. and maximum on available cities/settlements/roads
  */
 public class Player {
 
