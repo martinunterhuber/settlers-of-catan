@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/catan_main_new"
     tools:context=".GameActivity">
 
 
@@ -184,6 +185,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                app:backgroundTint="#CC574C"
                 android:enabled="false"
                 android:text="@string/move_robber"
                 app:layout_constraintStart_toStartOf="parent"
@@ -198,6 +200,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                app:backgroundTint="#CC574C"
                 android:layout_height="wrap_content"
                 android:text="@string/end_turn"
                 app:layout_constraintStart_toEndOf="@id/moveRobber"
@@ -213,6 +216,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_height="wrap_content"
+                app:backgroundTint="#CC574C"
                 android:text="@string/trade"
                 app:layout_constraintStart_toEndOf="@+id/endTurnButton"
                 app:layout_constraintTop_toTopOf="@+id/endTurnButton" />
@@ -227,6 +231,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_height="wrap_content"
+                app:backgroundTint="#CC574C"
                 android:text="@string/development"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
