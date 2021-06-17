@@ -192,6 +192,7 @@
                 android:layout_marginRight="8dp"
                 android:enabled="false"
                 android:text="@string/move_robber"
+                app:backgroundTint="#CC574C"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/endTurnButton" />
 

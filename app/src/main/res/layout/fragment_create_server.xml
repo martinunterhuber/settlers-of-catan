@@ -175,7 +175,7 @@
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/_13_9133866_rules_bot_rule_bot_discord" />
+        app:srcCompat="@drawable/info" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
