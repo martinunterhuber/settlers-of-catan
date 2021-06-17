@@ -262,6 +262,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         spinner.setAdapter(adapter);
 
         Button confirm = dialogView.findViewById(R.id.confirm);
+        Button cancel = dialogView.findViewById(R.id.cancel);
+        if(tag.equals("ROBBERS")){
+            cancel.setVisibility(View.INVISIBLE);
+        }
         SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
 
         confirm.setOnClickListener((view) -> {
@@ -279,6 +283,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
                 moveRobber(resource, player.getId());
                 alertDialog.dismiss();
             }
+        });
+        cancel.setOnClickListener(view -> {
+            alertDialog.dismiss();
+            sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         });
 
         AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
