@@ -32,6 +32,9 @@ public class GameTest {
             player.setResources(new ResourceMap(new int[]{5, 5, 5, 5, 5}));
         }
         tiles = game.getBoard().getTiles();
+        for (Player player : game.getPlayers()) {
+            player.setResources(new ResourceMap(new int[]{5, 5, 5, 5, 5}));
+        }
     }
 
     @Test
@@ -198,13 +201,20 @@ public class GameTest {
         int otherPlayerId = (playerId + 1) % 4;
         Player player = game.getPlayerById(playerId);
         Player otherPlayer = game.getPlayerById(otherPlayerId);
-        int playerSheepBefore = player.getResourceCount(Resource.SHEEP);
-        int otherPlayerSheepBefore = otherPlayer.getResourceCount(Resource.SHEEP);
+        Resource resourceToTake = null;
+        for (Resource r : Resource.values()) {
+            if (otherPlayer.getResourceCount(r) > 0) {
+                resourceToTake = r;
+                break;
+            }
+        }
+        int playerSheepBefore = player.getResourceCount(resourceToTake);
+        int otherPlayerSheepBefore = otherPlayer.getResourceCount(resourceToTake);
 
-        game.moveRobber(tiles[3][3], Resource.SHEEP, playerId, otherPlayerId);
+        game.moveRobber(tiles[3][3], resourceToTake, playerId, otherPlayerId);
 
-        Assert.assertEquals(playerSheepBefore + 1, player.getResourceCount(Resource.SHEEP));
-        Assert.assertEquals(otherPlayerSheepBefore - 1, otherPlayer.getResourceCount(Resource.SHEEP));
+        Assert.assertEquals(playerSheepBefore + 1, player.getResourceCount(resourceToTake));
+        Assert.assertEquals(otherPlayerSheepBefore - 1, otherPlayer.getResourceCount(resourceToTake));
         Assert.assertTrue(tiles[3][3].hasRobber());
         Assert.assertFalse(game.canMoveRobber());
     }

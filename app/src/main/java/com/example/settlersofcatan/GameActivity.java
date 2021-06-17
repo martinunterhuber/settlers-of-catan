@@ -214,7 +214,9 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     }
 
     private void moveRobber(View view){
-        selectPlayerAndResource(playerView.getSelectedTile());
+        if (playerView.getSelectedTile() != null) {
+            selectPlayerAndResource(playerView.getSelectedTile());
+        }
     }
 
     private void moveRobber(Resource resource, int otherPlayerId){
