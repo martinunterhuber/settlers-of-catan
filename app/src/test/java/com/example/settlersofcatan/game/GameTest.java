@@ -22,6 +22,9 @@ public class GameTest {
         players.add("Player4");
         game.init(players);
         tiles = game.getBoard().getTiles();
+        for (Player player : game.getPlayers()) {
+            player.setResources(new ResourceMap(new int[]{5, 5, 5, 5, 5}));
+        }
     }
 
     @Test
