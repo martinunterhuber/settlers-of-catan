@@ -222,7 +222,9 @@ public class Game {
                     built = true;
                     if (turnCounter >= players.size()) {
                         for (Tile t : node.getAdjacentTiles()) {
-                            player.giveSingleResource(t.getResource());
+                            if (t.getResource() != null){
+                                player.giveSingleResource(t.getResource());
+                            }
                         }
                     }
                 }
