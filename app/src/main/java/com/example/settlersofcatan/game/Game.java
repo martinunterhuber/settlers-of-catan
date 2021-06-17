@@ -135,10 +135,18 @@ public class Game {
 
     private void robPlayers(){
         for (Player player : players){
+            int totalResourceCount = 0;
             for (Resource resource : Resource.values()){
-                int resourceCount = player.getResourceCount(resource);
-                if (resourceCount >= 7){
-                    player.takeResource(resource, resourceCount / 2);
+                totalResourceCount += player.getResourceCount(resource);
+            }
+            if (totalResourceCount >= 7){
+                int i = 0;
+                while (i < totalResourceCount/2) {
+                    Resource resourceToTake = Resource.valueOf(random.nextInt(5));
+                    if (player.getResourceCount(resourceToTake) > 0) {
+                        player.takeResource(resourceToTake, 1);
+                        i++;
+                    }
                 }
             }
         }
