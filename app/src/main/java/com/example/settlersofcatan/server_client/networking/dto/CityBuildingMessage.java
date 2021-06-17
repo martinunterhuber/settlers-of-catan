@@ -1,7 +1,7 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-import com.example.settlersofcatan.game.Direction;
-import com.example.settlersofcatan.game.TileCoordinates;
+import com.example.settlersofcatan.game.board.Direction;
+import com.example.settlersofcatan.game.board.TileCoordinates;
 
 public class CityBuildingMessage extends BuildingMessage {
     public CityBuildingMessage() {

@@ -1,17 +1,16 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
-import com.example.settlersofcatan.PlayerResources;
-import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+import com.example.settlersofcatan.game.board.Tile;
+import com.example.settlersofcatan.game.buildings.City;
+import com.example.settlersofcatan.game.buildings.Settlement;
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.resources.ResourceMap;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameTest {
     private Game game;

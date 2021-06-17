@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.game.Resource;
-import com.example.settlersofcatan.game.ResourceMap;
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.resources.ResourceMap;
 
 /**
  * Class to represent a set of different resources with the purpose of trading.

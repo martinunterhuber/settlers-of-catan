@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/catan_background_basegame"
-    tools:context=".StartScreenActivity">
+    tools:context=".ui.game.StartScreenActivity">
 
     <ImageView
         android:id="@+id/imageView2"

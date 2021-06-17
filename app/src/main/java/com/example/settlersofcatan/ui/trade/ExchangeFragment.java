@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
-import com.example.settlersofcatan.game.Resource;
-import com.example.settlersofcatan.game.ResourceMap;
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.resources.ResourceMap;
 import com.example.settlersofcatan.server_client.GameClient;
 
 /**

@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@drawable/catan_main_new"
-    tools:context=".GameActivity">
+    tools:context=".ui.game.GameActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.settlersofcatan.MapView
+        <com.example.settlersofcatan.ui.game.MapView
             android:id="@+id/mapView"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_layout" />
 
-        <com.example.settlersofcatan.PlayerView
+        <com.example.settlersofcatan.ui.game.PlayerView
             android:id="@+id/playerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -34,7 +34,7 @@
             app:layout_constraintTop_toBottomOf="@+id/button_layout"
             app:layout_constraintVertical_bias="0.0" />
 
-        <com.example.settlersofcatan.ResourceView
+        <com.example.settlersofcatan.ui.resources.ResourceView
             android:id="@+id/resourceView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.example.settlersofcatan.OpponentView
+            <com.example.settlersofcatan.ui.game.OpponentView
                 android:id="@+id/opponent1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.example.settlersofcatan.OpponentView
+            <com.example.settlersofcatan.ui.game.OpponentView
                 android:id="@+id/opponent2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 app:layout_constraintStart_toEndOf="@id/opponent1"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.example.settlersofcatan.OpponentView
+            <com.example.settlersofcatan.ui.game.OpponentView
                 android:id="@+id/opponent3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -260,31 +260,31 @@
                 android:orientation="vertical"
                 android:showDividers="middle">
 
-                <com.example.settlersofcatan.DevelopmentCardView
+                <com.example.settlersofcatan.ui.game.DevelopmentCardView
                     android:id="@+id/view_knights"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:tag="1" />
 
-                <com.example.settlersofcatan.DevelopmentCardView
+                <com.example.settlersofcatan.ui.game.DevelopmentCardView
                     android:id="@+id/view_victory_point_cards"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:tag="2" />
 
-                <com.example.settlersofcatan.DevelopmentCardView
+                <com.example.settlersofcatan.ui.game.DevelopmentCardView
                     android:id="@+id/view_monopoly"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:tag="3" />
 
-                <com.example.settlersofcatan.DevelopmentCardView
+                <com.example.settlersofcatan.ui.game.DevelopmentCardView
                     android:id="@+id/view_road_building"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:tag="4" />
 
-                <com.example.settlersofcatan.DevelopmentCardView
+                <com.example.settlersofcatan.ui.game.DevelopmentCardView
                     android:id="@+id/view_year_of_plenty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

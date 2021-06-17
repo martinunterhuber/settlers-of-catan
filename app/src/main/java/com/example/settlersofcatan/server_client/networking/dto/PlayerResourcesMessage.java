@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-import com.example.settlersofcatan.PlayerResources;
+import com.example.settlersofcatan.game.resources.PlayerResources;
 
 import androidx.annotation.NonNull;
 

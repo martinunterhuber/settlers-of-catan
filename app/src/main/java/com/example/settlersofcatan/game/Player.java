@@ -1,8 +1,17 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
-import com.example.settlersofcatan.PlayerResources;
+import com.example.settlersofcatan.game.resources.PlayerResources;
+import com.example.settlersofcatan.game.board.Edge;
+import com.example.settlersofcatan.game.board.Harbor;
+import com.example.settlersofcatan.game.board.Node;
+import com.example.settlersofcatan.game.buildings.City;
+import com.example.settlersofcatan.game.buildings.NodePlaceable;
+import com.example.settlersofcatan.game.buildings.Road;
+import com.example.settlersofcatan.game.buildings.Settlement;
+import com.example.settlersofcatan.game.development_cards.DevelopmentCard;
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.resources.ResourceMap;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 
 import java.util.HashSet;

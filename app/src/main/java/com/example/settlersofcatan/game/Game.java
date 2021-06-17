@@ -1,10 +1,23 @@
 package com.example.settlersofcatan.game;
 
-import android.util.Log;
-
-import com.example.settlersofcatan.PlayerResources;
-import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.Ranking;
+import com.example.settlersofcatan.game.resources.PlayerResources;
+import com.example.settlersofcatan.ui.ranking.Ranking;
+import com.example.settlersofcatan.game.board.Board;
+import com.example.settlersofcatan.game.board.Edge;
+import com.example.settlersofcatan.game.board.Node;
+import com.example.settlersofcatan.game.board.Tile;
+import com.example.settlersofcatan.game.buildings.City;
+import com.example.settlersofcatan.game.buildings.Road;
+import com.example.settlersofcatan.game.buildings.Settlement;
+import com.example.settlersofcatan.game.development_cards.DevelopmentCard;
+import com.example.settlersofcatan.game.development_cards.DevelopmentCardDeck;
+import com.example.settlersofcatan.game.development_cards.Knights;
+import com.example.settlersofcatan.game.development_cards.Monopoly;
+import com.example.settlersofcatan.game.development_cards.RoadBuilding;
+import com.example.settlersofcatan.game.development_cards.VictoryPoints;
+import com.example.settlersofcatan.game.development_cards.YearOfPlenty;
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.networking.AsyncCallback;
 import com.example.settlersofcatan.server_client.networking.dto.BaseMessage;

@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.settlersofcatan.R;
-import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.TradeOffer;
+import com.example.settlersofcatan.game.trade.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
 
 public class WaitForReplyActivity extends AppCompatActivity {

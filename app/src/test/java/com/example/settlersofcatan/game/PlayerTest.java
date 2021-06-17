@@ -1,5 +1,8 @@
 package com.example.settlersofcatan.game;
 
+import com.example.settlersofcatan.game.resources.Resource;
+import com.example.settlersofcatan.game.resources.ResourceMap;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

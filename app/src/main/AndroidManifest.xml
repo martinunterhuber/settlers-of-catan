@@ -13,8 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SettlersOfCatan">
 
-        <activity android:name=".ResourceRankingActivity"></activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ui.ranking.ResourceRankingActivity"></activity>
+        <activity android:name=".ui.server.MainActivity" />
       
         <activity
             android:name=".ui.trade.ReceiveTradeOfferActivity"
@@ -23,27 +23,27 @@
         <activity android:name=".ui.trade.WaitForReplyActivity" />
 
         <activity
-            android:name=".GameEndActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".ui.ranking.GameEndActivity"
+            android:parentActivityName=".ui.server.MainActivity" />
         <activity
-            android:name=".TradeActivity"
+            android:name=".ui.trade.TradeActivity"
             android:label="@string/title_activity_trade"
             android:theme="@style/GameTheme"/>
       
-        <activity android:name=".StartScreenActivity">
+        <activity android:name=".ui.game.StartScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
             
-        <activity android:name=".GameActivity"
+        <activity android:name=".ui.game.GameActivity"
             android:theme="@style/GameTheme"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".ui.server.MainActivity"/>
 
         <activity
-            android:name=".server_client.WaitForHostActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".ui.server.WaitForHostActivity"
+            android:parentActivityName=".ui.server.MainActivity" />
     </application>
 
 </manifest>
