@@ -21,6 +21,9 @@ public class Player {
     private String name;
     private int id;
 
+    //Counter for resource ranking
+    private int resourcecounter;
+
     private int victoryPoints;
     // for victory point development cards, longest road, largest army
     private int hiddenVictoryPoints;
@@ -72,6 +75,7 @@ public class Player {
 
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
+        resourcecounter++;
         Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 

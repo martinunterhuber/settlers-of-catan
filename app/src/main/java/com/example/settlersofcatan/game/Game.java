@@ -55,7 +55,7 @@ public class Game {
     private Player largestArmyPlayer;
 
     private boolean canMoveRobber;
-
+  
     private HashMap<Integer, ArrayList<Integer>> cheated;
 
     private Game(){

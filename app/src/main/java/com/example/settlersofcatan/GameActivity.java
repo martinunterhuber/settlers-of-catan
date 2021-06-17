@@ -109,7 +109,9 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-      
+
+
+
         client = GameClient.getInstance();
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

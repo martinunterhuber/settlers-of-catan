@@ -1,5 +1,6 @@
 package com.example.settlersofcatan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ public class GameEndActivity extends AppCompatActivity {
     private TextView third;
     private TextView fourth;
     private Button endGameButton;
+    private Button resButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,14 @@ public class GameEndActivity extends AppCompatActivity {
         }else{
             fourth.setVisibility(View.GONE);
         }
+
+     resButton = findViewById(R.id.resranbtn);
+     resButton.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             startActivity(new Intent(GameEndActivity.this, ResourceRankingActivity.class));
+         }
+     });
 
     }
 
