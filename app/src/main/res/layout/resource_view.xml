@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#A3A3A3">
+    android:background="@drawable/wood_brackground">
 
     <ImageView
         android:id="@+id/img_wood"
@@ -58,81 +58,80 @@
         android:id="@+id/txt_wood"
         android:layout_width="38dp"
         android:layout_height="29dp"
+        android:layout_gravity="center_horizontal"
         android:ems="10"
-        android:inputType="number"
         android:text="0"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/img_wood"
         app:layout_constraintStart_toStartOf="@+id/img_wood"
-        app:layout_constraintTop_toTopOf="@+id/img_wood"
-        android:layout_gravity="center_horizontal" />
+        app:layout_constraintTop_toTopOf="@+id/img_wood" />
 
     <TextView
         android:id="@+id/txt_wheat"
         android:layout_width="38dp"
         android:layout_height="29dp"
+        android:layout_gravity="center_horizontal"
         android:ems="10"
         android:text="0"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/img_wheat"
         app:layout_constraintStart_toStartOf="@+id/img_wheat"
-        app:layout_constraintTop_toTopOf="@+id/img_wheat"
-        android:layout_gravity="center_horizontal"/>
+        app:layout_constraintTop_toTopOf="@+id/img_wheat" />
 
     <TextView
         android:id="@+id/txt_sheep"
         android:layout_width="38dp"
         android:layout_height="29dp"
+        android:layout_gravity="center_horizontal"
         android:ems="10"
         android:text="0"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/img_sheep"
         app:layout_constraintStart_toStartOf="@+id/img_sheep"
-        app:layout_constraintTop_toTopOf="@+id/img_sheep"
-        android:layout_gravity="center_horizontal"/>
+        app:layout_constraintTop_toTopOf="@+id/img_sheep" />
 
     <TextView
         android:id="@+id/txt_clay"
         android:layout_width="38dp"
         android:layout_height="29dp"
+        android:layout_gravity="center_horizontal"
         android:ems="10"
         android:text="0"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/img_clay"
         app:layout_constraintStart_toStartOf="@+id/img_clay"
-        app:layout_constraintTop_toTopOf="@+id/img_sheep"
-        android:layout_gravity="center_horizontal"/>
+        app:layout_constraintTop_toTopOf="@+id/img_sheep" />
 
     <TextView
         android:id="@+id/txt_ore"
         android:layout_width="38dp"
         android:layout_height="29dp"
+        android:layout_gravity="center_horizontal"
         android:ems="10"
         android:text="0"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/img_ore"
         app:layout_constraintStart_toStartOf="@+id/img_ore"
-        app:layout_constraintTop_toTopOf="@+id/img_sheep"
-        android:layout_gravity="center_horizontal"/>
+        app:layout_constraintTop_toTopOf="@+id/img_sheep" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

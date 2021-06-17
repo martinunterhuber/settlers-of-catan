@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/catan_main_new"
     tools:context=".GameActivity">
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,9 +29,10 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/mapView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/button_layout"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.example.settlersofcatan.ResourceView
             android:id="@+id/resourceView"
@@ -140,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
+            android:textColor="#FFC107"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@id/icon_trophy"
             app:layout_constraintEnd_toEndOf="@id/icon_trophy"
@@ -151,16 +153,19 @@
             android:layout_height="36dp"
             android:layout_marginBottom="4dp"
             android:onClick="onClick"
-            android:src="@drawable/trophy"
+            android:src="@drawable/trophynew"
             app:layout_constraintBottom_toTopOf="@id/resourceView"
             app:layout_constraintEnd_toStartOf="@id/btn_road"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/trophynew"
+            tools:srcCompat="@drawable/trophynew" />
 
         <TextView
             android:id="@+id/rollResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/btn_dice"
             app:layout_constraintEnd_toEndOf="@+id/btn_dice"
@@ -171,8 +176,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:rowCount="2"
             android:orientation="horizontal"
+            android:rowCount="2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/opponents">
@@ -188,6 +193,7 @@
                 android:layout_marginRight="8dp"
                 android:enabled="false"
                 android:text="@string/move_robber"
+                app:backgroundTint="#CC574C"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/endTurnButton" />
 
@@ -199,8 +205,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_height="wrap_content"
                 android:text="@string/end_turn"
+                app:backgroundTint="#CC574C"
                 app:layout_constraintStart_toEndOf="@id/moveRobber"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -212,8 +218,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_height="wrap_content"
                 android:text="@string/trade"
+                app:backgroundTint="#CC574C"
                 app:layout_constraintStart_toEndOf="@+id/endTurnButton"
                 app:layout_constraintTop_toTopOf="@+id/endTurnButton" />
 
@@ -225,12 +231,13 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_height="wrap_content"
                 android:text="@string/development"
+                app:backgroundTint="#CC574C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btn_trade" />
         </GridLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

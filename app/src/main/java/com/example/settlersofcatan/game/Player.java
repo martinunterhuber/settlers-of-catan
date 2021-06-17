@@ -21,6 +21,9 @@ public class Player {
     private String name;
     private int id;
 
+    //Counter for resource ranking
+    private int resourcecounter;
+
     private int victoryPoints;
     // for victory point development cards, longest road, largest army
     private int hiddenVictoryPoints;
@@ -72,6 +75,7 @@ public class Player {
 
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
+        resourcecounter++;
         Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
@@ -80,7 +84,9 @@ public class Player {
     }
 
     public void setResources(ResourceMap resources) {
-        this.resources = resources;
+        for (Resource resource: Resource.values()){
+            this.resources.setResourceCount(resource, resources.getResourceCount(resource));
+        }
     }
 
     public int getId() {
@@ -307,14 +313,17 @@ public class Player {
         Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
+    public void tradeOfferWasAccepted(TradeOffer tradeOffer) {
+        resources.incrementResourceMap(tradeOffer.getReceive());
+        resources.decrementResourceMap(tradeOffer.getGive());
+    }
+
     public void increaseDevelopmentCard(int index){
         developmetCards[index]++;
-        Log.i("DEVELOPMENT","Player card count increased.");
     }
 
     public void decreaseDevelopmentCard(int index){
         developmetCards[index]--;
-        Log.i("DEVELOPMENT","Player card count decreased.");
     }
 
     public int getDevelopmentCardCount(int index){

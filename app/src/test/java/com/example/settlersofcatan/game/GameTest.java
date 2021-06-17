@@ -1,10 +1,17 @@
 package com.example.settlersofcatan.game;
 
+import android.util.Log;
+
+import com.example.settlersofcatan.PlayerResources;
+import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameTest {
     private Game game;
@@ -21,7 +28,13 @@ public class GameTest {
         players.add("Player3");
         players.add("Player4");
         game.init(players);
+        for (Player player : game.getPlayers()) {
+            player.setResources(new ResourceMap(new int[]{5, 5, 5, 5, 5}));
+        }
         tiles = game.getBoard().getTiles();
+        for (Player player : game.getPlayers()) {
+            player.setResources(new ResourceMap(new int[]{5, 5, 5, 5, 5}));
+        }
     }
 
     @Test
@@ -188,13 +201,20 @@ public class GameTest {
         int otherPlayerId = (playerId + 1) % 4;
         Player player = game.getPlayerById(playerId);
         Player otherPlayer = game.getPlayerById(otherPlayerId);
-        int playerSheepBefore = player.getResourceCount(Resource.SHEEP);
-        int otherPlayerSheepBefore = otherPlayer.getResourceCount(Resource.SHEEP);
+        Resource resourceToTake = null;
+        for (Resource r : Resource.values()) {
+            if (otherPlayer.getResourceCount(r) > 0) {
+                resourceToTake = r;
+                break;
+            }
+        }
+        int playerSheepBefore = player.getResourceCount(resourceToTake);
+        int otherPlayerSheepBefore = otherPlayer.getResourceCount(resourceToTake);
 
-        game.moveRobber(tiles[3][3], Resource.SHEEP, playerId, otherPlayerId);
+        game.moveRobber(tiles[3][3], resourceToTake, playerId, otherPlayerId);
 
-        Assert.assertEquals(playerSheepBefore + 1, player.getResourceCount(Resource.SHEEP));
-        Assert.assertEquals(otherPlayerSheepBefore - 1, otherPlayer.getResourceCount(Resource.SHEEP));
+        Assert.assertEquals(playerSheepBefore + 1, player.getResourceCount(resourceToTake));
+        Assert.assertEquals(otherPlayerSheepBefore - 1, otherPlayer.getResourceCount(resourceToTake));
         Assert.assertTrue(tiles[3][3].hasRobber());
         Assert.assertFalse(game.canMoveRobber());
     }
@@ -242,5 +262,73 @@ public class GameTest {
 
         Assert.assertEquals(game.getPlayerById(0), game.getLongestRoadPlayer());
         Assert.assertEquals(game.getPlayerById(0).longestRoad(), 5);
+    }
+
+    @Test
+    public void testDrawDevelopmentCardNotDrawableForOtherPlayer(){
+        skipBuildingPhase();
+        game.rollDice(0);
+        Assert.assertEquals(-1, game.drawDevelopmentCard(1));
+    }
+
+    @Test
+    public void testDrawDevelopmentCardReturnsCardId(){
+        skipBuildingPhase();
+        game.rollDice(0);
+        int card = game.drawDevelopmentCard(0);
+        Assert.assertTrue(0 <= card && card < 5);
+    }
+
+    @Test
+    public void testDrawDevelopmentCardTakesResources(){
+        Player player = game.getPlayerById(0);
+
+        skipBuildingPhase();
+        game.rollDice(0);
+        ResourceMap expectedResources = ResourceMap.cloneResourceMap(player.getResources());
+        expectedResources.decrementResourceMap(new ResourceMap(new int[]{1, 0, 1, 0, 1}));
+        game.drawDevelopmentCard(0);
+        ResourceMap playerResources = player.getResources();
+        for (Resource resource: Resource.values()){
+            Assert.assertEquals(expectedResources.getResourceCount(resource), playerResources.getResourceCount(resource));
+        }
+    }
+
+    @Test
+    public void testRobResourceChangesResourceCounts(){
+        Player player0 = game.getPlayerById(0);
+        Player player1 = game.getPlayerById(1);
+        game.robResource(1, 0, Resource.SHEEP);
+        Assert.assertEquals(6, player0.getResourceCount(Resource.SHEEP));
+        Assert.assertEquals(4, player1.getResourceCount(Resource.SHEEP));
+    }
+
+    @Test
+    public void testRobResourcePlayerIsCheater(){
+        game.robResource(1, 0, Resource.SHEEP);
+        Assert.assertTrue(game.hasCheated(0));
+    }
+
+    @Test
+    public void testExposeCheater(){
+        Player player1 = game.getPlayerById(1);
+        game.robResource(0, 1, Resource.SHEEP);
+        game.exposeCheater(1);
+        for (Resource resource: Resource.values()){
+            if (resource == Resource.SHEEP){
+                Assert.assertEquals(3, player1.getResourceCount(resource));
+            } else {
+                Assert.assertEquals(2, player1.getResourceCount(resource));
+            }
+        }
+    }
+
+    @Test
+    public void testPenaltyForFalseCharge(){
+        Player player0 = game.getPlayerById(0);
+        game.penaltyForFalseCharge(1);
+        for (Resource resource: Resource.values()){
+            Assert.assertEquals(2, player0.getResourceCount(resource));
+        }
     }
 }

@@ -3,15 +3,13 @@ package com.example.settlersofcatan;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Looper;
-import android.view.Gravity;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,13 +25,14 @@ import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.Resource;
 import com.example.settlersofcatan.game.Tile;
+import com.example.settlersofcatan.game.TradeOffer;
 import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.ui.trade.ReceiveTradeOfferActivity;
 import com.example.settlersofcatan.util.OnPostDrawListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
@@ -110,7 +109,9 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-      
+
+
+
         client = GameClient.getInstance();
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -162,6 +163,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         drawDevelopmentCard.setOnClickListener(
                 view -> {
                     int type = game.drawDevelopmentCard(GameClient.getInstance().getId());
+                    GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
 
                     if (type == 0){
                         knights.updateView(type);
@@ -212,7 +214,9 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     }
 
     private void moveRobber(View view){
-        selectPlayerAndResource(playerView.getSelectedTile());
+        if (playerView.getSelectedTile() != null) {
+            selectPlayerAndResource(playerView.getSelectedTile());
+        }
     }
 
     private void moveRobber(Resource resource, int otherPlayerId){
@@ -260,6 +264,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         spinner.setAdapter(adapter);
 
         Button confirm = dialogView.findViewById(R.id.confirm);
+        Button cancel = dialogView.findViewById(R.id.cancel);
+        if(tag.equals("ROBBERS")){
+            cancel.setVisibility(View.INVISIBLE);
+        }
         SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
 
         confirm.setOnClickListener((view) -> {
@@ -277,6 +285,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
                 moveRobber(resource, player.getId());
                 alertDialog.dismiss();
             }
+        });
+        cancel.setOnClickListener(view -> {
+            alertDialog.dismiss();
+            sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         });
 
         AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
@@ -387,6 +399,12 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             opponent3.invalidate();
         }
 
+    }
+
+    public void displayTradeOffer(TradeOffer tradeOffer) {
+        Intent i = new Intent(getApplicationContext(), ReceiveTradeOfferActivity.class);
+        i.putExtra("tradeoffer", (Parcelable) tradeOffer);
+        startActivity(i);
     }
 
     @Override

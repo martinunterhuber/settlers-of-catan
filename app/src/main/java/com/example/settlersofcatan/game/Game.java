@@ -13,7 +13,8 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
-import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeOfferMessage;
+import com.example.settlersofcatan.server_client.networking.dto.TradeReplyMessage;
 import com.example.settlersofcatan.server_client.networking.dto.MovedRobberMessage;
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.dto.RoadBuildingMessage;
@@ -54,7 +55,7 @@ public class Game {
     private Player largestArmyPlayer;
 
     private boolean canMoveRobber;
-
+  
     private HashMap<Integer, ArrayList<Integer>> cheated;
 
     private Game(){
@@ -219,6 +220,13 @@ public class Game {
                     lastBuiltNode = node;
                     hasBuiltSettlement = true;
                     built = true;
+                    if (turnCounter >= players.size()) {
+                        for (Tile t : node.getAdjacentTiles()) {
+                            if (t.getResource() != null){
+                                player.giveSingleResource(t.getResource());
+                            }
+                        }
+                    }
                 }
             } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);
@@ -325,19 +333,14 @@ public class Game {
     }
 
     public int drawDevelopmentCard(int playerId){
+        Player player = getPlayerById(playerId);
         if (playerId == currentPlayerId
                 && hasRolled
                 && DevelopmentCardDeck.getInstance().getNumberOfCards() > 0
-                && getPlayerById(playerId).getResourceCount(Resource.ORE) > 0
-                && getPlayerById(playerId).getResourceCount(Resource.SHEEP) > 0
-                && getPlayerById(playerId).getResourceCount(Resource.WHEAT )> 0){
+                && player.getResources().containsResourceMap(DevelopmentCard.costs)){
             DevelopmentCard card = DevelopmentCardDeck.getInstance().drawDevelopmentCard();
-            Player player=getPlayerById(playerId);
 
-            player.takeResource(Resource.ORE,1);
-            player.takeResource(Resource.SHEEP,1);
-            player.takeResource(Resource.WHEAT,1);
-            GameClient.getInstance().getGameActivity().findViewById(R.id.resourceView).invalidate();
+            player.takeResources(DevelopmentCard.costs);
 
             if (card instanceof Knights){
                 player.increaseDevelopmentCard(0);
@@ -371,6 +374,18 @@ public class Game {
         }
     }
 
+    public void sendTradeOffer(TradeOffer tradeOffer) {
+        new Thread(() -> GameClient.getInstance()
+                .sendMessage(new TradeOfferMessage(tradeOffer)))
+                .start();
+    }
+
+    public void sendTradeOfferReply(Boolean accepted) {
+        new Thread(() -> GameClient.getInstance()
+                .sendMessage(new TradeReplyMessage(accepted)))
+                .start();
+    }
+
     // rob 1 resource from another player
     public void robResource(int playerFromId, int playerToId, Resource resource){
 
@@ -400,8 +415,6 @@ public class Game {
             cheaters.add(cheater);
             cheated.put(turnCounter, cheaters);
         }
-
-        Log.i("CHEAT", "Player " + cheater + " cheated on turn " + turnCounter);
     }
 
     public boolean hasCheated(int cheaterId){

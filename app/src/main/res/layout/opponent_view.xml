@@ -45,7 +45,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
         android:text="@string/points"
-        app:srcCompat="@drawable/trophy"
+        app:srcCompat="@drawable/trophynew"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_name" />
 

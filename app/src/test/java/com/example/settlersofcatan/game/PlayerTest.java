@@ -9,6 +9,7 @@ public class PlayerTest {
 
     @Before
     public void setUp() {
+        Game.getInstance().setClientCallback(m -> {});
         player = new Player(0, "Test");
         player.setResources(new ResourceMap(new int[]{2,2,2,2,2}));
     }

@@ -13,7 +13,7 @@ public class ResourceMap {
     public ResourceMap() {
         resources = new HashMap<>();
         for (Resource resource : Resource.values()){
-            resources.put(resource, 5);
+            resources.put(resource, 0);
         }
     }
 
@@ -60,6 +60,18 @@ public class ResourceMap {
             }
         }
         return true;
+    }
+
+    public void setResourceCount(Resource resource, int count){
+        resources.put(resource, count);
+    }
+  
+    public int[] toArray() {
+        int[] values = new int[5];
+        for (Resource resource : Resource.values()) {
+            values[resource.getIndex()] = getResourceCount(resource);
+        }
+        return values;
     }
 
     public static ResourceMap cloneResourceMap(ResourceMap resourceMapToCopy) {
