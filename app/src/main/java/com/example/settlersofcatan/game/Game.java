@@ -220,6 +220,11 @@ public class Game {
                     lastBuiltNode = node;
                     hasBuiltSettlement = true;
                     built = true;
+                    if (turnCounter >= players.size()) {
+                        for (Tile t : node.getAdjacentTiles()) {
+                            player.giveSingleResource(t.getResource());
+                        }
+                    }
                 }
             } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);

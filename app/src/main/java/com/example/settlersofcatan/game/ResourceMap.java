@@ -13,7 +13,7 @@ public class ResourceMap {
     public ResourceMap() {
         resources = new HashMap<>();
         for (Resource resource : Resource.values()){
-            resources.put(resource, 5);
+            resources.put(resource, 0);
         }
     }
 
