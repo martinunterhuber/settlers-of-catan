@@ -159,7 +159,7 @@ public class Game {
 
     public void endTurn(int playerId){
         if (isPlayersTurn(playerId) && canEndTurn() && !canMoveRobber) {
-            if(getPlayerById(playerId).getVictoryPoints() + getPlayerById(playerId).getHiddenVictoryPoints() >= 10){
+            if(getPlayerById(playerId).getVictoryPoints() + getPlayerById(playerId).getHiddenVictoryPoints() >= 1){
                 Ranking ranking = Ranking.getInstance();
                 clientCallback.asyncCallback(new ClientWinMessage(ranking));
                 return;

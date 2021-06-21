@@ -6,8 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/catan_main_new"
     tools:context=".ui.game.GameActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:src="@drawable/catan_main_new"
+        android:scaleType="centerCrop" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
