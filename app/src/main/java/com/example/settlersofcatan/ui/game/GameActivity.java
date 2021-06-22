@@ -16,12 +16,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
@@ -38,6 +37,8 @@ import com.example.settlersofcatan.util.OnPostDrawListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 
@@ -57,6 +58,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     private DevelopmentCardView roadBuilding;
     private DevelopmentCardView yearOfPlenty;
     private Button drawDevelopmentCard;
+    private ImageButton buildingCosts;
 
     private Button btnTrade;
 
@@ -153,6 +155,9 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             Intent i = new Intent(getApplicationContext(), TradeActivity.class);
             startActivity(i);
         });
+
+        buildingCosts=findViewById(R.id.imgBtn_costs);
+        buildingCosts.setOnClickListener(this::showCostDialog);
 
         client.registerActivity(this);
 
@@ -310,6 +315,20 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             }
         };
         spinner.setOnItemSelectedListener(onItemSelectedListener);
+
+        alertDialog.show();
+    }
+
+    public void showCostDialog(View view){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_building_resources_costs, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+
+        Button dismiss = dialogView.findViewById(R.id.btn_close_costs);
+        dismiss.setOnClickListener(view1 -> alertDialog.dismiss());
 
         alertDialog.show();
     }

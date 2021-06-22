@@ -169,6 +169,19 @@
             app:layout_constraintEnd_toEndOf="@+id/btn_dice"
             app:layout_constraintStart_toStartOf="@+id/btn_dice" />
 
+        <ImageButton
+            android:id="@+id/imgBtn_costs"
+            android:layout_width="46dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            app:layout_constraintStart_toEndOf="@+id/opponents"
+            app:layout_constraintTop_toTopOf="@+id/mapView"
+            app:srcCompat="@drawable/info" />
+
         <GridLayout
             android:id="@+id/button_layout"
             android:layout_width="120dp"
