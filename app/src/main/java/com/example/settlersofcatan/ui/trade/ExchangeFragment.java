@@ -206,56 +206,72 @@ public class ExchangeFragment extends Fragment {
      * @param source Where the resource should go
      */
     protected void executeTransfer(TradeResourceView target,TradeResourceView source) {
-        Resource resource = resourceBeingDragged;
-        int exchangeRate = resourceExchangeRates[resource.getIndex()];
         if (source == currentInventoryView) {
-            if (target == giveInventoryView) {
-                if (source.getContent().getResourceCount(resource) >= exchangeRate) {
-                    giveCounter++;
-                    source.getContent().decrementResourceCount(resource, exchangeRate);
-                    target.getContent().incrementResourceCount(resource, exchangeRate);
-                }
-            }
-            else if (target == receiveInventoryView) {
-                receiveCounter++;
-                source.getContent().incrementResourceCount(resource, 1);
-                target.getContent().incrementResourceCount(resource, 1);
-            }
+            executeTransferSourceIsCurrent(target, source);
         }
         else if (source == giveInventoryView){
-            if (target == currentInventoryView) {
-                giveCounter--;
-                source.getContent().decrementResourceCount(resource, exchangeRate);
-                target.getContent().incrementResourceCount(resource, exchangeRate);
-            }
-            else if (target == receiveInventoryView){
-                giveCounter--;
-                receiveCounter++;
-                source.getContent().decrementResourceCount(resource, exchangeRate);
-                currentInventoryView.getContent().incrementResourceCount(resource, exchangeRate + 1);
-                target.getContent().incrementResourceCount(resource, 1);
-            }
+            executeTransferSourceIsGive(target, source);
         }
         else {
-            if (target == currentInventoryView) {
-                if (currentInventoryView.getContent().getResourceCount(resource) > 0) {
-                    receiveCounter--;
-                    source.getContent().decrementResourceCount(resource, 1);
-                    target.getContent().decrementResourceCount(resource, 1);
-                }
-            }
-            else if ((target == giveInventoryView)
-                    && (currentInventoryView.getContent().getResourceCount(resource) >= exchangeRate + 1)) {
-                receiveCounter--;
-                giveCounter++;
-                source.getContent().decrementResourceCount(resource, 1);
-                currentInventoryView.getContent().decrementResourceCount(resource, exchangeRate + 1);
-                target.getContent().incrementResourceCount(resource, exchangeRate);
-            }
+            executeTransferSourceIsReceive(target, source);
         }
         giveInventoryView.updateResourceValues();
         receiveInventoryView.updateResourceValues();
         currentInventoryView.updateResourceValues();
+    }
+
+    private void executeTransferSourceIsReceive(TradeResourceView target, TradeResourceView source) {
+        Resource resource = resourceBeingDragged;
+        int exchangeRate = resourceExchangeRates[resource.getIndex()];
+        if (target == currentInventoryView) {
+            if (currentInventoryView.getContent().getResourceCount(resource) > 0) {
+                receiveCounter--;
+                source.getContent().decrementResourceCount(resource, 1);
+                target.getContent().decrementResourceCount(resource, 1);
+            }
+        }
+        else if ((target == giveInventoryView)
+                && (currentInventoryView.getContent().getResourceCount(resource) >= exchangeRate + 1)) {
+            receiveCounter--;
+            giveCounter++;
+            source.getContent().decrementResourceCount(resource, 1);
+            currentInventoryView.getContent().decrementResourceCount(resource, exchangeRate + 1);
+            target.getContent().incrementResourceCount(resource, exchangeRate);
+        }
+    }
+
+    private void executeTransferSourceIsGive(TradeResourceView target, TradeResourceView source) {
+        Resource resource = resourceBeingDragged;
+        int exchangeRate = resourceExchangeRates[resource.getIndex()];
+        if (target == currentInventoryView) {
+            giveCounter--;
+            source.getContent().decrementResourceCount(resource, exchangeRate);
+            target.getContent().incrementResourceCount(resource, exchangeRate);
+        }
+        else if (target == receiveInventoryView){
+            giveCounter--;
+            receiveCounter++;
+            source.getContent().decrementResourceCount(resource, exchangeRate);
+            currentInventoryView.getContent().incrementResourceCount(resource, exchangeRate + 1);
+            target.getContent().incrementResourceCount(resource, 1);
+        }
+    }
+
+    private void executeTransferSourceIsCurrent(TradeResourceView target, TradeResourceView source) {
+        Resource resource = resourceBeingDragged;
+        int exchangeRate = resourceExchangeRates[resource.getIndex()];
+        if (target == giveInventoryView) {
+            if (source.getContent().getResourceCount(resource) >= exchangeRate) {
+                giveCounter++;
+                source.getContent().decrementResourceCount(resource, exchangeRate);
+                target.getContent().incrementResourceCount(resource, exchangeRate);
+            }
+        }
+        else if (target == receiveInventoryView) {
+            receiveCounter++;
+            source.getContent().incrementResourceCount(resource, 1);
+            target.getContent().incrementResourceCount(resource, 1);
+        }
     }
 
     public boolean isInAcceptedState() {
