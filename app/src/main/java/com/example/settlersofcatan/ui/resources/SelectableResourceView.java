@@ -32,7 +32,7 @@ public class SelectableResourceView extends ResourceView {
 
     @Override
     protected void doOnDraw() {
-
+        // shouldn't draw current players resources
     }
 
     public boolean hasSelected(){

@@ -56,9 +56,6 @@ public class ExchangeFragment extends Fragment {
      */
     protected int receiveCounter;
 
-
-    public ExchangeFragment() { }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

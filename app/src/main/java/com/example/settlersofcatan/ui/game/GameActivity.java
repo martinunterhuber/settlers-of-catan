@@ -42,6 +42,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 
+    public static final String ROBBERS = "ROBBERS";
+    public static final String CHEAT = "CHEAT";
     private MapView map;
     private PlayerView playerView;
     private ResourceView resources;
@@ -101,7 +103,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
                 }
             }
 
-            showAlertDialog(spinnerArray, "CHEAT");
+            showAlertDialog(spinnerArray, CHEAT);
         }
     };
 
@@ -255,7 +257,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             return;
         }
 
-        showAlertDialog(spinnerArray, "ROBBERS");
+        showAlertDialog(spinnerArray, ROBBERS);
     }
 
     public void showAlertDialog(List<String> spinnerArray, String tag){
@@ -274,20 +276,20 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
         Button confirm = dialogView.findViewById(R.id.confirm);
         Button cancel = dialogView.findViewById(R.id.cancel);
-        if(tag.equals("ROBBERS")){
+        if(tag.equals(ROBBERS)){
             cancel.setVisibility(View.INVISIBLE);
         }
         SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
 
         confirm.setOnClickListener((view) -> {
-            if (tag.equals("CHEAT")) {
+            if (tag.equals(CHEAT)) {
                 String playerName = spinner.getSelectedItem().toString();
                 Player victim = Game.getInstance().getPlayerByName(playerName);
                 Resource resource = resourceView.getSelectedResource();
                 Game.getInstance().robResource(victim.getId(), GameClient.getInstance().getId(), resource);
                 alertDialog.dismiss();
                 sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-            }else if (tag.equals("ROBBERS")){
+            }else if (tag.equals(ROBBERS)){
                 String playerName = spinner.getSelectedItem().toString();
                 Player player = Game.getInstance().getPlayerByName(playerName);
                 Resource resource = resourceView.getSelectedResource();
@@ -360,6 +362,8 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
                 break;
             case R.id.btn_city:
                 playerView.buildCity();
+                break;
+            default:
                 break;
         }
     }

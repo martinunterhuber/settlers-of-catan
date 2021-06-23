@@ -92,6 +92,8 @@ public class DevelopmentCardView extends FrameLayout {
                 title.setText(R.string.development_year_of_plenty);
                 description.setText(R.string.year_of_plenty_description);
                 break;
+            default:
+                break;
 
         }
 
