@@ -1,8 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-import java.io.Serializable;
-
-public class ClientLeftMessage extends BaseMessage implements Serializable {
+public class ClientLeftMessage implements BaseMessage {
     public String username;
 
     public ClientLeftMessage() {

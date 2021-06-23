@@ -7,7 +7,7 @@ import com.example.settlersofcatan.game.resources.Resource;
 public abstract class NodePlaceable extends Placeable {
     protected Node location;
 
-    public NodePlaceable(Player player, Node location) {
+    protected NodePlaceable(Player player, Node location) {
         super(player);
         this.location = location;
     }

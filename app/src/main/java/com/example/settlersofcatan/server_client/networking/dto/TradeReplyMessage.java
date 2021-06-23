@@ -1,7 +1,7 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
 
-public class TradeReplyMessage extends BaseMessage {
+public class TradeReplyMessage implements BaseMessage {
     public boolean acceptedTrade;
 
 

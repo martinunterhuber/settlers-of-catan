@@ -7,13 +7,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.util.Procedure;
 
 public class SelectableResourceView extends ResourceView {
-    private final int selectedColor = getResources().getColor(R.color.selected);
+    private final int selectedColor = ResourcesCompat.getColor(getResources(), R.color.selected, null);
 
     private TextView selectedText;
     private Resource selectedResource;
@@ -32,7 +33,7 @@ public class SelectableResourceView extends ResourceView {
 
     @Override
     protected void doOnDraw() {
-
+        // shouldn't draw current players resources
     }
 
     public boolean hasSelected(){
@@ -54,20 +55,10 @@ public class SelectableResourceView extends ResourceView {
     }
 
     public void initListeners(Procedure doAfter){
-        findViewById(R.id.img_wood).setOnClickListener((v) -> {
-            listener(Resource.FOREST, R.id.txt_wood, doAfter);
-        });
-        findViewById(R.id.img_clay).setOnClickListener((v) -> {
-            listener(Resource.CLAY, R.id.txt_clay, doAfter);
-        });
-        findViewById(R.id.img_ore).setOnClickListener((v) -> {
-            listener(Resource.ORE, R.id.txt_ore, doAfter);
-        });
-        findViewById(R.id.img_sheep).setOnClickListener((v) -> {
-            listener(Resource.SHEEP, R.id.txt_sheep, doAfter);
-        });
-        findViewById(R.id.img_wheat).setOnClickListener((v) -> {
-            listener(Resource.WHEAT, R.id.txt_wheat, doAfter);
-        });
+        findViewById(R.id.img_wood).setOnClickListener(v -> listener(Resource.FOREST, R.id.txt_wood, doAfter));
+        findViewById(R.id.img_clay).setOnClickListener(v -> listener(Resource.CLAY, R.id.txt_clay, doAfter));
+        findViewById(R.id.img_ore).setOnClickListener(v -> listener(Resource.ORE, R.id.txt_ore, doAfter));
+        findViewById(R.id.img_sheep).setOnClickListener(v -> listener(Resource.SHEEP, R.id.txt_sheep, doAfter));
+        findViewById(R.id.img_wheat).setOnClickListener(v -> listener(Resource.WHEAT, R.id.txt_wheat, doAfter));
     }
 }

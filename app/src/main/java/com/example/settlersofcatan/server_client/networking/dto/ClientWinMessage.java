@@ -2,7 +2,7 @@ package com.example.settlersofcatan.server_client.networking.dto;
 
 import com.example.settlersofcatan.ui.ranking.Ranking;
 
-public class ClientWinMessage extends BaseMessage{
+public class ClientWinMessage implements BaseMessage{
     public Ranking ranking;
 
     public ClientWinMessage(){

@@ -1,14 +1,15 @@
 package com.example.settlersofcatan.ui.board;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for hexagonal grid without double paths or corner points.
  */
 public class HexGrid {
 
-    private final ArrayList<Point> corners;
-    private final ArrayList<Path> paths;
+    private final List<Point> corners;
+    private final List<Path> paths;
     private final Hexagon[] tiles;
 
     private Path touchedPath;
@@ -94,11 +95,11 @@ public class HexGrid {
 
 //----------- Getter and Setter -----------------------------------------------------------------
 
-    public ArrayList<Point> getCorners() {
+    public List<Point> getCorners() {
         return corners;
     }
 
-    public ArrayList<Path> getPaths() {
+    public List<Path> getPaths() {
         return paths;
     }
 

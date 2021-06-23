@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-public class TextMessage extends BaseMessage {
+public class TextMessage implements BaseMessage {
 
     public TextMessage() {
     }

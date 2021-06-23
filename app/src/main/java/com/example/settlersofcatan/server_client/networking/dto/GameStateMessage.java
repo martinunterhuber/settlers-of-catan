@@ -2,7 +2,7 @@ package com.example.settlersofcatan.server_client.networking.dto;
 
 import com.example.settlersofcatan.game.Game;
 
-public class GameStateMessage extends BaseMessage {
+public class GameStateMessage implements BaseMessage {
     public Game game;
 
     public GameStateMessage(){
