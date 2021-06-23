@@ -63,26 +63,29 @@ public class Board {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (inRange(i, j)){
-                    if (isDesertTile(i, j)){
-                        // For now we will use 'null' for the desert tile
-                        tiles[i][j] = new Tile(new TileCoordinates(i, j), null, 7);
-                        robber = new Robber(tiles[i][j]);
-                    } else {
-                        int resourceIndex;
-                        do {
-                            resourceIndex = Game.random.nextInt(5);
-                        } while(resourceDistribution[resourceIndex] <= 0);
-                        resourceDistribution[resourceIndex]--;
-                        tiles[i][j] = new Tile(
-                                new TileCoordinates(i, j),
-                                Resource.valueOf(resourceIndex),
-                                numbers.remove(0)
-                        );
-                    }
-
+                    initializeTile(numbers, resourceDistribution, i, j);
                     packedTiles[packedTileIndex++] = tiles[i][j];
                 }
             }
+        }
+    }
+
+    private void initializeTile(List<Integer> numbers, int[] resourceDistribution, int i, int j) {
+        if (isDesertTile(i, j)){
+            // For now we will use 'null' for the desert tile
+            tiles[i][j] = new Tile(new TileCoordinates(i, j), null, 7);
+            robber = new Robber(tiles[i][j]);
+        } else {
+            int resourceIndex;
+            do {
+                resourceIndex = Game.random.nextInt(5);
+            } while(resourceDistribution[resourceIndex] <= 0);
+            resourceDistribution[resourceIndex]--;
+            tiles[i][j] = new Tile(
+                    new TileCoordinates(i, j),
+                    Resource.valueOf(resourceIndex),
+                    numbers.remove(0)
+            );
         }
     }
 
@@ -97,46 +100,50 @@ public class Board {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (inRange(i, j)){
-                    Edge ne = new Edge();
-                    Edge e = new Edge();
-                    Edge se = new Edge();
-                    ne.addAdjacentTile(tiles[i][j]);
-                    e.addAdjacentTile(tiles[i][j]);
-                    se.addAdjacentTile(tiles[i][j]);
-                    tiles[i][j].setNortheastEdge(ne);
-                    tiles[i][j].setEastEdge(e);
-                    tiles[i][j].setSoutheastEdge(se);
-
-                    if (inRange(i - 1, j)){
-                        tiles[i - 1][j].getEastEdge().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setWestEdge(tiles[i - 1][j].getEastEdge());
-                    } else {
-                        Edge w = new Edge();
-                        w.addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setWestEdge(w);
-                    }
-
-                    if (inRange(i, j - 1)){
-                        tiles[i][j - 1].getSoutheastEdge().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setNorthwestEdge(tiles[i][j - 1].getSoutheastEdge());
-                    } else {
-                        Edge nw = new Edge();
-                        nw.addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setNorthwestEdge(nw);
-                    }
-
-                    if (inRange(i - 1, j + 1)){
-                        tiles[i - 1][j + 1].getNortheastEdge().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setSouthwestEdge(tiles[i - 1][j + 1].getNortheastEdge());
-                    } else {
-                        Edge sw = new Edge();
-                        sw.addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setSouthwestEdge(sw);
-                    }
-                    tiles[i][j].initEdges();
+                    initializeEdge(i, j);
                 }
             }
         }
+    }
+
+    private void initializeEdge(int i, int j) {
+        Edge ne = new Edge();
+        Edge e = new Edge();
+        Edge se = new Edge();
+        ne.addAdjacentTile(tiles[i][j]);
+        e.addAdjacentTile(tiles[i][j]);
+        se.addAdjacentTile(tiles[i][j]);
+        tiles[i][j].setNortheastEdge(ne);
+        tiles[i][j].setEastEdge(e);
+        tiles[i][j].setSoutheastEdge(se);
+
+        if (inRange(i - 1, j)){
+            tiles[i - 1][j].getEastEdge().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setWestEdge(tiles[i - 1][j].getEastEdge());
+        } else {
+            Edge w = new Edge();
+            w.addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setWestEdge(w);
+        }
+
+        if (inRange(i, j - 1)){
+            tiles[i][j - 1].getSoutheastEdge().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setNorthwestEdge(tiles[i][j - 1].getSoutheastEdge());
+        } else {
+            Edge nw = new Edge();
+            nw.addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setNorthwestEdge(nw);
+        }
+
+        if (inRange(i - 1, j + 1)){
+            tiles[i - 1][j + 1].getNortheastEdge().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setSouthwestEdge(tiles[i - 1][j + 1].getNortheastEdge());
+        } else {
+            Edge sw = new Edge();
+            sw.addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setSouthwestEdge(sw);
+        }
+        tiles[i][j].initEdges();
     }
 
     private void initializeNodes(){
@@ -158,51 +165,55 @@ public class Board {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (inRange(i, j)){
-                    if (inRange(i + 1, j - 1)){
-                        tiles[i + 1][j - 1].getSouthNode().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setNortheastNode(tiles[i + 1][j - 1].getSouthNode());
-                    } else {
-                        Node ne = new Node();
-                        ne.addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setNortheastNode(ne);
-                    }
-
-                    if (inRange(i, j + 1)){
-                        tiles[i][j + 1].getNorthNode().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setSoutheastNode(tiles[i][j + 1].getNorthNode());
-                    } else {
-                        Node se = new Node();
-                        se.addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setSoutheastNode(se);
-                    }
-
-                    if (inRange(i - 1, j + 1)){
-                        tiles[i - 1][j + 1].getNorthNode().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setSouthwestNode(tiles[i - 1][j + 1].getNorthNode());
-                    } else if (inRange(i - 1, j)){
-                        tiles[i - 1][j].getSoutheastNode().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setSouthwestNode(tiles[i - 1][j].getSoutheastNode());
-                    } else {
-                        Node sw = new Node();
-                        sw.addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setSouthwestNode(sw);
-                    }
-
-                    if (inRange(i, j - 1)){
-                        tiles[i][j - 1].getSouthNode().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setNorthwestNode(tiles[i][j - 1].getSouthNode());
-                    } else if (inRange(i - 1, j)){
-                        tiles[i - 1][j].getNortheastNode().addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setNorthwestNode(tiles[i - 1][j].getNortheastNode());
-                    } else {
-                        Node nw = new Node();
-                        nw.addAdjacentTile(tiles[i][j]);
-                        tiles[i][j].setNorthwestNode(nw);
-                    }
-                    tiles[i][j].initNodes();
+                    initializeNode(i, j);
                 }
             }
         }
+    }
+
+    private void initializeNode(int i, int j) {
+        if (inRange(i + 1, j - 1)){
+            tiles[i + 1][j - 1].getSouthNode().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setNortheastNode(tiles[i + 1][j - 1].getSouthNode());
+        } else {
+            Node ne = new Node();
+            ne.addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setNortheastNode(ne);
+        }
+
+        if (inRange(i, j + 1)){
+            tiles[i][j + 1].getNorthNode().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setSoutheastNode(tiles[i][j + 1].getNorthNode());
+        } else {
+            Node se = new Node();
+            se.addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setSoutheastNode(se);
+        }
+
+        if (inRange(i - 1, j + 1)){
+            tiles[i - 1][j + 1].getNorthNode().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setSouthwestNode(tiles[i - 1][j + 1].getNorthNode());
+        } else if (inRange(i - 1, j)){
+            tiles[i - 1][j].getSoutheastNode().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setSouthwestNode(tiles[i - 1][j].getSoutheastNode());
+        } else {
+            Node sw = new Node();
+            sw.addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setSouthwestNode(sw);
+        }
+
+        if (inRange(i, j - 1)){
+            tiles[i][j - 1].getSouthNode().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setNorthwestNode(tiles[i][j - 1].getSouthNode());
+        } else if (inRange(i - 1, j)){
+            tiles[i - 1][j].getNortheastNode().addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setNorthwestNode(tiles[i - 1][j].getNortheastNode());
+        } else {
+            Node nw = new Node();
+            nw.addAdjacentTile(tiles[i][j]);
+            tiles[i][j].setNorthwestNode(nw);
+        }
+        tiles[i][j].initNodes();
     }
 
     /**
