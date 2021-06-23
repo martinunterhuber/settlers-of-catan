@@ -157,96 +157,133 @@ public class GameClient {
 
     private void callback(BaseMessage message){
         if (message instanceof GameStateMessage){
-            Game game = ((GameStateMessage) message).game;
-            game.setClientCallback(this::gameAsyncCallback);
-            Game.setInstance(game);
-            for (Player player : Game.getInstance().getPlayers()){
-                if (player.getName().equals(this.username)){
-                    id = player.getId();
-                }
-            }
-            if (startGameCallback != null){
-                startGameCallback.callback(message);
-                startGameCallback = null;
-            }
-            if (gameActivity != null) {
-                gameActivity.redrawViewsNewGameState();
-            }
+            handleGameStateChange(message);
         } else if (message instanceof ClientWinMessage && gameActivity != null){
-            Intent intent = new Intent(gameActivity, GameEndActivity.class);
-            gameActivity.startActivity(intent);
-            gameActivity.finish();
+            handleClientWin();
         } else if (message instanceof PlayerResourcesMessage && gameActivity != null){
-            PlayerResources.setInstance(((PlayerResourcesMessage) message).playerResources);
-            for (Player p : Game.getInstance().getPlayers()){
-                p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
-            }
-
-            if (((PlayerResourcesMessage) message).cheaterId != -1){
-                Game.getInstance().updateCheaters(((PlayerResourcesMessage) message).cheaterId);
-            }
-
-            gameActivity.redrawViews();
-
+            handleResourceUpdate((PlayerResourcesMessage) message);
         } else if (message instanceof ClientDiceMessage && gameActivity != null){
-            gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
-                    ((ClientDiceMessage) message).getUsername(),
-                    ((ClientDiceMessage) message).getRolled())
-
-            );
+            handleDiceRoll((ClientDiceMessage) message);
         } else if (message instanceof DevelopmentCardMessage){
             DevelopmentCardDeck.setInstance(((DevelopmentCardMessage) message).deck);
         } else if (message instanceof TradeOfferMessage) {
-            TradeOffer tradeOffer = ((TradeOfferMessage) message).tradeOffer;
-            if (waitForReplyActivity != null && tradeOffer.getTo().getId() == id) {
-                waitForReplyActivity.getCounterOffer();
-                waitForReplyActivity = null;
-            }
-            if (gameActivity != null && tradeOffer.getTo().getId() == id) {
-                gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
-            }
+            handleTradeOffer((TradeOfferMessage) message);
         } else if (message instanceof TradeReplyMessage) {
-            if (waitForReplyActivity != null) {
-                waitForReplyActivity.getReply(((TradeReplyMessage) message).acceptedTrade);
-                waitForReplyActivity = null;
-            }
+            handleTradeReply((TradeReplyMessage) message);
         } else if (message instanceof BuildingMessage && gameActivity != null) {
-            BuildingMessage buildMessage = (BuildingMessage) message;
-            Game game = Game.getInstance();
-            if (buildMessage.playerId != id) {
-                Tile tile = game.getBoard().getTileByCoordinates(buildMessage.tileCoordinates);
-                Player player = game.getPlayerById(buildMessage.playerId);
-                if (message instanceof CityBuildingMessage) {
-                    player.placeCity(tile.getNodeByDirection(buildMessage.direction));
-                } else if (message instanceof RoadBuildingMessage) {
-                    player.placeRoad(tile.getEdgeByDirection(buildMessage.direction));
-                } else {
-                    player.placeSettlement(tile.getNodeByDirection(buildMessage.direction));
-                }
-                gameActivity.redrawViews();
-            }
+            handleBuilding(message);
         } else if (message instanceof MovedRobberMessage && gameActivity != null) {
-            MovedRobberMessage robberMessage = (MovedRobberMessage)message;
-            Board board = Game.getInstance().getBoard();
-            board.moveRobberTo(board.getTileByCoordinates(robberMessage.coordinates));
-            gameActivity.redrawViews();
+            handleMoveRobber((MovedRobberMessage) message);
         } else if (message instanceof EndTurnMessage){
-            EndTurnMessage turnMessage = (EndTurnMessage) message;
-            Game game = Game.getInstance();
-            game.initializeNextTurn(turnMessage.nextPlayerId, turnMessage.turnCount);
-            if (gameActivity != null) {
-                gameActivity.redrawViewsTurnEnd();
-            }
+            handleTurnEnd((EndTurnMessage) message);
         } else if (message instanceof ArmySizeIncreaseMessage){
-            int playerId = ((ArmySizeIncreaseMessage) message).playerId;
-            Game game = Game.getInstance();
-            game.getPlayerById(playerId).incrementPlayedKnights();
-            game.updateLargestArmy();
-            if (gameActivity != null) {
-                gameActivity.redrawViews();
-            }
+            handleArmyIncrease((ArmySizeIncreaseMessage) message);
         }
         Log.i(NetworkConstants.TAG, message.toString());
+    }
+
+    private void handleArmyIncrease(ArmySizeIncreaseMessage message) {
+        int playerId = message.playerId;
+        Game game = Game.getInstance();
+        game.getPlayerById(playerId).incrementPlayedKnights();
+        game.updateLargestArmy();
+        if (gameActivity != null) {
+            gameActivity.redrawViews();
+        }
+    }
+
+    private void handleTurnEnd(EndTurnMessage message) {
+        Game game = Game.getInstance();
+        game.initializeNextTurn(message.nextPlayerId, message.turnCount);
+        if (gameActivity != null) {
+            gameActivity.redrawViewsTurnEnd();
+        }
+    }
+
+    private void handleMoveRobber(MovedRobberMessage message) {
+        Board board = Game.getInstance().getBoard();
+        board.moveRobberTo(board.getTileByCoordinates(message.coordinates));
+        gameActivity.redrawViews();
+    }
+
+    private void handleBuilding(BaseMessage message) {
+        BuildingMessage buildMessage = (BuildingMessage) message;
+        Game game = Game.getInstance();
+        if (buildMessage.playerId != id) {
+            Tile tile = game.getBoard().getTileByCoordinates(buildMessage.tileCoordinates);
+            Player player = game.getPlayerById(buildMessage.playerId);
+            if (message instanceof CityBuildingMessage) {
+                player.placeCity(tile.getNodeByDirection(buildMessage.direction));
+            } else if (message instanceof RoadBuildingMessage) {
+                player.placeRoad(tile.getEdgeByDirection(buildMessage.direction));
+            } else {
+                player.placeSettlement(tile.getNodeByDirection(buildMessage.direction));
+            }
+            gameActivity.redrawViews();
+        }
+    }
+
+    private void handleTradeReply(TradeReplyMessage message) {
+        if (waitForReplyActivity != null) {
+            waitForReplyActivity.getReply(message.acceptedTrade);
+            waitForReplyActivity = null;
+        }
+    }
+
+    private void handleTradeOffer(TradeOfferMessage message) {
+        TradeOffer tradeOffer = message.tradeOffer;
+        if (waitForReplyActivity != null && tradeOffer.getTo().getId() == id) {
+            waitForReplyActivity.getCounterOffer();
+            waitForReplyActivity = null;
+        }
+        if (gameActivity != null && tradeOffer.getTo().getId() == id) {
+            gameActivity.runOnUiThread(() -> gameActivity.displayTradeOffer(tradeOffer));
+        }
+    }
+
+    private void handleDiceRoll(ClientDiceMessage message) {
+        gameActivity.runOnUiThread(() -> gameActivity.updateOpponentView(
+                message.getUsername(),
+                message.getRolled())
+
+        );
+    }
+
+    private void handleResourceUpdate(PlayerResourcesMessage message) {
+        PlayerResources.setInstance(message.playerResources);
+        for (Player p : Game.getInstance().getPlayers()){
+            p.updateResources(PlayerResources.getInstance().getSinglePlayerResources(p.getId()));
+        }
+
+        if (message.cheaterId != -1){
+            Game.getInstance().updateCheaters(message.cheaterId);
+        }
+
+        gameActivity.redrawViews();
+    }
+
+    private void handleClientWin() {
+        Intent intent = new Intent(gameActivity, GameEndActivity.class);
+        gameActivity.startActivity(intent);
+        gameActivity.finish();
+    }
+
+    private void handleGameStateChange(BaseMessage message) {
+        Game game = ((GameStateMessage) message).game;
+        game.setClientCallback(this::gameAsyncCallback);
+        Game.setInstance(game);
+        for (Player player : Game.getInstance().getPlayers()){
+            if (player.getName().equals(this.username)){
+                id = player.getId();
+            }
+        }
+        if (startGameCallback != null){
+            startGameCallback.callback(message);
+            startGameCallback = null;
+        }
+        if (gameActivity != null) {
+            gameActivity.redrawViewsNewGameState();
+        }
     }
 
     public void registerActivity(GameActivity activity){

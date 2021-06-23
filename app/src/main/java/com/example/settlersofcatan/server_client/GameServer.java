@@ -85,19 +85,9 @@ public class GameServer {
 
     private void callback(BaseMessage message) {
         if (message instanceof ClientJoinedMessage){
-            String username = ((ClientJoinedMessage) message).username;
-            if (!username.equals(GameClient.getInstance().getUsername())){
-                clientUsernames.add(username);
-            } else {
-                clientUsernames.set(0, username);
-            }
-            Log.i(NetworkConstants.TAG, username + " joined the lobby");
-            userChangedCallback.callback(username);
+            handleClientJoined((ClientJoinedMessage) message);
         } else if (message instanceof ClientLeftMessage){
-            String username = ((ClientLeftMessage) message).username;
-            clientUsernames.remove(username);
-            Log.i(NetworkConstants.TAG, username + " left the lobby");
-            userChangedCallback.callback(username);
+            handleClientLeft((ClientLeftMessage) message);
         } else if (message instanceof GameStateMessage) {
             broadcastMessage(message);
         }else if (message instanceof ClientWinMessage){
@@ -123,6 +113,24 @@ public class GameServer {
         } else {
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
+    }
+
+    private void handleClientJoined(ClientJoinedMessage message) {
+        String username = message.username;
+        if (!username.equals(GameClient.getInstance().getUsername())){
+            clientUsernames.add(username);
+        } else {
+            clientUsernames.set(0, username);
+        }
+        Log.i(NetworkConstants.TAG, username + " joined the lobby");
+        userChangedCallback.callback(username);
+    }
+
+    private void handleClientLeft(ClientLeftMessage message) {
+        String username = message.username;
+        clientUsernames.remove(username);
+        Log.i(NetworkConstants.TAG, username + " left the lobby");
+        userChangedCallback.callback(username);
     }
 
     public void registerUserChangedCallback(Callback<String> callback){
