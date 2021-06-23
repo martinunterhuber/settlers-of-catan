@@ -4,24 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@drawable/catan_background_basegame"
     android:foreground="@drawable/border_black"
     tools:context=".ui.color.ChooseColorActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:src="@drawable/catan_main_new"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/txtView_choose_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:text="Choose your color: "
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <GridLayout
+        android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:background="#B3FFFFFF"
         android:columnCount="2"
         android:orientation="horizontal"
         android:rowCount="2"
@@ -37,9 +52,9 @@
             android:layout_height="200px"
             android:layout_columnWeight="1"
             android:background="#05A505"
+            android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp"
-            android:clickable="true"/>
+            tools:layout_editor_absoluteY="24dp" />
 
         <View
             android:id="@+id/view_red"
@@ -47,9 +62,9 @@
             android:layout_height="200px"
             android:layout_columnWeight="1"
             android:background="#F44336"
+            android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp"
-            android:clickable="true"/>
+            tools:layout_editor_absoluteY="24dp" />
 
         <View
             android:id="@+id/view_orange"
@@ -57,9 +72,9 @@
             android:layout_height="200px"
             android:layout_columnWeight="1"
             android:background="#FF9800"
+            android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp"
-            android:clickable="true"/>
+            tools:layout_editor_absoluteY="24dp" />
 
         <View
             android:id="@+id/view_blue"
@@ -67,9 +82,9 @@
             android:layout_height="200px"
             android:layout_columnWeight="1"
             android:background="#2196F3"
+            android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp"
-            android:clickable="true"/>
+            tools:layout_editor_absoluteY="24dp" />
 
     </GridLayout>
 
