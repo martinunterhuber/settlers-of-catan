@@ -1,7 +1,5 @@
 package com.example.settlersofcatan.game;
 
-import android.widget.ArrayAdapter;
-
 import com.example.settlersofcatan.game.board.Board;
 import com.example.settlersofcatan.game.board.Edge;
 import com.example.settlersofcatan.game.board.Node;

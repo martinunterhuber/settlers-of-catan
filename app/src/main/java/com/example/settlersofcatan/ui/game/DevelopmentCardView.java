@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
 
 /**

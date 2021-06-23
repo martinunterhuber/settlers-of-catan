@@ -19,7 +19,6 @@ import com.example.settlersofcatan.game.trade.TradeOffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Fragment to facilitate trading with players, uses a nested ExchangeFragment.
