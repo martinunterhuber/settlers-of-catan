@@ -29,6 +29,7 @@ public class Player {
 
     private String name;
     private int id;
+    private String color;
 
     //Counter for resource ranking
     private int resourcecounter;
@@ -361,5 +362,13 @@ public class Player {
 
     public int getPlayedKnights() {
         return playedKnights;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

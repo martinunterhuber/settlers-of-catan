@@ -4,12 +4,12 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.settlersofcatan.ui.color.ChooseColorActivity;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.server_client.GameClient;
-import com.example.settlersofcatan.ui.game.GameActivity;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class WaitForHostActivity extends AppCompatActivity {
     @Override
@@ -19,7 +19,7 @@ public class WaitForHostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wait_for_host);
         GameClient.getInstance().registerStartGameCallback(
                 (message) -> {
-                    Intent intent = new Intent(this, GameActivity.class);
+                    Intent intent = new Intent(this, ChooseColorActivity.class);
                     startActivity(intent);
                     finish();
                 }

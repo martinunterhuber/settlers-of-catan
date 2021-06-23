@@ -9,10 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import com.example.settlersofcatan.ui.color.ChooseColorActivity;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.development_cards.DevelopmentCardDeck;
@@ -24,7 +21,10 @@ import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage
 import com.example.settlersofcatan.server_client.networking.dto.PlayerResourcesMessage;
 import com.example.settlersofcatan.server_client.networking.kryonet.NetworkServerKryo;
 import com.example.settlersofcatan.ui.game.FragmentInfo;
-import com.example.settlersofcatan.ui.game.GameActivity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class CreateServerFragment extends Fragment {
     EditText[] users = new EditText[4];
@@ -64,7 +64,7 @@ public class CreateServerFragment extends Fragment {
                     GameClient client = GameClient.getInstance();
                     client.connect("localhost", username);
                     client.registerStartGameCallback((message) -> {
-                        Intent intent = new Intent(getActivity(), GameActivity.class);
+                        Intent intent = new Intent(getActivity(), ChooseColorActivity.class);
                         startActivity(intent);
                     });
 

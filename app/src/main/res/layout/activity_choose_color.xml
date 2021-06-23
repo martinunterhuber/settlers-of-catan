@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:foreground="@drawable/border_black"
+    tools:context=".ui.color.ChooseColorActivity">
+
+    <TextView
+        android:id="@+id/txtView_choose_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Choose your color: "
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:rowCount="2"
+        android:useDefaultMargins="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/view_green"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_columnWeight="1"
+            android:background="#05A505"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="24dp"
+            android:clickable="true"/>
+
+        <View
+            android:id="@+id/view_red"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_columnWeight="1"
+            android:background="#F44336"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="24dp"
+            android:clickable="true"/>
+
+        <View
+            android:id="@+id/view_orange"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_columnWeight="1"
+            android:background="#FF9800"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="24dp"
+            android:clickable="true"/>
+
+        <View
+            android:id="@+id/view_blue"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_columnWeight="1"
+            android:background="#2196F3"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="24dp"
+            android:clickable="true"/>
+
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

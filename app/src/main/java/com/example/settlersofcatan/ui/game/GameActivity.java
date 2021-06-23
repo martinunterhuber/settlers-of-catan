@@ -21,8 +21,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
@@ -38,6 +36,8 @@ import com.example.settlersofcatan.util.OnPostDrawListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 
@@ -316,9 +316,29 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
     private void setButtonToPlayerColor(){
         Player player = Game.getInstance().getPlayerById(client.getId());
-        ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[player.getId()]);
-        ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[player.getId()]);
-        ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
+        switch (player.getColor()){
+            case "GREEN":
+                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[0]);
+                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[0]);
+                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[0]);
+                break;
+            case "RED":
+                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[1]);
+                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[1]);
+                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[1]);
+                break;
+            case "ORANGE":
+                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[2]);
+                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[2]);
+                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[2]);
+                break;
+            case "BLUE":
+                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[3]);
+                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[3]);
+                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[3]);
+                break;
+        }
+
     }
 
     public void redrawViews(){

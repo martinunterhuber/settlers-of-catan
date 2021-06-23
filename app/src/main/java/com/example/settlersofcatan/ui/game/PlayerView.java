@@ -10,9 +10,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.board.Tile;
@@ -25,6 +23,9 @@ import com.example.settlersofcatan.ui.board.Hexagon;
 import com.example.settlersofcatan.ui.board.HexagonPart;
 import com.example.settlersofcatan.ui.board.Path;
 import com.example.settlersofcatan.ui.board.Point;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * View class on which the cities, settlements and roads of the players are placed.
@@ -72,9 +73,13 @@ public class PlayerView extends View {
             NodePlaceable building = point.getNode().getBuilding();
             if (building != null){
                 if (building instanceof Settlement){
-                    point.setResID(SETTLEMENT_IDS[building.getPlayer().getId()]);
+                    point.setResID(SETTLEMENT_IDS[getColorId(PlayerColors.getInstance()
+                                                                        .getSinglePlayerColor(building.getPlayer().getId())
+                                                            )]);
                 } else {
-                    point.setResID(CITY_IDS[building.getPlayer().getId()]);
+                    point.setResID(CITY_IDS[getColorId(PlayerColors.getInstance()
+                                                                .getSinglePlayerColor(building.getPlayer().getId())
+                                                        )]);
                 }
             } else {
                 point.setResID(R.drawable.corner_unselected);
@@ -89,7 +94,9 @@ public class PlayerView extends View {
         for (Path path : hexGrid.getPaths()){
             Road road = path.getEdge().getRoad();
             if (road != null){
-                path.setResID(ROAD_IDS[road.getPlayer().getId()]);
+                path.setResID(ROAD_IDS[getColorId(PlayerColors.getInstance()
+                                                        .getSinglePlayerColor(road.getPlayer().getId())
+                                                )]);
             } else if (selected != path) {
                 path.setResID(R.drawable.road_unselected);
             } else {
@@ -275,5 +282,17 @@ public class PlayerView extends View {
             return ((Hexagon) selected).getTile();
         }
         return null;
+    }
+
+    private int getColorId(String color){
+        if (color.equals("GREEN")){
+            return 0;
+        } else if (color.equals("RED")){
+            return 1;
+        } else if (color.equals("ORANGE")){
+            return 2;
+        } else {
+            return 3;
+        }
     }
 }
