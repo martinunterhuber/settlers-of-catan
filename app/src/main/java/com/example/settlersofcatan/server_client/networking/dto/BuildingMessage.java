@@ -3,7 +3,7 @@ package com.example.settlersofcatan.server_client.networking.dto;
 import com.example.settlersofcatan.game.board.Direction;
 import com.example.settlersofcatan.game.board.TileCoordinates;
 
-public abstract class BuildingMessage extends BaseMessage {
+public abstract class BuildingMessage implements BaseMessage {
     public int playerId;
     public TileCoordinates tileCoordinates;
     public Direction direction;

@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
@@ -147,8 +148,8 @@ public class MapView extends View {
         int halfWidth = bitmapWidth / 2;
         int shipHeight = 100;
         int resourceHeight = 115;
-        float positionLeft = path.getX2().getX() + path.getDifferenceX() / 2f - (float) halfWidth + (float) offset.getX();
-        float positionTop = path.getX2().getY() + path.getDifferenceY() / 2f - (float) halfWidth - 10f + (float) offset.getY();
+        float positionLeft = path.getX2().getX() + path.getDifferenceX() / 2f - halfWidth + offset.getX();
+        float positionTop = path.getX2().getY() + path.getDifferenceY() / 2f - halfWidth - 10f + offset.getY();
 
         if (path.getEdge().getHarbor() != null){
             Resource resource = path.getEdge().getHarbor().getResource();
@@ -173,7 +174,7 @@ public class MapView extends View {
      * XML drawable gets converted into bitmap.
      */
     private Bitmap getBitmap(int drawableRes) {
-        Drawable drawable = getResources().getDrawable(drawableRes);
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), drawableRes, null);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bitmap);

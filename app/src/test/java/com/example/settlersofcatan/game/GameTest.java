@@ -260,7 +260,7 @@ public class GameTest {
         game.buildRoad(tiles[3][3].getWestEdge(), 0);
 
         Assert.assertEquals(game.getPlayerById(0), game.getLongestRoadPlayer());
-        Assert.assertEquals(0, game.getPlayerById(0).longestRoad());
+        Assert.assertEquals(5, game.getPlayerById(0).longestRoad());
     }
 
     @Test

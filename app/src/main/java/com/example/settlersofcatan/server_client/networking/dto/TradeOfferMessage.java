@@ -2,7 +2,7 @@ package com.example.settlersofcatan.server_client.networking.dto;
 
 import com.example.settlersofcatan.game.trade.TradeOffer;
 
-public class TradeOfferMessage extends BaseMessage {
+public class TradeOfferMessage implements BaseMessage {
     public TradeOffer tradeOffer;
 
 

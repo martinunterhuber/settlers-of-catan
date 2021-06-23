@@ -19,6 +19,7 @@ import com.example.settlersofcatan.game.trade.TradeOffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment to facilitate trading with players, uses a nested ExchangeFragment.
@@ -66,7 +67,7 @@ public class TradeFragment extends Fragment {
         Game game = Game.getInstance();
         currentPlayer = game.getPlayerById(game.getCurrentPlayerId());
 
-        otherPlayers = (ArrayList<Player>) game.getPlayers().clone();
+        otherPlayers = new ArrayList<>(game.getPlayers());
         otherPlayers.remove(currentPlayer);
         for (int i = 0; i < otherPlayers.size(); i++) {
             Player player = otherPlayers.get(i);

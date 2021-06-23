@@ -55,11 +55,12 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class GameServer {
     private static GameServer instance;
     private NetworkServerKryo server;
-    private ArrayList<String> clientUsernames = new ArrayList<>();
+    private final List<String> clientUsernames = new ArrayList<>();
     private Callback<String> userChangedCallback;
 
     private GameServer(){
@@ -202,7 +203,7 @@ public class GameServer {
         return clientUsernames.get(index);
     }
 
-    public ArrayList<String> getClientUsernames() {
+    public List<String> getClientUsernames() {
         return clientUsernames;
     }
 

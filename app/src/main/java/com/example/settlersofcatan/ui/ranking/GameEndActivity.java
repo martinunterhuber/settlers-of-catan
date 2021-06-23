@@ -13,27 +13,20 @@ import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.server_client.GameClient;
 
 public class GameEndActivity extends AppCompatActivity {
-    private TextView win;
-    private TextView first;
-    private TextView second;
-    private TextView third;
-    private TextView fourth;
-    private Button endGameButton;
-    private Button resButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_end);
 
-        win=findViewById(R.id.txt_win);
-        first=findViewById(R.id.txt_first);
-        second=findViewById(R.id.txt_second);
-        third=findViewById(R.id.txt_third);
-        fourth=findViewById(R.id.txt_fourth);
-        endGameButton = findViewById(R.id.btn_end);
+        TextView win = findViewById(R.id.txt_win);
+        TextView first = findViewById(R.id.txt_first);
+        TextView second = findViewById(R.id.txt_second);
+        TextView third = findViewById(R.id.txt_third);
+        TextView fourth = findViewById(R.id.txt_fourth);
+        Button endGameButton = findViewById(R.id.btn_end);
 
-        endGameButton.setOnClickListener((v) -> finish());
+        endGameButton.setOnClickListener(v -> finish());
 
         // Text if you've won or lost
         if (GameClient.getInstance().getId() == Ranking.getInstance().getPlayer(0).getId()){
@@ -69,7 +62,7 @@ public class GameEndActivity extends AppCompatActivity {
             fourth.setVisibility(View.GONE);
         }
 
-     resButton = findViewById(R.id.resranbtn);
-     resButton.setOnClickListener(v -> startActivity(new Intent(GameEndActivity.this, ResourceRankingActivity.class)));
+        Button resButton = findViewById(R.id.resranbtn);
+        resButton.setOnClickListener(v -> startActivity(new Intent(GameEndActivity.this, ResourceRankingActivity.class)));
     }
 }
