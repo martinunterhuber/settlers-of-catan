@@ -58,11 +58,12 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class GameServer {
     private static GameServer instance;
     private NetworkServerKryo server;
-    private ArrayList<String> clientUsernames = new ArrayList<>();
+    private final List<String> clientUsernames = new ArrayList<>();
     private Callback<String> userChangedCallback;
 
     private GameServer(){
@@ -87,19 +88,9 @@ public class GameServer {
 
     private void callback(BaseMessage message) {
         if (message instanceof ClientJoinedMessage){
-            String username = ((ClientJoinedMessage) message).username;
-            if (!username.equals(GameClient.getInstance().getUsername())){
-                clientUsernames.add(username);
-            } else {
-                clientUsernames.set(0, username);
-            }
-            Log.i(NetworkConstants.TAG, username + " joined the lobby");
-            userChangedCallback.callback(username);
+            handleClientJoined((ClientJoinedMessage) message);
         } else if (message instanceof ClientLeftMessage){
-            String username = ((ClientLeftMessage) message).username;
-            clientUsernames.remove(username);
-            Log.i(NetworkConstants.TAG, username + " left the lobby");
-            userChangedCallback.callback(username);
+            handleClientLeft((ClientLeftMessage) message);
         } else if (message instanceof GameStateMessage) {
             broadcastMessage(message);
         }else if (message instanceof ClientWinMessage){
@@ -127,6 +118,24 @@ public class GameServer {
         } else{
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
+    }
+
+    private void handleClientJoined(ClientJoinedMessage message) {
+        String username = message.username;
+        if (!username.equals(GameClient.getInstance().getUsername())){
+            clientUsernames.add(username);
+        } else {
+            clientUsernames.set(0, username);
+        }
+        Log.i(NetworkConstants.TAG, username + " joined the lobby");
+        userChangedCallback.callback(username);
+    }
+
+    private void handleClientLeft(ClientLeftMessage message) {
+        String username = message.username;
+        clientUsernames.remove(username);
+        Log.i(NetworkConstants.TAG, username + " left the lobby");
+        userChangedCallback.callback(username);
     }
 
     public void registerUserChangedCallback(Callback<String> callback){
@@ -210,7 +219,7 @@ public class GameServer {
         return clientUsernames.get(index);
     }
 
-    public ArrayList<String> getClientUsernames() {
+    public List<String> getClientUsernames() {
         return clientUsernames;
     }
 

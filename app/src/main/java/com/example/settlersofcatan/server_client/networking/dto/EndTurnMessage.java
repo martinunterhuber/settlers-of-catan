@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-public class EndTurnMessage extends BaseMessage {
+public class EndTurnMessage implements BaseMessage {
     public int turnCount;
     public int nextPlayerId;
 

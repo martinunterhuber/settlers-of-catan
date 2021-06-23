@@ -101,13 +101,13 @@ public class OpponentView extends FrameLayout {
         int opponentNumber = Integer.parseInt(this.getTag().toString());
         int count = 1;
         for (Player player : players){
-            if (player.getId() == playerId){
-                continue;
-            } else if (opponentNumber == count) {
-                opponent = player;
-                break;
-            } else {
-                count++;
+            if (player.getId() != playerId) {
+                if (opponentNumber == count) {
+                    opponent = player;
+                    break;
+                } else {
+                    count++;
+                }
             }
         }
     }

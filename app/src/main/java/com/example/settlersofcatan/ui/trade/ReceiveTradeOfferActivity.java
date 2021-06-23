@@ -2,7 +2,6 @@ package com.example.settlersofcatan.ui.trade;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -22,10 +21,6 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
     private TradeOffer tradeOffer;
 
     private ReceiveTradeFragment receiveTradeFragment;
-    private Button denyBtn;
-    private Button acceptBtn;
-    private Button counterOfferBtn;
-    private TextView offerFromTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +45,10 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
 
 
         receiveTradeFragment = (ReceiveTradeFragment) getSupportFragmentManager().findFragmentById(R.id.receiveTradeView);
-        denyBtn = findViewById(R.id.denyBtn);
-        acceptBtn = findViewById(R.id.acceptBtn);
-        counterOfferBtn = findViewById(R.id.counterOfferBtn);
-        offerFromTxt = findViewById(R.id.offerFromTxt);
+        Button denyBtn = findViewById(R.id.denyBtn);
+        Button acceptBtn = findViewById(R.id.acceptBtn);
+        Button counterOfferBtn = findViewById(R.id.counterOfferBtn);
+        TextView offerFromTxt = findViewById(R.id.offerFromTxt);
 
         Intent i = getIntent();
         tradeOffer = (TradeOffer) i.getParcelableExtra("tradeoffer");
@@ -84,15 +79,10 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
             t.setReceive(receiveTradeFragment.getReceiveInventoryView().getContent());
             Game.getInstance().sendTradeOffer(t);
             Intent intent = new Intent(getApplicationContext(), WaitForReplyActivity.class);
-            intent.putExtra("tradeoffer",(Parcelable) t);
+            intent.putExtra("tradeoffer", t);
             startActivity(intent);
             finish();
-                }
-        );
-
-
-
-
+        });
     }
 
     @Override

@@ -9,13 +9,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,6 +41,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity implements OnPostDrawListener {
 
+    public static final String ROBBERS = "ROBBERS";
+    public static final String CHEAT = "CHEAT";
     private MapView map;
     private PlayerView playerView;
     private ResourceView resources;
@@ -48,8 +50,6 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     private OpponentView opponent2;
     private OpponentView opponent3;
     private Button endTurnButton;
-    private Button moveRobberButton;
-    private ImageView dice;
 
     private DevelopmentCardView knights;
     private DevelopmentCardView victoryPoints;
@@ -64,16 +64,15 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
     private SensorManager sensorManager;
     private Sensor sensor;
-    private int currentSensorValue = 0;
     private int previousSensorValue = 0;
-    private SensorEventListener sensorEventListener = new SensorEventListener() {
+    private final SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             float x = sensorEvent.values[0];
             float y = sensorEvent.values[1];
             float z = sensorEvent.values[2];
 
-            currentSensorValue = (int) Math.sqrt((x*x + y*y + z*z));
+            int currentSensorValue = (int) Math.sqrt((x * x + y * y + z * z));
             if (previousSensorValue != currentSensorValue
                     && currentSensorValue > 17
                     && !Game.getInstance().isBuildingPhase()) {
@@ -99,7 +98,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
                 }
             }
 
-            showAlertDialog(spinnerArray, "CHEAT");
+            showAlertDialog(spinnerArray, CHEAT);
         }
     };
 
@@ -140,10 +139,10 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
         endTurnButton = findViewById(R.id.endTurnButton);
 
-        moveRobberButton = findViewById(R.id.moveRobber);
+        Button moveRobberButton = findViewById(R.id.moveRobber);
         moveRobberButton.setOnClickListener(this::moveRobber);
 
-        dice = findViewById(R.id.btn_dice);
+        ImageView dice = findViewById(R.id.btn_dice);
         dice.setOnClickListener(this::rollDice);
 
         drawDevelopmentCard=findViewById(R.id.btn_draw_development);
@@ -154,6 +153,9 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             startActivity(i);
         });
 
+        ImageButton buildingCosts = findViewById(R.id.imgBtn_costs);
+        buildingCosts.setOnClickListener(this::showCostDialog);
+
         client.registerActivity(this);
 
         initializeButtons();
@@ -162,7 +164,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
     private void initializeButtons(){
         Game game = Game.getInstance();
 
-        endTurnButton.setOnClickListener((v) -> game.endTurn(client.getId()));
+        endTurnButton.setOnClickListener(v -> game.endTurn(client.getId()));
 
         drawDevelopmentCard.setOnClickListener(
                 view -> {
@@ -204,9 +206,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
         initializeButtons();
         redrawViews();
         if (Game.getInstance().getCurrentPlayerId() == client.getId()){
-            runOnUiThread(() -> {
-                Toast.makeText(this, R.string.turn_message, Toast.LENGTH_LONG).show();
-            });
+            runOnUiThread(() -> Toast.makeText(this, R.string.turn_message, Toast.LENGTH_LONG).show());
         }
     }
 
@@ -250,7 +250,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             return;
         }
 
-        showAlertDialog(spinnerArray, "ROBBERS");
+        showAlertDialog(spinnerArray, ROBBERS);
     }
 
     public void showAlertDialog(List<String> spinnerArray, String tag){
@@ -269,20 +269,20 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
         Button confirm = dialogView.findViewById(R.id.confirm);
         Button cancel = dialogView.findViewById(R.id.cancel);
-        if(tag.equals("ROBBERS")){
+        if(tag.equals(ROBBERS)){
             cancel.setVisibility(View.INVISIBLE);
         }
         SelectableResourceView resourceView = dialogView.findViewById(R.id.robberResourceView);
 
-        confirm.setOnClickListener((view) -> {
-            if (tag.equals("CHEAT")) {
+        confirm.setOnClickListener(v -> {
+            if (tag.equals(CHEAT)) {
                 String playerName = spinner.getSelectedItem().toString();
                 Player victim = Game.getInstance().getPlayerByName(playerName);
                 Resource resource = resourceView.getSelectedResource();
                 Game.getInstance().robResource(victim.getId(), GameClient.getInstance().getId(), resource);
                 alertDialog.dismiss();
                 sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-            }else if (tag.equals("ROBBERS")){
+            }else if (tag.equals(ROBBERS)){
                 String playerName = spinner.getSelectedItem().toString();
                 Player player = Game.getInstance().getPlayerByName(playerName);
                 Resource resource = resourceView.getSelectedResource();
@@ -310,6 +310,20 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
             }
         };
         spinner.setOnItemSelectedListener(onItemSelectedListener);
+
+        alertDialog.show();
+    }
+
+    public void showCostDialog(View view){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_building_resources_costs, null);
+        dialogBuilder.setView(dialogView);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+
+        Button dismiss = dialogView.findViewById(R.id.btn_close_costs);
+        dismiss.setOnClickListener(view1 -> alertDialog.dismiss());
 
         alertDialog.show();
     }
@@ -358,6 +372,8 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
                 break;
             case R.id.btn_city:
                 playerView.buildCity();
+                break;
+            default:
                 break;
         }
     }
@@ -424,7 +440,7 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
     public void displayTradeOffer(TradeOffer tradeOffer) {
         Intent i = new Intent(getApplicationContext(), ReceiveTradeOfferActivity.class);
-        i.putExtra("tradeoffer", (Parcelable) tradeOffer);
+        i.putExtra("tradeoffer", tradeOffer);
         startActivity(i);
     }
 

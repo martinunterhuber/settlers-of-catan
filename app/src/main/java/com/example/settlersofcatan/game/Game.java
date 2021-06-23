@@ -47,9 +47,9 @@ public class Game {
     public static final Random random = new Random();
 
     // transient = "do not serialize this"
-    transient private AsyncCallback<BaseMessage> clientCallback;
+    private transient AsyncCallback<BaseMessage> clientCallback;
 
-    private ArrayList<Player> players;
+    private List<Player> players;
     private Board board;
 
     private int currentPlayerId;
@@ -93,7 +93,7 @@ public class Game {
         Game.instance = instance;
     }
 
-    public void init(ArrayList<String> names){
+    public void init(List<String> names){
         for (int i = 0; i < names.size(); i++) {
             String name = names.get(i);
             players.add(new Player(i, name));
@@ -225,38 +225,42 @@ public class Game {
 
     public void buildSettlement(Node node, int playerId){
         Player player = getPlayerById(playerId);
-        boolean built = false;
         if (node.hasNoAdjacentBuildings() && isPlayersTurn(playerId)){
             if (isBuildingPhase()){
                 if (!hasBuiltSettlement){
-                    player.placeSettlement(node);
-                    lastBuiltNode = node;
-                    hasBuiltSettlement = true;
-                    built = true;
-                    if (turnCounter >= players.size()) {
-                        for (Tile t : node.getAdjacentTiles()) {
-                            if (t.getResource() != null){
-                                player.giveSingleResource(t.getResource());
-                            }
-                        }
-                    }
+                    buildInitialSettlement(node, player);
+                    sendSettlementMessage(node, playerId);
                 }
             } else if (hasRolled && player.hasResources(Settlement.costs) && player.canPlaceSettlementOn(node)){
                 player.takeResources(Settlement.costs);
                 player.placeSettlement(node);
                 updateLongestRoadPlayer();
-                built = true;
+                sendSettlementMessage(node, playerId);
             }
         }
-        if (built){
-            Tile tile = node.getAdjacentTiles().iterator().next();
-            clientCallback.asyncCallback(
-                    new SettlementBuildingMessage(
-                            playerId,
-                            tile.getCoordinates(),
-                            tile.getDirectionOfNode(node)
-                    )
-            );
+    }
+
+    private void sendSettlementMessage(Node node, int playerId) {
+        Tile tile = node.getAdjacentTiles().iterator().next();
+        clientCallback.asyncCallback(
+                new SettlementBuildingMessage(
+                        playerId,
+                        tile.getCoordinates(),
+                        tile.getDirectionOfNode(node)
+                )
+        );
+    }
+
+    private void buildInitialSettlement(Node node, Player player) {
+        player.placeSettlement(node);
+        lastBuiltNode = node;
+        hasBuiltSettlement = true;
+        if (turnCounter >= players.size()) {
+            for (Tile t : node.getAdjacentTiles()) {
+                if (t.getResource() != null){
+                    player.giveSingleResource(t.getResource());
+                }
+            }
         }
     }
 
@@ -285,41 +289,41 @@ public class Game {
 
     public void buildRoad(Edge edge, int playerId){
         Player player = getPlayerById(playerId);
-        boolean built = false;
         if (isPlayersTurn(playerId) && player.canPlaceRoadOn(edge)) {
             if (isBuildingPhase()){
                 if (!hasBuiltRoad && lastBuiltNode != null && lastBuiltNode.getOutgoingEdges().contains(edge)){
                     player.placeRoad(edge);
                     hasBuiltRoad = true;
-                    built = true;
+                    sendRoadMessage(edge, playerId);
                 }
             } else if (hasRolled && player.hasResources(Road.costs) && !hasPlayedCard){
                 player.takeResources(Road.costs);
                 player.placeRoad(edge);
                 updateLongestRoadPlayer();
-                built = true;
+                sendRoadMessage(edge, playerId);
 
             } else if (hasRolled && hasPlayedCard){
                 player.placeRoad(edge);
                 freeRoads--;
                 updateLongestRoadPlayer();
-                built = true;
+                sendRoadMessage(edge, playerId);
 
                 if (freeRoads == 0){
                     hasPlayedCard = false;
                 }
             }
         }
-        if (built){
-            Tile tile = edge.getAdjacentTiles().iterator().next();
-            clientCallback.asyncCallback(
-                    new RoadBuildingMessage(
-                            playerId,
-                            tile.getCoordinates(),
-                            tile.getDirectionOfEdge(edge)
-                    )
-            );
-        }
+    }
+
+    private void sendRoadMessage(Edge edge, int playerId) {
+        Tile tile = edge.getAdjacentTiles().iterator().next();
+        clientCallback.asyncCallback(
+                new RoadBuildingMessage(
+                        playerId,
+                        tile.getCoordinates(),
+                        tile.getDirectionOfEdge(edge)
+                )
+        );
     }
 
     public void updateLongestRoadPlayer(){
@@ -417,29 +421,21 @@ public class Game {
     }
 
     public void updateCheaters(int cheater){
-        ArrayList<Integer> cheaters;
+        ArrayList<Integer> cheaters = cheated.get(turnCounter);
 
-        if (cheated.get(turnCounter) != null){  //more than 1 cheater per round
-            cheaters = cheated.get(turnCounter);
-            cheaters.add(cheater);
-            cheated.put(turnCounter,cheaters);
-        }else {
+        if (cheaters == null){
             cheaters = new ArrayList<>();
-            cheaters.add(cheater);
-            cheated.put(turnCounter, cheaters);
         }
+        cheaters.add(cheater);
+        cheated.put(turnCounter,cheaters);
     }
 
     public boolean hasCheated(int cheaterId){
         for (int i = turnCounter; i > turnCounter - players.size() && i >= 0; i--){
             if (cheated.get(i) != null){
                 List<Integer> cheater = cheated.get(i);
-                if (cheater != null){
-                    for (int cId : cheater){
-                        if (cId == cheaterId){
-                            return true;
-                        }
-                    }
+                if (cheater != null && cheater.contains(cheaterId)) {
+                    return true;
                 }
             }
         }
@@ -515,7 +511,7 @@ public class Game {
         return playerId == currentPlayerId;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 

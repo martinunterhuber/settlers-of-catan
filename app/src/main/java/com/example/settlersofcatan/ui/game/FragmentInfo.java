@@ -18,6 +18,7 @@ import com.example.settlersofcatan.R;
 
 public class FragmentInfo extends Fragment {
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_rules, container, false);
     }
@@ -25,10 +26,10 @@ public class FragmentInfo extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageButton btn = getView().findViewById(R.id.backbutton);
-        btn.setOnClickListener((v) -> getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit());
-        Button tbn2 = getView().findViewById(R.id.button_video);
-        tbn2.setOnClickListener((vi)->watchYoutubeVideo(getContext(),"8Yj0Y3GKE40"));
+        ImageButton btn = view.findViewById(R.id.backbutton);
+        btn.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit());
+        Button tbn2 = view.findViewById(R.id.button_video);
+        tbn2.setOnClickListener(v -> watchYoutubeVideo(getContext(),"8Yj0Y3GKE40"));
     }
 
     public static void watchYoutubeVideo(Context context, String id) {

@@ -37,6 +37,7 @@ jobs:
           profile: Nexus 6
           script: ./gradlew connectedAndroidTest --stacktrace
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -skin 1440x2560
+          emulator-build: 6110076
       - name: run tests and analyze
         run: ./gradlew test jacocoTestReport sonarqube --info
         env:

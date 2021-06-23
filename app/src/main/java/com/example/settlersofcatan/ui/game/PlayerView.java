@@ -10,7 +10,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.settlersofcatan.ui.color.PlayerColors;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.board.Tile;
@@ -23,6 +26,7 @@ import com.example.settlersofcatan.ui.board.Hexagon;
 import com.example.settlersofcatan.ui.board.HexagonPart;
 import com.example.settlersofcatan.ui.board.Path;
 import com.example.settlersofcatan.ui.board.Point;
+import com.example.settlersofcatan.ui.color.PlayerColors;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,9 +42,9 @@ public class PlayerView extends View {
 
     private GameClient client = GameClient.getInstance();
 
-    final static int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_green , R.drawable.settlement_red, R.drawable.settlement_orange, R.drawable.settlement_blue};
-    final static int[] ROAD_IDS = new int[]{R.drawable.road_green, R.drawable.road_red, R.drawable.road_orange, R.drawable.road_blue};
-    final static int[] CITY_IDS = new int[]{R.drawable.city_green, R.drawable.city_red, R.drawable.city_orange, R.drawable.city_blue};
+    static final int[] SETTLEMENT_IDS = new int[]{R.drawable.settlement_green , R.drawable.settlement_red, R.drawable.settlement_orange, R.drawable.settlement_blue};
+    static final int[] ROAD_IDS = new int[]{R.drawable.road_green, R.drawable.road_red, R.drawable.road_orange, R.drawable.road_blue};
+    static final int[] CITY_IDS = new int[]{R.drawable.city_green, R.drawable.city_red, R.drawable.city_orange, R.drawable.city_blue};
 
     public PlayerView(Context context) {
         super(context);
@@ -147,7 +151,7 @@ public class PlayerView extends View {
     }
 
     public void buildRoad(){
-        if (selected != null && selected instanceof Path){
+        if (selected instanceof Path){
             Game.getInstance().buildRoad(((Path)selected).getEdge(), client.getId());
             ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
             invalidate();
@@ -155,7 +159,7 @@ public class PlayerView extends View {
     }
 
     public void buildSettlement() {
-        if (selected != null && selected instanceof Point){
+        if (selected instanceof Point){
             Game.getInstance().buildSettlement(((Point)selected).getNode(), client.getId());
             selected = null;
             ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
@@ -164,7 +168,7 @@ public class PlayerView extends View {
     }
 
     public void buildCity(){
-        if (selected != null && selected instanceof Point){
+        if (selected instanceof Point){
             Game.getInstance().buildCity(((Point)selected).getNode(), client.getId());
             ((AppCompatActivity) getContext()).findViewById(R.id.resourceView).invalidate();
             invalidate();
@@ -250,7 +254,7 @@ public class PlayerView extends View {
         if (drawableRes == 0){
             return null;
         }
-        Drawable drawable = getResources().getDrawable(drawableRes);
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), drawableRes, null);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bitmap);
@@ -278,7 +282,7 @@ public class PlayerView extends View {
     }
 
     public Tile getSelectedTile(){
-        if (selected != null && selected instanceof Hexagon){
+        if (selected instanceof Hexagon){
             return ((Hexagon) selected).getTile();
         }
         return null;

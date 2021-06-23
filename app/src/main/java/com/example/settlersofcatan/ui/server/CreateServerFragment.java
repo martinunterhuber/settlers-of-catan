@@ -53,7 +53,7 @@ public class CreateServerFragment extends Fragment {
         getView().findViewById(R.id.createServerButton2).setOnClickListener(this::startGame);
 
         ImageButton btn = getView().findViewById(R.id.imageButton);
-        btn.setOnClickListener((v)->showInfo());
+        btn.setOnClickListener(v -> showInfo());
 
     }
 
@@ -63,7 +63,7 @@ public class CreateServerFragment extends Fragment {
                 () -> {
                     GameClient client = GameClient.getInstance();
                     client.connect("localhost", username);
-                    client.registerStartGameCallback((message) -> {
+                    client.registerStartGameCallback(message -> {
                         Intent intent = new Intent(getActivity(), ChooseColorActivity.class);
                         startActivity(intent);
                     });

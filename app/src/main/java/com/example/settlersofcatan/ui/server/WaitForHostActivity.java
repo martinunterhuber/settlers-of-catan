@@ -18,7 +18,7 @@ public class WaitForHostActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setContentView(R.layout.activity_wait_for_host);
         GameClient.getInstance().registerStartGameCallback(
-                (message) -> {
+                message -> {
                     Intent intent = new Intent(this, ChooseColorActivity.class);
                     startActivity(intent);
                     finish();

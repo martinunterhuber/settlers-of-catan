@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
-import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
 
 /**
@@ -68,8 +67,6 @@ public class DevelopmentCardView extends FrameLayout {
     }
 
     public void initDevelopmentCard() {
-        Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
-
         switch (this.getTag().toString()){
             case "1":
                 title.setText(R.string.development_knights);
@@ -92,6 +89,8 @@ public class DevelopmentCardView extends FrameLayout {
                 title.setText(R.string.development_year_of_plenty);
                 description.setText(R.string.year_of_plenty_description);
                 break;
+            default:
+                break;
 
         }
 
@@ -100,11 +99,11 @@ public class DevelopmentCardView extends FrameLayout {
     }
 
     public void updateView(int type){
-        int count = Game.getInstance()
+        int cardCount = Game.getInstance()
                 .getPlayerById(GameClient.getInstance().getId())
                 .getDevelopmentCardCount(type);
 
-        this.count.setText(String.valueOf(count));
+        this.count.setText(String.valueOf(cardCount));
     }
 
 

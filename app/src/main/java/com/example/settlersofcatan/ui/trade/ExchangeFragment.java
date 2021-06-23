@@ -56,14 +56,6 @@ public class ExchangeFragment extends Fragment {
      */
     protected int receiveCounter;
 
-
-    public ExchangeFragment() { }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -128,81 +120,63 @@ public class ExchangeFragment extends Fragment {
     protected void initDrag() {
         for (Resource resource : Resource.values()) {
             ImageView currentImg = currentInventoryView.getResourceImage(resource);
-            currentImg.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
-                    resourceBeingDragged = resource;
-                    String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+            currentImg.setOnLongClickListener(v -> {
+                ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
+                resourceBeingDragged = resource;
+                String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
 
-                    ClipData dragData = new ClipData("", mimeTypes, item);
-                    View.DragShadowBuilder myShadow = new View.DragShadowBuilder(currentImg);
+                ClipData dragData = new ClipData("", mimeTypes, item);
+                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(currentImg);
 
-                    v.startDrag(dragData, myShadow, currentInventoryView, 0);
-                    return true;
-                }
+                v.startDrag(dragData, myShadow, currentInventoryView, 0);
+                return true;
             });
 
             ImageView giveImg = giveInventoryView.getResourceImage(resource);
-            giveImg.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
-                    resourceBeingDragged = resource;
-                    String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+            giveImg.setOnLongClickListener(v -> {
+                ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
+                resourceBeingDragged = resource;
+                String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
 
-                    ClipData dragData = new ClipData("", mimeTypes, item);
-                    View.DragShadowBuilder myShadow = new View.DragShadowBuilder(giveImg);
+                ClipData dragData = new ClipData("", mimeTypes, item);
+                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(giveImg);
 
-                    v.startDrag(dragData, myShadow, giveInventoryView, 0);
-                    return true;
-                }
+                v.startDrag(dragData, myShadow, giveInventoryView, 0);
+                return true;
             });
 
             ImageView receiveImg = receiveInventoryView.getResourceImage(resource);
-            receiveImg.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
-                    resourceBeingDragged = resource;
-                    String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+            receiveImg.setOnLongClickListener(v -> {
+                ClipData.Item item = new ClipData.Item((CharSequence) v.getTag());
+                resourceBeingDragged = resource;
+                String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
 
-                    ClipData dragData = new ClipData("", mimeTypes, item);
-                    View.DragShadowBuilder myShadow = new View.DragShadowBuilder(receiveImg);
-                    v.startDrag(dragData, myShadow, receiveInventoryView, 0);
-                    return true;
-                }
+                ClipData dragData = new ClipData("", mimeTypes, item);
+                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(receiveImg);
+                v.startDrag(dragData, myShadow, receiveInventoryView, 0);
+                return true;
             });
         }
 
-        currentInventoryView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DROP) {
-                    validateTransfer(currentInventoryView, event);
-                }
-                return true;
+        currentInventoryView.setOnDragListener((v, event) -> {
+            if (event.getAction() == DragEvent.ACTION_DROP) {
+                validateTransfer(currentInventoryView, event);
             }
+            return true;
         });
 
-        receiveInventoryView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DROP) {
-                    validateTransfer(receiveInventoryView, event);
-                }
-                return true;
+        receiveInventoryView.setOnDragListener((v, event) -> {
+            if (event.getAction() == DragEvent.ACTION_DROP) {
+                validateTransfer(receiveInventoryView, event);
             }
-            });
+            return true;
+        });
 
-        giveInventoryView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                if (event.getAction() == DragEvent.ACTION_DROP) {
-                    validateTransfer(giveInventoryView, event);
-                }
-                return true;
+        giveInventoryView.setOnDragListener((v, event) -> {
+            if (event.getAction() == DragEvent.ACTION_DROP) {
+                validateTransfer(giveInventoryView, event);
             }
+            return true;
         });
 
 
@@ -232,57 +206,72 @@ public class ExchangeFragment extends Fragment {
      * @param source Where the resource should go
      */
     protected void executeTransfer(TradeResourceView target,TradeResourceView source) {
-        Resource resource = resourceBeingDragged;
-        int exchangeRate = resourceExchangeRates[resource.getIndex()];
         if (source == currentInventoryView) {
-            if (target == giveInventoryView) {
-                if (source.getContent().getResourceCount(resource) >= exchangeRate) {
-                    giveCounter++;
-                    source.getContent().decrementResourceCount(resource, exchangeRate);
-                    target.getContent().incrementResourceCount(resource, exchangeRate);
-                }
-            }
-            else if (target == receiveInventoryView) {
-                receiveCounter++;
-                source.getContent().incrementResourceCount(resource, 1);
-                target.getContent().incrementResourceCount(resource, 1);
-            }
+            executeTransferSourceIsCurrent(target, source);
         }
         else if (source == giveInventoryView){
-            if (target == currentInventoryView) {
-                giveCounter--;
-                source.getContent().decrementResourceCount(resource, exchangeRate);
-                target.getContent().incrementResourceCount(resource, exchangeRate);
-            }
-            else if (target == receiveInventoryView){
-                giveCounter--;
-                receiveCounter++;
-                source.getContent().decrementResourceCount(resource, exchangeRate);
-                currentInventoryView.getContent().incrementResourceCount(resource, exchangeRate + 1);
-                target.getContent().incrementResourceCount(resource, 1);
-            }
+            executeTransferSourceIsGive(target, source);
         }
         else {
-            if (target == currentInventoryView) {
-                if (currentInventoryView.getContent().getResourceCount(resource) > 0) {
-                    receiveCounter--;
-                    source.getContent().decrementResourceCount(resource, 1);
-                    target.getContent().decrementResourceCount(resource, 1);
-                }
-            }
-            else if (target == giveInventoryView){
-                if (currentInventoryView.getContent().getResourceCount(resource) >= exchangeRate + 1) {
-                    receiveCounter--;
-                    giveCounter++;
-                    source.getContent().decrementResourceCount(resource, 1);
-                    currentInventoryView.getContent().decrementResourceCount(resource, exchangeRate + 1);
-                    target.getContent().incrementResourceCount(resource, exchangeRate);
-                }
-            }
+            executeTransferSourceIsReceive(target, source);
         }
         giveInventoryView.updateResourceValues();
         receiveInventoryView.updateResourceValues();
         currentInventoryView.updateResourceValues();
+    }
+
+    private void executeTransferSourceIsReceive(TradeResourceView target, TradeResourceView source) {
+        Resource resource = resourceBeingDragged;
+        int exchangeRate = resourceExchangeRates[resource.getIndex()];
+        if (target == currentInventoryView) {
+            if (currentInventoryView.getContent().getResourceCount(resource) > 0) {
+                receiveCounter--;
+                source.getContent().decrementResourceCount(resource, 1);
+                target.getContent().decrementResourceCount(resource, 1);
+            }
+        }
+        else if ((target == giveInventoryView)
+                && (currentInventoryView.getContent().getResourceCount(resource) >= exchangeRate + 1)) {
+            receiveCounter--;
+            giveCounter++;
+            source.getContent().decrementResourceCount(resource, 1);
+            currentInventoryView.getContent().decrementResourceCount(resource, exchangeRate + 1);
+            target.getContent().incrementResourceCount(resource, exchangeRate);
+        }
+    }
+
+    private void executeTransferSourceIsGive(TradeResourceView target, TradeResourceView source) {
+        Resource resource = resourceBeingDragged;
+        int exchangeRate = resourceExchangeRates[resource.getIndex()];
+        if (target == currentInventoryView) {
+            giveCounter--;
+            source.getContent().decrementResourceCount(resource, exchangeRate);
+            target.getContent().incrementResourceCount(resource, exchangeRate);
+        }
+        else if (target == receiveInventoryView){
+            giveCounter--;
+            receiveCounter++;
+            source.getContent().decrementResourceCount(resource, exchangeRate);
+            currentInventoryView.getContent().incrementResourceCount(resource, exchangeRate + 1);
+            target.getContent().incrementResourceCount(resource, 1);
+        }
+    }
+
+    private void executeTransferSourceIsCurrent(TradeResourceView target, TradeResourceView source) {
+        Resource resource = resourceBeingDragged;
+        int exchangeRate = resourceExchangeRates[resource.getIndex()];
+        if (target == giveInventoryView) {
+            if (source.getContent().getResourceCount(resource) >= exchangeRate) {
+                giveCounter++;
+                source.getContent().decrementResourceCount(resource, exchangeRate);
+                target.getContent().incrementResourceCount(resource, exchangeRate);
+            }
+        }
+        else if (target == receiveInventoryView) {
+            receiveCounter++;
+            source.getContent().incrementResourceCount(resource, 1);
+            target.getContent().incrementResourceCount(resource, 1);
+        }
     }
 
     public boolean isInAcceptedState() {
