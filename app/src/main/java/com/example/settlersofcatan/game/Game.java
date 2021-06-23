@@ -434,12 +434,8 @@ public class Game {
         for (int i = turnCounter; i > turnCounter - players.size() && i >= 0; i--){
             if (cheated.get(i) != null){
                 List<Integer> cheater = cheated.get(i);
-                if (cheater != null){
-                    for (int cId : cheater){
-                        if (cId == cheaterId){
-                            return true;
-                        }
-                    }
+                if (cheater != null && cheater.contains(cheaterId)) {
+                    return true;
                 }
             }
         }
