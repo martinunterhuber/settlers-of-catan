@@ -66,7 +66,7 @@ public class TradeFragment extends Fragment {
         Game game = Game.getInstance();
         currentPlayer = game.getPlayerById(game.getCurrentPlayerId());
 
-        otherPlayers = (ArrayList<Player>) game.getPlayers().clone();
+        otherPlayers = new ArrayList<>(game.getPlayers());
         otherPlayers.remove(currentPlayer);
         for (int i = 0; i < otherPlayers.size(); i++) {
             Player player = otherPlayers.get(i);

@@ -33,6 +33,7 @@ public class NetworkServerKryo implements NetworkServer, KryoNetComponent {
         server.bind(NetworkConstants.TCP_PORT);
 
         server.addListener(new Listener() {
+            @Override
             public void received(Connection connection, Object object) {
                 if (messageCallback != null && object instanceof BaseMessage)
                     messageCallback.callback((BaseMessage) object);

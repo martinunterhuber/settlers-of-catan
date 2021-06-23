@@ -16,10 +16,6 @@ public class Edge {
     private Road road;
     private Harbor harbor;
 
-    public Edge() {
-
-    }
-
     public Road getRoad() {
         return road;
     }

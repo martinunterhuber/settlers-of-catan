@@ -25,7 +25,7 @@ public class Ranking {
     public void gameOutcome(){
         for (Player p : Game.getInstance().getPlayers()){
 
-            if (placement.size() == 0){
+            if (placement.isEmpty()){
                 placement.add(p);
             }else {
                 int index = getPlacement(p);

@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.settlersofcatan.game.resources.PlayerResources;
 
-public class PlayerResourcesMessage extends BaseMessage{
+public class PlayerResourcesMessage implements BaseMessage{
     public PlayerResources playerResources;
     public int cheaterId;
 

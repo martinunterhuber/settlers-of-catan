@@ -17,10 +17,6 @@ public class Node {
 
     private NodePlaceable building;
 
-    public Node() {
-
-    }
-
     public NodePlaceable getBuilding() {
         return building;
     }

@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-public class ClientDiceMessage extends BaseMessage {
+public class ClientDiceMessage implements BaseMessage {
     private String username;
 
     private int rolled;

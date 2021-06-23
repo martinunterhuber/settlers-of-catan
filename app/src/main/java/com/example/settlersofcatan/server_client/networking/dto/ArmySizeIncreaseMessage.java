@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-public class ArmySizeIncreaseMessage extends BaseMessage {
+public class ArmySizeIncreaseMessage implements BaseMessage {
     public int playerId;
 
     public ArmySizeIncreaseMessage(){

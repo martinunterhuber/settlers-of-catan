@@ -22,10 +22,10 @@ public class TileCoordinates {
     }
 
     public double getX(){
-        return Math.sqrt(3) * (double) q  +  Math.sqrt(3)/2 * (double) r;
+        return Math.sqrt(3) * q  +  Math.sqrt(3)/2 * r;
     }
 
     public double getY(){
-        return 3./2 * (double) r;
+        return 3./2 * r;
     }
 }

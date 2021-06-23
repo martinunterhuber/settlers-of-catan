@@ -7,7 +7,6 @@ import com.example.settlersofcatan.game.buildings.City;
 import com.example.settlersofcatan.game.buildings.NodePlaceable;
 import com.example.settlersofcatan.game.buildings.Road;
 import com.example.settlersofcatan.game.buildings.Settlement;
-import com.example.settlersofcatan.game.development_cards.DevelopmentCard;
 import com.example.settlersofcatan.game.resources.PlayerResources;
 import com.example.settlersofcatan.game.resources.Resource;
 import com.example.settlersofcatan.game.resources.ResourceMap;
@@ -27,30 +26,29 @@ public class Player {
     private static final int SETTLEMENT_COUNT = 5;
     private static final int CITY_COUNT = 4;
 
-    private String name;
-    private int id;
+    private final String name;
+    private final int id;
 
     //Counter for resource ranking
-    private int resourcecounter;
+    private int resourceCounter;
 
     private int victoryPoints;
     // for victory point development cards, longest road, largest army
     private int hiddenVictoryPoints;
     private int playedKnights = 0;
-    // {Knights, victory point, monopoly, road building, year of plenty}
-    private int[] developmetCards = new int[]{0, 0, 0, 0, 0};
+    // Knights, victory point, monopoly, road building, year of plenty
+    private final int[] developmentCards = new int[]{0, 0, 0, 0, 0};
 
     private ResourceMap resources;
 
-    private HashSet<DevelopmentCard> unrevealedDevelopmentCards = new HashSet<>();
-    private HashSet<Settlement> settlements = new HashSet<>();
-    private HashSet<City> cities = new HashSet<>();
-    private HashSet<Road> roads = new HashSet<>();
-    private HashSet<Harbor> harborsSettledOn = new HashSet<>();
+    private final Set<Settlement> settlements = new HashSet<>();
+    private final Set<City> cities = new HashSet<>();
+    private final Set<Road> roads = new HashSet<>();
+    private final Set<Harbor> harborsSettledOn = new HashSet<>();
 
-    private HashSet<Edge> potentialRoadPlacements = new HashSet<>();
-    private HashSet<Node> potentialSettlementPlacements = new HashSet<>();
-    private HashSet<Node> potentialCityPlacements = new HashSet<>();
+    private final Set<Edge> potentialRoadPlacements = new HashSet<>();
+    private final Set<Node> potentialSettlementPlacements = new HashSet<>();
+    private final Set<Node> potentialCityPlacements = new HashSet<>();
 
     private Player(){
         this(-1, null);
@@ -84,7 +82,7 @@ public class Player {
 
     public void takeResource(Resource resource, int count) {
         resources.decrementResourceCount(resource, count);
-        resourcecounter++;
+        resourceCounter++;
         Game.getInstance().doAsyncClientCallback(new PlayerResourcesMessage(PlayerResources.getInstance()));
     }
 
@@ -107,17 +105,17 @@ public class Player {
     }
 
     // Calculation in getters subject to change, just there to guarantee authenticity
-    public HashSet<Edge> getPotentialRoadPlacements() {
+    public Set<Edge> getPotentialRoadPlacements() {
         calculatePotentialRoadPlacements();
         return potentialRoadPlacements;
     }
 
-    public HashSet<Node> getPotentialSettlementPlacements() {
+    public Set<Node> getPotentialSettlementPlacements() {
         calculatePotentialSettlementPlacements();
         return potentialSettlementPlacements;
     }
 
-    public HashSet<Node> getPotentialCityPlacements() {
+    public Set<Node> getPotentialCityPlacements() {
         calculatePotentialCityPlacements();
         return potentialCityPlacements;
     }
@@ -275,7 +273,7 @@ public class Player {
     public void placeCity(Node n) {
         City cityToPlace = new City(this, n);
         cities.add(cityToPlace);
-        settlements.remove((Settlement) n.getBuilding());
+        settlements.remove(n.getBuilding());
         n.setBuilding(cityToPlace);
         victoryPoints++;
     }
@@ -328,15 +326,15 @@ public class Player {
     }
 
     public void increaseDevelopmentCard(int index){
-        developmetCards[index]++;
+        developmentCards[index]++;
     }
 
     public void decreaseDevelopmentCard(int index){
-        developmetCards[index]--;
+        developmentCards[index]--;
     }
 
     public int getDevelopmentCardCount(int index){
-        return developmetCards[index];
+        return developmentCards[index];
     }
 
     void addVictoryPoints(int victoryPoints){

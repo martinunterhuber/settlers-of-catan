@@ -47,9 +47,9 @@ public class Game {
     public static final Random random = new Random();
 
     // transient = "do not serialize this"
-    transient private AsyncCallback<BaseMessage> clientCallback;
+    private transient AsyncCallback<BaseMessage> clientCallback;
 
-    private ArrayList<Player> players;
+    private List<Player> players;
     private Board board;
 
     private int currentPlayerId;
@@ -93,7 +93,7 @@ public class Game {
         Game.instance = instance;
     }
 
-    public void init(ArrayList<String> names){
+    public void init(List<String> names){
         for (int i = 0; i < names.size(); i++) {
             String name = names.get(i);
             players.add(new Player(i, name));
@@ -515,7 +515,7 @@ public class Game {
         return playerId == currentPlayerId;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
