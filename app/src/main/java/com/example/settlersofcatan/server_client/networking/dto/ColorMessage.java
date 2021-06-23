@@ -1,6 +1,6 @@
 package com.example.settlersofcatan.server_client.networking.dto;
 
-public class ColorMessage extends BaseMessage{
+public class ColorMessage implements BaseMessage{
     public int playerId;
     public String playerColor;
 
@@ -11,6 +11,4 @@ public class ColorMessage extends BaseMessage{
         this.playerId = playerId;
         this.playerColor = playerColor;
     }
-
-
 }
