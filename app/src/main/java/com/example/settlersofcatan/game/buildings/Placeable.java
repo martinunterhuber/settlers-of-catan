@@ -5,7 +5,7 @@ import com.example.settlersofcatan.game.Player;
 public abstract class Placeable {
     protected Player player;
 
-    public Placeable(Player player) {
+    protected Placeable(Player player) {
         this.player = player;
     }
 

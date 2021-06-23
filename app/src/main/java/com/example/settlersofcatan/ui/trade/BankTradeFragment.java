@@ -19,10 +19,8 @@ public class BankTradeFragment extends ExchangeFragment{
     protected void validateTransfer(TradeResourceView target, DragEvent dragEvent) {
         TradeResourceView source = (TradeResourceView) dragEvent.getLocalState();
         if (target == receiveInventoryView) {
-            if (source == currentInventoryView && giveCounter <= receiveCounter) {
-                return;
-            }
-            else if (source == giveInventoryView && giveCounter - 1 <= receiveCounter) {
+            if ((source == currentInventoryView && giveCounter <= receiveCounter)
+                    || (source == giveInventoryView && giveCounter - 1 <= receiveCounter)) {
                 return;
             }
         }

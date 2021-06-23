@@ -18,6 +18,7 @@ import com.example.settlersofcatan.R;
 
 public class FragmentInfo extends Fragment {
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_rules, container, false);
     }

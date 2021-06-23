@@ -68,8 +68,6 @@ public class DevelopmentCardView extends FrameLayout {
     }
 
     public void initDevelopmentCard() {
-        Player player = Game.getInstance().getPlayerById(GameClient.getInstance().getId());
-
         switch (this.getTag().toString()){
             case "1":
                 title.setText(R.string.development_knights);
@@ -102,11 +100,11 @@ public class DevelopmentCardView extends FrameLayout {
     }
 
     public void updateView(int type){
-        int count = Game.getInstance()
+        int cardCount = Game.getInstance()
                 .getPlayerById(GameClient.getInstance().getId())
                 .getDevelopmentCardCount(type);
 
-        this.count.setText(String.valueOf(count));
+        this.count.setText(String.valueOf(cardCount));
     }
 
 

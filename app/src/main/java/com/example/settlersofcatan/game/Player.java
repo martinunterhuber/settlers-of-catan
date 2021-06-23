@@ -37,12 +37,11 @@ public class Player {
     // for victory point development cards, longest road, largest army
     private int hiddenVictoryPoints;
     private int playedKnights = 0;
-    // {Knights, victory point, monopoly, road building, year of plenty}
+    // Knights, victory point, monopoly, road building, year of plenty
     private int[] developmetCards = new int[]{0, 0, 0, 0, 0};
 
     private ResourceMap resources;
 
-    private HashSet<DevelopmentCard> unrevealedDevelopmentCards = new HashSet<>();
     private HashSet<Settlement> settlements = new HashSet<>();
     private HashSet<City> cities = new HashSet<>();
     private HashSet<Road> roads = new HashSet<>();

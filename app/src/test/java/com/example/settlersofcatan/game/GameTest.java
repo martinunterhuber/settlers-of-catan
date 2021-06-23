@@ -41,7 +41,7 @@ public class GameTest {
         game.buildSettlement(tiles[2][2].getNorthNode(), 0);
 
         Assert.assertNotNull(tiles[2][2].getNorthNode().getBuilding());
-        Assert.assertEquals(tiles[2][2].getNorthNode().getBuilding().getPlayer().getId(), 0);
+        Assert.assertEquals(0, tiles[2][2].getNorthNode().getBuilding().getPlayer().getId());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class GameTest {
         game.buildRoad(tiles[2][2].getNortheastEdge(), 0);
 
         Assert.assertNotNull(tiles[2][2].getNortheastEdge().getRoad());
-        Assert.assertEquals(tiles[2][2].getNortheastEdge().getRoad().getPlayer().getId(), 0);
+        Assert.assertEquals(0, tiles[2][2].getNortheastEdge().getRoad().getPlayer().getId());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class GameTest {
         game.buildSettlement(tiles[2][2].getSoutheastNode(), 1);
 
         Assert.assertNotNull(tiles[2][2].getSoutheastNode().getBuilding());
-        Assert.assertEquals(tiles[2][2].getNortheastEdge().getRoad().getPlayer().getId(), 0);
+        Assert.assertEquals(0, tiles[2][2].getNortheastEdge().getRoad().getPlayer().getId());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class GameTest {
         game.buildSettlement(tiles[2][2].getNorthNode(), 0);
         game.buildRoad(tiles[2][2].getNortheastEdge(), 0);
         game.endTurn(0);
-        Assert.assertEquals(game.getCurrentPlayerId(), 1);
+        Assert.assertEquals(1, game.getCurrentPlayerId());
     }
 
     @Test
@@ -112,28 +112,28 @@ public class GameTest {
     @Test
     public void testOrderForInitialBuildingRounds(){
         doBuildRound(2, 0, 0);
-        Assert.assertEquals(game.getCurrentPlayerId(), 1);
+        Assert.assertEquals(1, game.getCurrentPlayerId());
 
         doBuildRound(2, 1, 1);
-        Assert.assertEquals(game.getCurrentPlayerId(), 2);
+        Assert.assertEquals(2, game.getCurrentPlayerId());
 
         doBuildRound(2, 2, 2);
-        Assert.assertEquals(game.getCurrentPlayerId(), 3);
+        Assert.assertEquals(3, game.getCurrentPlayerId());
 
         doBuildRound(2, 3, 3);
-        Assert.assertEquals(game.getCurrentPlayerId(), 3);
+        Assert.assertEquals(3, game.getCurrentPlayerId());
 
         doBuildRound(3, 0, 3);
-        Assert.assertEquals(game.getCurrentPlayerId(), 2);
+        Assert.assertEquals(2, game.getCurrentPlayerId());
 
         doBuildRound(3, 1, 2);
-        Assert.assertEquals(game.getCurrentPlayerId(), 1);
+        Assert.assertEquals(1, game.getCurrentPlayerId());
 
         doBuildRound(3, 2, 1);
-        Assert.assertEquals(game.getCurrentPlayerId(), 0);
+        Assert.assertEquals(0, game.getCurrentPlayerId());
 
         doBuildRound(3, 3, 0);
-        Assert.assertEquals(game.getCurrentPlayerId(), 0);
+        Assert.assertEquals(0, game.getCurrentPlayerId());
     }
 
     private void skipBuildingPhase(){
@@ -151,7 +151,7 @@ public class GameTest {
     public void testEndTurnBeforeRollingTheDice() {
         skipBuildingPhase();
         game.endTurn(0);
-        Assert.assertEquals(game.getCurrentPlayerId(), 0);
+        Assert.assertEquals(0, game.getCurrentPlayerId());
     }
 
     @Test
@@ -234,7 +234,7 @@ public class GameTest {
         Assert.assertNotNull(tiles[3][3].getEastEdge().getRoad());
         Assert.assertNotNull(tiles[3][3].getSoutheastNode().getBuilding());
         Assert.assertTrue(tiles[3][3].getSoutheastNode().getBuilding() instanceof Settlement);
-        Assert.assertEquals(tiles[3][3].getSoutheastNode().getBuilding().getPlayer().getId(), 0);
+        Assert.assertEquals(0, tiles[3][3].getSoutheastNode().getBuilding().getPlayer().getId());
     }
 
     @Test
@@ -246,7 +246,7 @@ public class GameTest {
 
         Assert.assertNotNull(tiles[3][3].getNorthNode().getBuilding());
         Assert.assertTrue(tiles[3][3].getNorthNode().getBuilding() instanceof City);
-        Assert.assertEquals(tiles[3][3].getNorthNode().getBuilding().getPlayer().getId(), 0);
+        Assert.assertEquals(0, tiles[3][3].getNorthNode().getBuilding().getPlayer().getId());
     }
 
     @Test
@@ -260,7 +260,7 @@ public class GameTest {
         game.buildRoad(tiles[3][3].getWestEdge(), 0);
 
         Assert.assertEquals(game.getPlayerById(0), game.getLongestRoadPlayer());
-        Assert.assertEquals(game.getPlayerById(0).longestRoad(), 5);
+        Assert.assertEquals(0, game.getPlayerById(0).longestRoad());
     }
 
     @Test

@@ -8,10 +8,10 @@ public abstract class BuildingMessage extends BaseMessage {
     public TileCoordinates tileCoordinates;
     public Direction direction;
 
-    public BuildingMessage() {
+    protected BuildingMessage() {
     }
 
-    public BuildingMessage(int playerId, TileCoordinates tileCoordinates, Direction direction) {
+    protected BuildingMessage(int playerId, TileCoordinates tileCoordinates, Direction direction) {
         this.playerId = playerId;
         this.tileCoordinates = tileCoordinates;
         this.direction = direction;

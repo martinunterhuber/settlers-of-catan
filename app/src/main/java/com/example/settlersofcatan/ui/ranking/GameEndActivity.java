@@ -70,13 +70,6 @@ public class GameEndActivity extends AppCompatActivity {
         }
 
      resButton = findViewById(R.id.resranbtn);
-     resButton.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-             startActivity(new Intent(GameEndActivity.this, ResourceRankingActivity.class));
-         }
-     });
-
+     resButton.setOnClickListener(v -> startActivity(new Intent(GameEndActivity.this, ResourceRankingActivity.class)));
     }
-
 }
