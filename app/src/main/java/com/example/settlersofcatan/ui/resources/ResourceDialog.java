@@ -20,89 +20,39 @@ public class ResourceDialog {
         dialog.setContentView(R.layout.dialog_resource);
 
         Button wood = dialog.findViewById(R.id.btn_wood);
-        wood.setOnClickListener(view -> {
-            if (caller instanceof Monopoly){
-                new Thread(() -> (
-                        (Monopoly) caller).getResourcesFromOpponents(Resource.FOREST)
-                ).start();
-            }
-
-            if (caller instanceof YearOfPlenty){
-                new Thread(() -> (
-                        (YearOfPlenty) caller).getResources(Resource.FOREST)
-                ).start();
-            }
-
-            dialog.dismiss();
-        });
+        initializeListener(caller, dialog, wood, Resource.FOREST);
 
         Button wheat = dialog.findViewById(R.id.btn_wheat);
-        wheat.setOnClickListener(view -> {
-            if (caller instanceof Monopoly){
-                new Thread(() -> (
-                        (Monopoly) caller).getResourcesFromOpponents(Resource.WHEAT)
-                ).start();
-            }
-
-            if (caller instanceof YearOfPlenty){
-                new Thread(() -> (
-                        (YearOfPlenty) caller).getResources(Resource.WHEAT)
-                ).start();
-            }
-            dialog.dismiss();
-        });
+        initializeListener(caller, dialog, wheat, Resource.WHEAT);
 
         Button sheep = dialog.findViewById(R.id.btn_sheep);
-        sheep.setOnClickListener(view -> {
-            if (caller instanceof Monopoly){
-                new Thread(() -> (
-                        (Monopoly) caller).getResourcesFromOpponents(Resource.SHEEP)
-                ).start();
-            }
-
-            if (caller instanceof YearOfPlenty){
-                new Thread(() -> (
-                        (YearOfPlenty) caller).getResources(Resource.SHEEP)
-                ).start();
-            }
-            dialog.dismiss();
-        });
+        initializeListener(caller, dialog, sheep, Resource.SHEEP);
 
         Button clay = dialog.findViewById(R.id.btn_clay);
-        clay.setOnClickListener(view -> {
-            if (caller instanceof Monopoly){
-                new Thread(() -> (
-                        (Monopoly) caller).getResourcesFromOpponents(Resource.CLAY)
-                ).start();
-            }
-
-            if (caller instanceof YearOfPlenty){
-                new Thread(() -> (
-                        (YearOfPlenty) caller).getResources(Resource.CLAY)
-                ).start();
-            }
-
-            dialog.dismiss();
-        });
+        initializeListener(caller, dialog, clay, Resource.CLAY);
 
         Button ore = dialog.findViewById(R.id.btn_ore);
-        ore.setOnClickListener(view -> {
-            if (caller instanceof Monopoly){
-                new Thread(() -> (
-                        (Monopoly) caller).getResourcesFromOpponents(Resource.ORE)
-                ).start();
-            }
-
-            if (caller instanceof YearOfPlenty){
-                new Thread(() -> (
-                        (YearOfPlenty) caller).getResources(Resource.ORE)
-                ).start();
-            }
-
-            dialog.dismiss();
-        });
+        initializeListener(caller, dialog, ore, Resource.ORE);
 
         dialog.show();
 
+    }
+
+    private void initializeListener(DevelopmentCard caller, Dialog dialog, Button button, Resource resource) {
+        button.setOnClickListener(view -> {
+            if (caller instanceof Monopoly) {
+                new Thread(() -> (
+                        (Monopoly) caller).getResourcesFromOpponents(resource)
+                ).start();
+            }
+
+            if (caller instanceof YearOfPlenty) {
+                new Thread(() -> (
+                        (YearOfPlenty) caller).getResources(resource)
+                ).start();
+            }
+
+            dialog.dismiss();
+        });
     }
 }
