@@ -53,8 +53,8 @@ An Android application of the game Settlers of Catan. This app only supports mul
 Since the game can only be played as online multiplayer, all players need an internet-enabled device. One of the devices serves as a server. The other players join this server by entering its IP address.
 
 <p align="left">
-  <img src="https://user-images.githubusercontent.com/61834693/120498410-7be97780-c3bf-11eb-9112-6853d0331c27.gif" width="33.7%" height="33.7%">
-  <img src="https://user-images.githubusercontent.com/61834693/120498327-6c6a2e80-c3bf-11eb-9024-f91f83882c91.gif" width="30%" height="30%"> 
+  <img src="https://user-images.githubusercontent.com/61834693/123163062-98824800-d471-11eb-9540-580eca6ee876.gif" width="30%" height="30%">
+  <img src="https://user-images.githubusercontent.com/61834693/123163512-16465380-d472-11eb-9ac6-86c10e0cdde0.gif" width="30%" height="30%"> 
 </p>
 
 
@@ -76,7 +76,37 @@ The first player to have 5 or more continuous road segments, from one point to a
 ### Rolling dice & resource gathering <a name="dice_resources"/>  
 When it is a player's turn, he must first roll the dice. This happens by clicking on the dice symbol in the lower right corner. A randomly generated number is displayed to the players. Depending on the number, resources are distributed to those players who have settlements or cities on the fields which are affected. Changes in resources are indicated by a flashing animation of the respective resources.  Settlements bring one unit of the resource, cities two. If the number 7 is rolled, the robbers are activated.
 
+
 ### Trading <a name="trading"/>  
+#### Trading with Bank
+You don't need a harbor to trade at 4:1, so when nobody wants to trade…  
+
+
+<img src="https://user-images.githubusercontent.com/61834693/123163833-763cfa00-d472-11eb-8030-2a65fcf3e038.gif" width="30%" height="30%">   
+
+
+There are 2 different kinds of harbor locations:
+*  Generic harbor (3:1): 
+   *  Here you can exchange 3 identical resource for any one other resource.
+*  Special Harbor (2:1): 
+   *  There is 1 special harbor for each type of resource (with the same symbol).
+   *  The exchange rate of 2:1 only applies to the resource shown on the harbor location.
+   *  A special harbor doesn't permit you to trade any other resource type at a more favorable rate (not even 3:1)!
+
+
+#### Trading with Player
+On your turn, you may trade resources with the other players. You and the other players negotiate the terms of your trades. Such as which cards will be exchanged.  
+You can make an offer to an other player ...
+
+
+<img src="https://user-images.githubusercontent.com/61834693/123166830-1fd1ba80-d476-11eb-8c1a-94ff039d5a28.gif" width="30%" height="30%">  
+
+
+... or receive an offer from another player and make a counteroffer.  
+
+
+<img src="https://user-images.githubusercontent.com/61834693/123166985-498ae180-d476-11eb-9d9f-6c6706e3e4e0.gif" width="30%" height="30%">  
+
 
   
 ### Development cards <a name="development"/>
@@ -95,6 +125,15 @@ The first player to play 3 Knight cards may claim the Largest Army and gets 2 ad
 ### Robbers <a name="robbers"/>  
 The robber always occupies one of the resource fields on the board. At the beginning of the game, it is on the "Desert" field. If a player rolls the number 7 or plays the Knight Development Card, he must move the robber to another field. All players who own settlements or cities adjacent to the field with the robber do not get any resources when rolling the corresponding number. In addition, the player who moves the robbers gets a resource of his choice from one of the players who have neighbouring settlements or cities.
 
+
+<img src="https://user-images.githubusercontent.com/61834693/123170737-29115600-d47b-11eb-9198-d0c57a078c7f.gif" width="30%" height="30%">
+
  
 ### Cheating <a name="cheating"/> 
 A player can try to steal a resource from another player at any time. To do this, the player shakes the smartphone to open the cheat window. He then selects a player and a resource. For one round, each player has the opportunity to report this theft. To do so, he has to touch the theft icon of the player in question. If the player guesses correctly, he gets half of all the thief's resources. However, if one accuses the wrong person, the wrongly accused gets half of all the resources of the player who reported him.
+
+
+<p align="left">
+  <img src="https://user-images.githubusercontent.com/61834693/123167687-2876c080-d477-11eb-9cfd-1b150830a681.gif" width="30%" height="30%">
+  <img src="https://user-images.githubusercontent.com/61834693/123167849-6a076b80-d477-11eb-93e1-e5c0d00d9046.gif" width="30%" height="30%"> 
+</p>
