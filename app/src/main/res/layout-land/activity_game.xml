@@ -6,10 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/catan_main_new"
     tools:context=".ui.game.GameActivity">
 
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:src="@drawable/catan_main_new"
+        android:scaleType="centerCrop" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -137,6 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
+            android:textColor="#FFC107"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@id/icon_trophy"
             app:layout_constraintEnd_toEndOf="@id/icon_trophy"
@@ -158,10 +163,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/btn_dice"
             app:layout_constraintEnd_toEndOf="@+id/btn_dice"
             app:layout_constraintStart_toStartOf="@+id/btn_dice" />
+
+        <ImageButton
+            android:id="@+id/imgBtn_costs"
+            android:layout_width="46dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            app:layout_constraintStart_toEndOf="@+id/opponents"
+            app:layout_constraintTop_toTopOf="@+id/mapView"
+            app:srcCompat="@drawable/info" />
 
         <GridLayout
             android:id="@+id/button_layout"

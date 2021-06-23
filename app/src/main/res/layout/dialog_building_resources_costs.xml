@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_road_costs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:paddingRight="20dp"
+            android:text="ROAD: "
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/img_road_wood"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/woodhex" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/img_road_clay"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/clayhex" />
+
+        </TableRow>
+
+        <TextView
+            android:id="@+id/txt_settlement_cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="SETTLEMENT:"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/woodhex" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/clayhex" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView12"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/sheephex" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView13"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/wheathex" />
+        </TableRow>
+
+        <TextView
+            android:id="@+id/txt_city_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="CITY:"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imageView14"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="2dp"
+                app:srcCompat="@drawable/wheathex" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="2dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView21"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="2dp"
+                app:srcCompat="@drawable/wheathex" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="2dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView23"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="2dp"
+                app:srcCompat="@drawable/orehex" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="2dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView17"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="2dp"
+                app:srcCompat="@drawable/orehex" />
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="2dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView18"
+                android:layout_width="120px"
+                android:layout_height="120px"
+
+                app:srcCompat="@drawable/orehex" />
+        </TableRow>
+
+        <TextView
+            android:id="@+id/txt_development_cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DEVELOPMENT:"
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:textStyle="bold" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imageView19"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/wheathex" />
+
+            <TextView
+                android:id="@+id/textView26"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView20"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/sheephex" />
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="+"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView22"
+                android:layout_width="120px"
+                android:layout_height="120px"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/orehex" />
+        </TableRow>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_close_costs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
