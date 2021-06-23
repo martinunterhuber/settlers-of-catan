@@ -316,28 +316,25 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
     private void setButtonToPlayerColor(){
         Player player = Game.getInstance().getPlayerById(client.getId());
+        int colorId=0;
         switch (player.getColor()){
             case "GREEN":
-                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[0]);
-                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[0]);
-                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[0]);
+                colorId=0;
                 break;
             case "RED":
-                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[1]);
-                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[1]);
-                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[1]);
+                colorId=1;
                 break;
             case "ORANGE":
-                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[2]);
-                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[2]);
-                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[2]);
+                colorId=2;
                 break;
             case "BLUE":
-                ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[3]);
-                ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[3]);
-                ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[3]);
+                colorId=3;
                 break;
         }
+
+        ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[colorId]);
+        ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[colorId]);
+        ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[colorId]);
 
     }
 
