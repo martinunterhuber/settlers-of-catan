@@ -1,11 +1,15 @@
 package com.example.settlersofcatan.ui.server;
 
+import androidx.test.annotation.UiThreadTest;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.FlakyTest;
 
 import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.server_client.GameClient;
+import com.example.settlersofcatan.ui.color.ChooseColorActivity;
 import com.example.settlersofcatan.ui.game.GameActivity;
 
 import org.junit.After;
@@ -49,6 +53,9 @@ public class MainActivityTest {
     public void testClickCreateServerStartsGameActivity() throws InterruptedException {
         onView(ViewMatchers.withId(R.id.createServerButton2)).perform(click());
         Thread.sleep(1000);
+        intended(hasComponent(ChooseColorActivity.class.getName()));
+        onView(ViewMatchers.withId(R.id.view_green)).perform(click());
+        Thread.sleep(1000);
         intended(hasComponent(GameActivity.class.getName()));
     }
 
@@ -61,6 +68,7 @@ public class MainActivityTest {
         Thread.sleep(500);
 
         intended(hasComponent(WaitForHostActivity.class.getName()));
+        GameClient.getInstance().disconnect();
     }
 
     @Test
