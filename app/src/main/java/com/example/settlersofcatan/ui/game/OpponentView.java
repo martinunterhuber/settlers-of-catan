@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.settlersofcatan.game.PlayerColor;
 import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
@@ -125,19 +126,7 @@ public class OpponentView extends FrameLayout {
     }
 
     public void setBackgroundColor(){
-        switch (PlayerColors.getInstance().getSinglePlayerColor(opponent.getId())){
-            case "GREEN":
-                opponentLayout.setBackgroundColor(GameActivity.playerColors[0]);
-                break;
-            case "RED":
-                opponentLayout.setBackgroundColor(GameActivity.playerColors[1]);
-                break;
-            case "ORANGE":
-                opponentLayout.setBackgroundColor(GameActivity.playerColors[2]);
-                break;
-            case "BLUE":
-                opponentLayout.setBackgroundColor(GameActivity.playerColors[3]);
-                break;
-        }
+        PlayerColor playerColor = PlayerColors.getInstance().getSinglePlayerColor(opponent.getId());
+        opponentLayout.setBackgroundColor(GameActivity.playerColors[playerColor.getId()]);
     }
 }

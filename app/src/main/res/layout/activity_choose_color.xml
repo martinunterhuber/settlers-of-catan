@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/catan_background_basegame"
-    android:foreground="@drawable/border_black"
+    android:fitsSystemWindows="true"
     tools:context=".ui.color.ChooseColorActivity">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
         android:src="@drawable/catan_main_new"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:scaleType="centerCrop" />
 
     <TextView
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Choose your color: "
+        android:text="@string/choose_your_color"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -46,45 +46,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
+        <FrameLayout
             android:id="@+id/view_green"
-            android:layout_width="200px"
-            android:layout_height="200px"
-            android:layout_columnWeight="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="#05A505"
             android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp" />
+            tools:layout_editor_absoluteY="24dp"
+            android:focusable="true" />
 
-        <View
+        <FrameLayout
             android:id="@+id/view_red"
-            android:layout_width="200px"
-            android:layout_height="200px"
-            android:layout_columnWeight="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="#F44336"
             android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp" />
+            tools:layout_editor_absoluteY="24dp"
+            android:focusable="true" />
 
-        <View
+        <FrameLayout
             android:id="@+id/view_orange"
-            android:layout_width="200px"
-            android:layout_height="200px"
-            android:layout_columnWeight="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="#FF9800"
             android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp" />
+            tools:layout_editor_absoluteY="24dp"
+            android:focusable="true" />
 
-        <View
+        <FrameLayout
             android:id="@+id/view_blue"
-            android:layout_width="200px"
-            android:layout_height="200px"
-            android:layout_columnWeight="1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="#2196F3"
             android:clickable="true"
             tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="24dp" />
+            tools:layout_editor_absoluteY="24dp"
+            android:focusable="true" />
 
     </GridLayout>
 

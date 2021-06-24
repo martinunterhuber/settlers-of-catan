@@ -2,6 +2,7 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.game.PlayerColor;
 import com.example.settlersofcatan.ui.color.ChooseColorActivity;
 import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.game.Game;
@@ -199,6 +200,7 @@ public class GameServer {
         server.registerClass(ChooseColorActivity.class);
         server.registerClass(ColorMessage.class);
         server.registerClass(PlayerColors.class);
+        server.registerClass(PlayerColor.class);
     }
 
     private void startServer(){

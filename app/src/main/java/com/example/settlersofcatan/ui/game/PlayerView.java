@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.settlersofcatan.R;
+import com.example.settlersofcatan.game.PlayerColor;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.board.Tile;
 import com.example.settlersofcatan.game.buildings.NodePlaceable;
@@ -27,9 +28,6 @@ import com.example.settlersofcatan.ui.board.HexagonPart;
 import com.example.settlersofcatan.ui.board.Path;
 import com.example.settlersofcatan.ui.board.Point;
 import com.example.settlersofcatan.ui.color.PlayerColors;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * View class on which the cities, settlements and roads of the players are placed.
@@ -76,14 +74,11 @@ public class PlayerView extends View {
         for (Point point : hexGrid.getCorners()){
             NodePlaceable building = point.getNode().getBuilding();
             if (building != null){
+                PlayerColor playerColor = PlayerColors.getInstance().getSinglePlayerColor(building.getPlayer().getId());
                 if (building instanceof Settlement){
-                    point.setResID(SETTLEMENT_IDS[getColorId(PlayerColors.getInstance()
-                                                                        .getSinglePlayerColor(building.getPlayer().getId())
-                                                            )]);
+                    point.setResID(SETTLEMENT_IDS[playerColor.getId()]);
                 } else {
-                    point.setResID(CITY_IDS[getColorId(PlayerColors.getInstance()
-                                                                .getSinglePlayerColor(building.getPlayer().getId())
-                                                        )]);
+                    point.setResID(CITY_IDS[playerColor.getId()]);
                 }
             } else {
                 point.setResID(R.drawable.corner_unselected);
@@ -98,9 +93,8 @@ public class PlayerView extends View {
         for (Path path : hexGrid.getPaths()){
             Road road = path.getEdge().getRoad();
             if (road != null){
-                path.setResID(ROAD_IDS[getColorId(PlayerColors.getInstance()
-                                                        .getSinglePlayerColor(road.getPlayer().getId())
-                                                )]);
+                PlayerColor playerColor = PlayerColors.getInstance().getSinglePlayerColor(road.getPlayer().getId());
+                path.setResID(ROAD_IDS[playerColor.getId()]);
             } else if (selected != path) {
                 path.setResID(R.drawable.road_unselected);
             } else {
@@ -286,17 +280,5 @@ public class PlayerView extends View {
             return ((Hexagon) selected).getTile();
         }
         return null;
-    }
-
-    private int getColorId(String color){
-        if (color.equals("GREEN")){
-            return 0;
-        } else if (color.equals("RED")){
-            return 1;
-        } else if (color.equals("ORANGE")){
-            return 2;
-        } else {
-            return 3;
-        }
     }
 }

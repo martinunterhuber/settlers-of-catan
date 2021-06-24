@@ -3,6 +3,7 @@ package com.example.settlersofcatan.server_client;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.settlersofcatan.game.PlayerColor;
 import com.example.settlersofcatan.ui.color.ChooseColorActivity;
 import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.game.Game;
@@ -156,6 +157,7 @@ public class GameClient {
         client.registerClass(ChooseColorActivity.class);
         client.registerClass(ColorMessage.class);
         client.registerClass(PlayerColors.class);
+        client.registerClass(PlayerColor.class);
     }
 
     private void gameAsyncCallback(BaseMessage message){

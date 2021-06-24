@@ -3,28 +3,28 @@ package com.example.settlersofcatan.ui.color;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.FrameLayout;
 
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
+import com.example.settlersofcatan.game.PlayerColor;
 import com.example.settlersofcatan.server_client.GameClient;
 import com.example.settlersofcatan.server_client.networking.dto.ColorMessage;
 import com.example.settlersofcatan.ui.game.GameActivity;
 
-import java.util.HashMap;
+import java.util.Map;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 
 public class ChooseColorActivity extends AppCompatActivity {
 
-    private View red;
-    private View orange;
-    private View blue;
-    private View green;
+    private FrameLayout red;
+    private FrameLayout orange;
+    private FrameLayout blue;
+    private FrameLayout green;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -33,60 +33,31 @@ public class ChooseColorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_color);
 
         red=findViewById(R.id.view_red);
-        red.setOnClickListener(view -> {
-            Game.getInstance().getPlayerById(GameClient.getInstance().getId()).setColor("RED");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                unselectColor();
-                red.setForeground(getDrawable(R.drawable.current_player_border));
-            }
-            new Thread(()->
-                    GameClient.getInstance().sendMessage(new ColorMessage(GameClient.getInstance().getId(),"RED"))
-            ).start();
-
-        });
+        initColorListener(red, PlayerColor.RED);
 
         orange=findViewById(R.id.view_orange);
-        orange.setOnClickListener(view -> {
-            Game.getInstance().getPlayerById(GameClient.getInstance().getId()).setColor("ORANGE");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                unselectColor();
-                orange.setForeground(getDrawable(R.drawable.current_player_border));
-            }
-            new Thread(()->
-                    GameClient.getInstance().sendMessage(new ColorMessage(GameClient.getInstance().getId(),"ORANGE"))
-            ).start();
-
-        });
+        initColorListener(orange, PlayerColor.ORANGE);
 
         blue=findViewById(R.id.view_blue);
-        blue.setOnClickListener(view -> {
-            Game.getInstance().getPlayerById(GameClient.getInstance().getId()).setColor("BLUE");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                unselectColor();
-                blue.setForeground(getDrawable(R.drawable.current_player_border));
-            }
-            new Thread(()->
-                    GameClient.getInstance().sendMessage(new ColorMessage(GameClient.getInstance().getId(),"BLUE"))
-            ).start();
-
-        });
+        initColorListener(blue, PlayerColor.BLUE);
 
         green=findViewById(R.id.view_green);
-        green.setOnClickListener(view -> {
-            Game.getInstance().getPlayerById(GameClient.getInstance().getId()).setColor("GREEN");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                unselectColor();
-                green.setForeground(getDrawable(R.drawable.current_player_border));
-            }
-            new Thread(()->
-                    GameClient.getInstance().sendMessage(new ColorMessage(GameClient.getInstance().getId(),"GREEN"))
-            ).start();
-        });
+        initColorListener(green, PlayerColor.GREEN);
 
         GameClient.getInstance().registerActivity(this);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void initColorListener(FrameLayout colorView, PlayerColor playerColor){
+        colorView.setOnClickListener(view -> {
+            Game.getInstance().getPlayerById(GameClient.getInstance().getId()).setColor(playerColor);
+            unselectColor();
+            colorView.setForeground(AppCompatResources.getDrawable(this, R.drawable.current_player_border));
+            new Thread(()->
+                    GameClient.getInstance().sendMessage(new ColorMessage(GameClient.getInstance().getId(), playerColor))
+            ).start();
+        });
+    }
+
     private void unselectColor(){
         red.setForeground(null);
         green.setForeground(null);
@@ -94,30 +65,32 @@ public class ChooseColorActivity extends AppCompatActivity {
         blue.setForeground(null);
     }
 
-    @SuppressLint("ResourceAsColor")
     public void disableColor(){
-        HashMap<Integer, String> playersColors = PlayerColors.getInstance().getPlayersColorMap();
+        Map<Integer, PlayerColor> playersColors = PlayerColors.getInstance().getPlayersColorMap();
 
         enableColors();
 
         for (int i = 0; i < Game.getInstance().getPlayers().size(); i++) {
-            if (playersColors.get(i) != null && GameClient.getInstance().getId() != i) {
-                switch (playersColors.get(i)) {
-                    case "GREEN":
-                        green.setBackgroundColor(R.color.material_on_background_disabled);
+            PlayerColor playerColor = playersColors.get(i);
+            if (playerColor != null && GameClient.getInstance().getId() != i) {
+                switch (playerColor) {
+                    case GREEN:
+                        green.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
                         green.setClickable(false);
                         break;
-                    case "RED":
-                        red.setBackgroundColor(R.color.material_on_background_disabled);
+                    case RED:
+                        red.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
                         red.setClickable(false);
                         break;
-                    case "ORANGE":
-                        orange.setBackgroundColor(R.color.material_on_background_disabled);
+                    case ORANGE:
+                        orange.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
                         orange.setClickable(false);
                         break;
-                    case "BLUE":
-                        blue.setBackgroundColor(R.color.material_on_background_disabled);
+                    case BLUE:
+                        blue.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
                         blue.setClickable(false);
+                        break;
+                    default:
                         break;
                 }
             }
