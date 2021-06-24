@@ -2,6 +2,9 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.game.PlayerColor;
+import com.example.settlersofcatan.ui.color.ChooseColorActivity;
+import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.board.Board;
@@ -35,6 +38,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ColorMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
@@ -85,19 +89,9 @@ public class GameServer {
 
     private void callback(BaseMessage message) {
         if (message instanceof ClientJoinedMessage){
-            String username = ((ClientJoinedMessage) message).username;
-            if (!username.equals(GameClient.getInstance().getUsername())){
-                clientUsernames.add(username);
-            } else {
-                clientUsernames.set(0, username);
-            }
-            Log.i(NetworkConstants.TAG, username + " joined the lobby");
-            userChangedCallback.callback(username);
+            handleClientJoined((ClientJoinedMessage) message);
         } else if (message instanceof ClientLeftMessage){
-            String username = ((ClientLeftMessage) message).username;
-            clientUsernames.remove(username);
-            Log.i(NetworkConstants.TAG, username + " left the lobby");
-            userChangedCallback.callback(username);
+            handleClientLeft((ClientLeftMessage) message);
         } else if (message instanceof GameStateMessage) {
             broadcastMessage(message);
         }else if (message instanceof ClientWinMessage){
@@ -120,9 +114,29 @@ public class GameServer {
             broadcastMessage(message);
         } else if (message instanceof ArmySizeIncreaseMessage) {
             broadcastMessage(message);
-        } else {
+        } else if (message instanceof ColorMessage) {
+            broadcastMessage(message);
+        } else{
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
+    }
+
+    private void handleClientJoined(ClientJoinedMessage message) {
+        String username = message.username;
+        if (!username.equals(GameClient.getInstance().getUsername())){
+            clientUsernames.add(username);
+        } else {
+            clientUsernames.set(0, username);
+        }
+        Log.i(NetworkConstants.TAG, username + " joined the lobby");
+        userChangedCallback.callback(username);
+    }
+
+    private void handleClientLeft(ClientLeftMessage message) {
+        String username = message.username;
+        clientUsernames.remove(username);
+        Log.i(NetworkConstants.TAG, username + " left the lobby");
+        userChangedCallback.callback(username);
     }
 
     public void registerUserChangedCallback(Callback<String> callback){
@@ -183,6 +197,10 @@ public class GameServer {
         server.registerClass(MovedRobberMessage.class);
         server.registerClass(EndTurnMessage.class);
         server.registerClass(ArmySizeIncreaseMessage.class);
+        server.registerClass(ChooseColorActivity.class);
+        server.registerClass(ColorMessage.class);
+        server.registerClass(PlayerColors.class);
+        server.registerClass(PlayerColor.class);
     }
 
     private void startServer(){

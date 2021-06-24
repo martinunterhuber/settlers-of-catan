@@ -8,16 +8,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
+import com.example.settlersofcatan.game.PlayerColor;
+import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.R;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.server_client.GameClient;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class OpponentView extends FrameLayout {
     private TextView textName;
@@ -67,7 +69,7 @@ public class OpponentView extends FrameLayout {
         if (opponent != null){
             textName.setText(opponent.getName());
             textPointCount.setText(String.valueOf(opponent.getVictoryPoints()));
-            opponentLayout.setBackgroundColor(GameActivity.playerColors[opponent.getId()]);
+            setBackgroundColor();
             dice.setText(String.valueOf(rolled));
 
             exposeCheater.setOnClickListener(view -> {
@@ -121,5 +123,10 @@ public class OpponentView extends FrameLayout {
 
     public void updateDice(int rolled){
         this.rolled = (rolled);
+    }
+
+    public void setBackgroundColor(){
+        PlayerColor playerColor = PlayerColors.getInstance().getSinglePlayerColor(opponent.getId());
+        opponentLayout.setBackgroundColor(GameActivity.playerColors[playerColor.getId()]);
     }
 }

@@ -330,9 +330,11 @@ public class GameActivity extends AppCompatActivity implements OnPostDrawListene
 
     private void setButtonToPlayerColor(){
         Player player = Game.getInstance().getPlayerById(client.getId());
-        ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[player.getId()]);
-        ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[player.getId()]);
-        ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[player.getId()]);
+        int colorId = player.getColor() == null ? 0 : player.getColor().getId();
+        ((ImageView)findViewById(R.id.btn_city)).setImageResource(PlayerView.CITY_IDS[colorId]);
+        ((ImageView)findViewById(R.id.btn_road)).setImageResource(PlayerView.ROAD_IDS[colorId]);
+        ((ImageView)findViewById(R.id.btn_settlement)).setImageResource(PlayerView.SETTLEMENT_IDS[colorId]);
+
     }
 
     public void redrawViews(){
