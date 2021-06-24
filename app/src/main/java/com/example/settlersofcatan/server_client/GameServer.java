@@ -2,6 +2,9 @@ package com.example.settlersofcatan.server_client;
 
 import android.util.Log;
 
+import com.example.settlersofcatan.game.PlayerColor;
+import com.example.settlersofcatan.ui.color.ChooseColorActivity;
+import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.board.Board;
@@ -35,6 +38,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ColorMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
@@ -110,7 +114,9 @@ public class GameServer {
             broadcastMessage(message);
         } else if (message instanceof ArmySizeIncreaseMessage) {
             broadcastMessage(message);
-        } else {
+        } else if (message instanceof ColorMessage) {
+            broadcastMessage(message);
+        } else{
             Log.e(NetworkConstants.TAG,"Unknown message type!");
         }
     }
@@ -191,6 +197,10 @@ public class GameServer {
         server.registerClass(MovedRobberMessage.class);
         server.registerClass(EndTurnMessage.class);
         server.registerClass(ArmySizeIncreaseMessage.class);
+        server.registerClass(ChooseColorActivity.class);
+        server.registerClass(ColorMessage.class);
+        server.registerClass(PlayerColors.class);
+        server.registerClass(PlayerColor.class);
     }
 
     private void startServer(){

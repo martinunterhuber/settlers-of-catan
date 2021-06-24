@@ -26,6 +26,7 @@ public class Player {
     private static final int SETTLEMENT_COUNT = 5;
     private static final int CITY_COUNT = 4;
 
+    private PlayerColor playerColor;
     private final String name;
     private final int id;
 
@@ -359,5 +360,13 @@ public class Player {
 
     public int getPlayedKnights() {
         return playedKnights;
+    }
+
+    public PlayerColor getColor() {
+        return playerColor;
+    }
+
+    public void setColor(PlayerColor playerColor) {
+        this.playerColor = playerColor;
     }
 }

@@ -3,6 +3,9 @@ package com.example.settlersofcatan.server_client;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.settlersofcatan.game.PlayerColor;
+import com.example.settlersofcatan.ui.color.ChooseColorActivity;
+import com.example.settlersofcatan.ui.color.PlayerColors;
 import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 import com.example.settlersofcatan.game.board.Board;
@@ -36,6 +39,7 @@ import com.example.settlersofcatan.server_client.networking.dto.ClientDiceMessag
 import com.example.settlersofcatan.server_client.networking.dto.ClientJoinedMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientLeftMessage;
 import com.example.settlersofcatan.server_client.networking.dto.ClientWinMessage;
+import com.example.settlersofcatan.server_client.networking.dto.ColorMessage;
 import com.example.settlersofcatan.server_client.networking.dto.DevelopmentCardMessage;
 import com.example.settlersofcatan.server_client.networking.dto.EndTurnMessage;
 import com.example.settlersofcatan.server_client.networking.dto.GameStateMessage;
@@ -66,6 +70,7 @@ public class GameClient {
     private int id;
     private Callback<BaseMessage> startGameCallback;
     private GameActivity gameActivity;
+    private ChooseColorActivity colorActivity;
     private WaitForReplyActivity waitForReplyActivity;
 
     private GameClient(){
@@ -149,6 +154,10 @@ public class GameClient {
         client.registerClass(MovedRobberMessage.class);
         client.registerClass(EndTurnMessage.class);
         client.registerClass(ArmySizeIncreaseMessage.class);
+        client.registerClass(ChooseColorActivity.class);
+        client.registerClass(ColorMessage.class);
+        client.registerClass(PlayerColors.class);
+        client.registerClass(PlayerColor.class);
     }
 
     private void gameAsyncCallback(BaseMessage message){
@@ -178,8 +187,19 @@ public class GameClient {
             handleTurnEnd((EndTurnMessage) message);
         } else if (message instanceof ArmySizeIncreaseMessage){
             handleArmyIncrease((ArmySizeIncreaseMessage) message);
+        } else if (message instanceof ColorMessage && colorActivity != null){
+            handleColorChange((ColorMessage) message);
         }
         Log.i(NetworkConstants.TAG, message.toString());
+    }
+  
+    private void handleColorChange(ColorMessage message) {
+        PlayerColors.getInstance().setSinglePlayerColor(message.playerId, message.playerColor);
+
+        colorActivity.runOnUiThread(()-> {
+            colorActivity.disableColor();
+            colorActivity.startGame();
+        });
     }
 
     private void handleArmyIncrease(ArmySizeIncreaseMessage message) {
@@ -288,6 +308,10 @@ public class GameClient {
 
     public void registerActivity(GameActivity activity){
         gameActivity = activity;
+    }
+
+    public void registerActivity(ChooseColorActivity activity){
+        colorActivity = activity;
     }
 
     public void registerStartGameCallback(Callback<BaseMessage> c){
