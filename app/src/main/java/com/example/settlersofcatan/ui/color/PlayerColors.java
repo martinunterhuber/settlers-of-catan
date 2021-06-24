@@ -5,6 +5,7 @@ import com.example.settlersofcatan.game.Game;
 import com.example.settlersofcatan.game.Player;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerColors {
     private static PlayerColors instance;
@@ -59,7 +60,7 @@ public class PlayerColors {
         return true;
     }
 
-    public HashMap<Integer, PlayerColor> getPlayersColorMap() {
+    public Map<Integer, PlayerColor> getPlayersColorMap() {
         return playersColorMap;
     }
 }

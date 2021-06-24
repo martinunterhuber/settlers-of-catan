@@ -17,6 +17,7 @@ import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 
 
 public class ChooseColorActivity extends AppCompatActivity {
@@ -73,21 +74,22 @@ public class ChooseColorActivity extends AppCompatActivity {
         for (int i = 0; i < Game.getInstance().getPlayers().size(); i++) {
             PlayerColor playerColor = playersColors.get(i);
             if (playerColor != null && GameClient.getInstance().getId() != i) {
+                int backgroundColor = ResourcesCompat.getColor(getResources(), R.color.material_on_background_disabled, null);
                 switch (playerColor) {
                     case GREEN:
-                        green.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
+                        green.setBackgroundColor(backgroundColor);
                         green.setClickable(false);
                         break;
                     case RED:
-                        red.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
+                        red.setBackgroundColor(backgroundColor);
                         red.setClickable(false);
                         break;
                     case ORANGE:
-                        orange.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
+                        orange.setBackgroundColor(backgroundColor);
                         orange.setClickable(false);
                         break;
                     case BLUE:
-                        blue.setBackgroundColor(getResources().getColor(R.color.material_on_background_disabled));
+                        blue.setBackgroundColor(backgroundColor);
                         blue.setClickable(false);
                         break;
                     default:
