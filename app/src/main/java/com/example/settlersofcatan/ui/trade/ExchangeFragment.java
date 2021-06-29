@@ -94,8 +94,8 @@ public class ExchangeFragment extends Fragment {
         receiveText = getView().findViewById(R.id.receiveTextView);
         giveText = getView().findViewById(R.id.giveTextView);
 
-        receiveText.setText("I receive:");
-        giveText.setText("I give:");
+        receiveText.setText(R.string.i_receive);
+        giveText.setText(R.string.i_give);
 
         //TradeResourceView makes the image of a resource invisible if it hits zero, but for
         //the resources the player has they should not be
