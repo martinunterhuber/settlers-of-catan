@@ -68,7 +68,11 @@ public class GameServer {
     private Callback<String> userChangedCallback;
 
     private GameServer(){
-
+        server = new NetworkServerKryo();
+        registerMessageClasses();
+        server.registerCallback(this::callback);
+        startServer();
+        clientUsernames.add("");
     }
 
     public static GameServer getInstance(){
@@ -77,15 +81,6 @@ public class GameServer {
         }
         return instance;
     }
-
-    public void init(){
-        server = new NetworkServerKryo();
-        registerMessageClasses();
-        server.registerCallback(this::callback);
-        startServer();
-        clientUsernames.add("");
-    }
-
 
     private void callback(BaseMessage message) {
         if (message instanceof ClientJoinedMessage){
