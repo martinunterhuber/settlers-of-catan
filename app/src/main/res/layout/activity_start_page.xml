@@ -4,8 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/catan_background_basegame"
-    tools:context=".ui.game.StartScreenActivity">
+    tools:context=".ui.game.StartScreenActivity"
+    android:fitsSystemWindows="true" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/catan_background_basegame"
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:id="@+id/imageView2"

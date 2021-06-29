@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Choose a resource:"
+        android:text="@string/choose_a_resource"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Wood"
+        android:text="@string/wood"
         app:layout_constraintEnd_toStartOf="@+id/txt_dialog"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_dialog" />
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Wheat"
+        android:text="@string/wheat"
         app:layout_constraintEnd_toEndOf="@+id/btn_wood"
         app:layout_constraintStart_toStartOf="@+id/btn_wood"
         app:layout_constraintTop_toBottomOf="@+id/btn_wood" />
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Sheep"
+        android:text="@string/sheep"
         app:layout_constraintEnd_toEndOf="@+id/txt_dialog"
         app:layout_constraintStart_toStartOf="@+id/txt_dialog"
         app:layout_constraintTop_toBottomOf="@+id/txt_dialog" />
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:text="Clay"
+        android:text="@string/clay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/btn_sheep"
         app:layout_constraintStart_toStartOf="@+id/btn_sheep"
@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Ore"
+        android:text="@string/ore"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_dialog"
         app:layout_constraintTop_toBottomOf="@+id/txt_dialog" />

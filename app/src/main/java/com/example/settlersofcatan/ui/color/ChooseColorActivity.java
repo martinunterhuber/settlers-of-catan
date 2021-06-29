@@ -120,6 +120,7 @@ public class ChooseColorActivity extends AppCompatActivity {
         if (PlayerColors.getInstance().checkIfAllPlayersChose()) {
             Intent intent = new Intent(this, GameActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 }

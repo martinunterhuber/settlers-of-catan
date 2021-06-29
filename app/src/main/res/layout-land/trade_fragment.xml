@@ -47,7 +47,7 @@
         android:id="@+id/tradeOfferText"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="@string/tradeoffer_to"
+        android:text="@string/trade_offer_to"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@id/toFirstBtn"

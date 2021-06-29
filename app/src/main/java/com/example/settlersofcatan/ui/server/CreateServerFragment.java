@@ -45,7 +45,6 @@ public class CreateServerFragment extends Fragment {
         users[3] = getView().findViewById(R.id.editTextPlayer3);
         new Thread(() -> {
             server = GameServer.getInstance();
-            server.init();
             server.registerUserChangedCallback(this::updateUsers);
         }).start();
         String ip = NetworkServerKryo.getLocalIPAddress();

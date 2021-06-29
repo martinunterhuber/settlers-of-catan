@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.settlersofcatan.R;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -37,14 +39,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return fragment;
     }
 
+
+
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Player";
+                return playerFragment.getString(R.string.player);
             case 1:
-                return "Bank";
+                return bankFragment.getString(R.string.bank);
             default:
                 throw new IllegalArgumentException();
         }

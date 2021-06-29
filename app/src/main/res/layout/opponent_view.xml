@@ -17,7 +17,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
-        android:text="0"
+        android:text="@string/_0"
         app:layout_constraintEnd_toStartOf="@id/img_dice"
         app:layout_constraintStart_toEndOf="@+id/txt_points"
         app:layout_constraintTop_toBottomOf="@+id/txt_name" />
@@ -89,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="0"
+        android:text="@string/_0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_dice"
         app:layout_constraintTop_toTopOf="@+id/img_dice"

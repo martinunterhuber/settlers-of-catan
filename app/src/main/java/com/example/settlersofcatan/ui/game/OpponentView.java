@@ -77,10 +77,10 @@ public class OpponentView extends FrameLayout {
 
                 if (game.hasCheated(opponent.getId())){
                     game.exposeCheater(opponent.getId());
-                    Toast.makeText(getContext(),opponent.getName() + " has cheated!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.has_cheated, opponent.getName()), Toast.LENGTH_SHORT).show();
                 }else {
                     game.penaltyForFalseCharge(opponent.getId());
-                    Toast.makeText(getContext(),opponent.getName() + " has NOT cheated!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.has_not_cheated, opponent.getName()), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {

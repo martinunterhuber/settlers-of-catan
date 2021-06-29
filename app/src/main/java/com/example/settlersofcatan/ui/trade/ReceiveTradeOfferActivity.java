@@ -53,8 +53,7 @@ public class ReceiveTradeOfferActivity extends AppCompatActivity {
         Intent i = getIntent();
         tradeOffer = (TradeOffer) i.getParcelableExtra("tradeoffer");
 
-        String text = "Trade offer from " + tradeOffer.getFrom().getName();
-        offerFromTxt.setText(text);
+        offerFromTxt.setText(getString(R.string.trade_offer_from, tradeOffer.getFrom().getName()));
 
         if (!Game.getInstance().getPlayerById(GameClient.getInstance().getId()).isEligibleForTradeOffer(tradeOffer)) {
             acceptBtn.setVisibility(View.GONE);

@@ -68,7 +68,11 @@ public class GameServer {
     private Callback<String> userChangedCallback;
 
     private GameServer(){
-
+        server = new NetworkServerKryo();
+        registerMessageClasses();
+        server.registerCallback(this::callback);
+        startServer();
+        clientUsernames.add("");
     }
 
     public static GameServer getInstance(){
@@ -77,15 +81,6 @@ public class GameServer {
         }
         return instance;
     }
-
-    public void init(){
-        server = new NetworkServerKryo();
-        registerMessageClasses();
-        server.registerCallback(this::callback);
-        startServer();
-        clientUsernames.add("");
-    }
-
 
     private void callback(BaseMessage message) {
         if (message instanceof ClientJoinedMessage){
@@ -125,6 +120,8 @@ public class GameServer {
         String username = message.username;
         if (!username.equals(GameClient.getInstance().getUsername())){
             clientUsernames.add(username);
+        } else if (clientUsernames.isEmpty()) {
+            clientUsernames.add("");
         } else {
             clientUsernames.set(0, username);
         }
