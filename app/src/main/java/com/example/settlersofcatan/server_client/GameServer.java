@@ -120,6 +120,8 @@ public class GameServer {
         String username = message.username;
         if (!username.equals(GameClient.getInstance().getUsername())){
             clientUsernames.add(username);
+        } else if (clientUsernames.size() == 0) {
+            clientUsernames.add("");
         } else {
             clientUsernames.set(0, username);
         }
