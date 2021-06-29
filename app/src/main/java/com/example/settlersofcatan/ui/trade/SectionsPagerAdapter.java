@@ -1,5 +1,7 @@
 package com.example.settlersofcatan.ui.trade;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,10 +18,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private final Fragment playerFragment = TradeFragment.newInstance();
     private final Fragment bankFragment = BankFragment.newInstance();
+    private final Context context;
 
-
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public SectionsPagerAdapter(FragmentManager fm, Context context) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        this.context = context;
     }
 
     @Override
@@ -46,9 +49,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return playerFragment.getString(R.string.player);
+                return context.getString(R.string.player);
             case 1:
-                return bankFragment.getString(R.string.bank);
+                return context.getString(R.string.bank);
             default:
                 throw new IllegalArgumentException();
         }
